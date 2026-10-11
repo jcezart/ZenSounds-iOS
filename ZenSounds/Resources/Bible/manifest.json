@@ -1,0 +1,822 @@
+{
+  "schema": 1,
+  "downloadedOn": "2026-10-10",
+  "translations": [
+    {
+      "language": "pt",
+      "id": "por_blj",
+      "source": "https://bible.helloao.org/api/por_blj/complete.json",
+      "licenseUrl": "https://ebible.org/Scriptures/details.php?id=porbr2018",
+      "sourceSha256": "fad4bc8678467511c1c521869bcdafa023ded93fe48d1e03eb55e6c347b131aa",
+      "books": 66,
+      "chapters": 1189,
+      "verses": 31102,
+      "files": [
+        {
+          "code": "GEN",
+          "sha256": "82ccf6acbc6eae28f2ce121eea12a15d8275d3e0d6ff7db02870e9eddae9f6e0",
+          "size": 65451,
+          "chapters": 50
+        },
+        {
+          "code": "EXO",
+          "sha256": "a55ac09a8fef569756f33e56dabb1d46063f9d5459e9d742ea493f075fea123f",
+          "size": 51717,
+          "chapters": 40
+        },
+        {
+          "code": "LEV",
+          "sha256": "98ae200bb6c04351f1073b4dc7c7062676a762b761aa6108f139908b4227fc54",
+          "size": 34050,
+          "chapters": 27
+        },
+        {
+          "code": "NUM",
+          "sha256": "ca4a10a3a61901a982e94e53972d9dfbf17e44b490e50ef64a363182f544e56a",
+          "size": 48013,
+          "chapters": 36
+        },
+        {
+          "code": "DEU",
+          "sha256": "adbf0df7b18e5d23a0848407a61b40a5f21ff16037cdd0ff14c13eaeac8349eb",
+          "size": 45843,
+          "chapters": 34
+        },
+        {
+          "code": "JOS",
+          "sha256": "fa9888845632d8ea8680ee995569a497b76cae51e48c540a3dd8f4917ba852b1",
+          "size": 30808,
+          "chapters": 24
+        },
+        {
+          "code": "JDG",
+          "sha256": "cab2c609b5dd6a2805fb9355cbb8a2f5a30b93dbcc236255f62fc062dcf56cfa",
+          "size": 33052,
+          "chapters": 21
+        },
+        {
+          "code": "RUT",
+          "sha256": "b7fe7952e9f8ec3f94de5fc36a39ee2b69a6f1e0cd7a47ef0ee61705491a56ec",
+          "size": 5657,
+          "chapters": 4
+        },
+        {
+          "code": "1SA",
+          "sha256": "212e9b5eb03d027d71c37639c26837e199f35d133100a577c817da784942c7ac",
+          "size": 44146,
+          "chapters": 31
+        },
+        {
+          "code": "2SA",
+          "sha256": "8b3dd2d90bba850cf9d15649ab2b48e4f7e0c2418975c7d7b0e5bc8d636c5a94",
+          "size": 37423,
+          "chapters": 24
+        },
+        {
+          "code": "1KI",
+          "sha256": "e8c2c964ec71175313ed5d54fd7ef254b008f068759892e74d227e32e0117d46",
+          "size": 42250,
+          "chapters": 22
+        },
+        {
+          "code": "2KI",
+          "sha256": "887d04301d185ff540295dc7c46f829ce0184693b4485b394da847472820325d",
+          "size": 37724,
+          "chapters": 25
+        },
+        {
+          "code": "1CH",
+          "sha256": "9998964beac1343ff1d57053104de2d535e7275110cbfede8d13546f25e68897",
+          "size": 38613,
+          "chapters": 29
+        },
+        {
+          "code": "2CH",
+          "sha256": "501618c30257579f328991fa5a13d31d167f9bed5002f3215ed91fb5f854db62",
+          "size": 44524,
+          "chapters": 36
+        },
+        {
+          "code": "EZR",
+          "sha256": "fc2b3ad5d7b07ded37c6f2d71c778d1fab80ce4a61e3c84630c650cb50ba7529",
+          "size": 14245,
+          "chapters": 10
+        },
+        {
+          "code": "NEH",
+          "sha256": "b10e0e2f3ee5fe66a6c5d789247a38acf731d0ae2d2adcb836d5ec7bcba85749",
+          "size": 20789,
+          "chapters": 13
+        },
+        {
+          "code": "EST",
+          "sha256": "8a78e350bde8386b46b40ede59b6fe7de37780e9888c35c984405d8a30bce873",
+          "size": 11068,
+          "chapters": 10
+        },
+        {
+          "code": "JOB",
+          "sha256": "969a77aec5bbfa03774143be89aa5837ffed2a409333df70ece1605e863bb474",
+          "size": 41980,
+          "chapters": 42
+        },
+        {
+          "code": "PSA",
+          "sha256": "fd24ba68b33513cf0dbc3e23a11ebd1ba995d6ab5dd1431a1a0d347b3208fa29",
+          "size": 89816,
+          "chapters": 150
+        },
+        {
+          "code": "PRO",
+          "sha256": "013071fbcb15a21afbba6ec687587b632b602b1bf14bdd9027d912f0b77097ed",
+          "size": 32654,
+          "chapters": 31
+        },
+        {
+          "code": "ECC",
+          "sha256": "d0d21ed90fd7f7e0151ea13a62453e00053ded5e661b94f0e521b7663974daa2",
+          "size": 12193,
+          "chapters": 12
+        },
+        {
+          "code": "SNG",
+          "sha256": "fd69a214fc20cef4ac206425ecd1aa1b3bd9ecc6f854a7ca105d2bbef49f03c5",
+          "size": 6882,
+          "chapters": 8
+        },
+        {
+          "code": "ISA",
+          "sha256": "4959056556f4df6c84322ee39e86ab987297ef9df8589b786b891d5c9dc9fb8f",
+          "size": 77141,
+          "chapters": 66
+        },
+        {
+          "code": "JER",
+          "sha256": "a986e13d7bc60a5d123ce77334a6bf43cc868f89dc4fc432df3e249d80df5146",
+          "size": 78537,
+          "chapters": 52
+        },
+        {
+          "code": "LAM",
+          "sha256": "534a7a0dbeb9f1c4ddfacf417d8a3eb9303a45f2d02992a7226c19bc5b001c40",
+          "size": 8928,
+          "chapters": 5
+        },
+        {
+          "code": "EZK",
+          "sha256": "1b97d95aaea91fd49a265dd75ed01843561f391054c049dc85a3d73a225ac4a1",
+          "size": 65188,
+          "chapters": 48
+        },
+        {
+          "code": "DAN",
+          "sha256": "6bed7aba4fe547da13c3e917eef1b3f2794195ebf2d0d8798b50ecedd3aa1e7a",
+          "size": 22080,
+          "chapters": 12
+        },
+        {
+          "code": "HOS",
+          "sha256": "3a00ef14485e745d09a998feee90b5cc28d8788a5849941c6cb5e94bb3898247",
+          "size": 12215,
+          "chapters": 14
+        },
+        {
+          "code": "JOL",
+          "sha256": "fc5a950f668986d84a2b0695bc377d1567ebb070a03c6f9e150d136a778059d5",
+          "size": 5094,
+          "chapters": 3
+        },
+        {
+          "code": "AMO",
+          "sha256": "5eb1ffae4c4e019a6852e300f77060032c0d14a41db5c4b632bafd920c8ec53e",
+          "size": 9348,
+          "chapters": 9
+        },
+        {
+          "code": "OBA",
+          "sha256": "d996923274a8cc5f16d7c8586064470c3e0e7ddcb41c974105394c65c4049a7a",
+          "size": 2222,
+          "chapters": 1
+        },
+        {
+          "code": "JON",
+          "sha256": "a0095eaef8d2298f2af6cc64077aa0e7538d4df88f9463b4caafa1ab9903ae8c",
+          "size": 3614,
+          "chapters": 4
+        },
+        {
+          "code": "MIC",
+          "sha256": "2e21b9c1b2b7686d7917a54d932c33bfff09ba4c1a6b7625b04d248171dfe48d",
+          "size": 7899,
+          "chapters": 7
+        },
+        {
+          "code": "NAM",
+          "sha256": "c897fb30db5901b006534225585bb637801ed1b040cacfeaa48f322e31c1b71b",
+          "size": 3981,
+          "chapters": 3
+        },
+        {
+          "code": "HAB",
+          "sha256": "599bdc9ad6332a824ebe6d0b9f6963bc50f077a66009b6b7f2ceb57b3af405f2",
+          "size": 4406,
+          "chapters": 3
+        },
+        {
+          "code": "ZEP",
+          "sha256": "72439f01b8c8b2a397672347b0a2963d7629838c9bd4dd92a1a5d455e46e43cb",
+          "size": 4373,
+          "chapters": 3
+        },
+        {
+          "code": "HAG",
+          "sha256": "2007f7a1e63ef1a84a267179003e6ef07c18093dbd111ec1ed4f5d7e1f4ddaa2",
+          "size": 2839,
+          "chapters": 2
+        },
+        {
+          "code": "ZEC",
+          "sha256": "ecb0ec95365e4e8425997b5f60212d2546e61d9b01238d74f1e7e52e117312f2",
+          "size": 12425,
+          "chapters": 14
+        },
+        {
+          "code": "MAL",
+          "sha256": "4e6329efdefb70491938ed74474f5fef2344cf494d996943a3d638c1fb2b2ef4",
+          "size": 4500,
+          "chapters": 4
+        },
+        {
+          "code": "MAT",
+          "sha256": "50ead2fcc51939e7e860d2f9116c8b8f46b3f153dc1ed443a3d06e21294a625c",
+          "size": 51063,
+          "chapters": 28
+        },
+        {
+          "code": "MRK",
+          "sha256": "80ef5423e9beb38c4f9e50521771f6eeaf53c88f62ef285eea3cff5c83b6121c",
+          "size": 30853,
+          "chapters": 16
+        },
+        {
+          "code": "LUK",
+          "sha256": "2efabd1f140abcee57e0fc6a2c9afe77347f749e7108e33b3abfc1f3388d8edf",
+          "size": 50842,
+          "chapters": 24
+        },
+        {
+          "code": "JHN",
+          "sha256": "44623cd0fc457e517b13cdda3ed369b8e5956fd12744b1bc36792e6fb564d337",
+          "size": 35108,
+          "chapters": 21
+        },
+        {
+          "code": "ACT",
+          "sha256": "8ded9db535dc73113ab4fc2e2e6de3dba4a8d1a27b624506e87ceaaf05c437f4",
+          "size": 50134,
+          "chapters": 28
+        },
+        {
+          "code": "ROM",
+          "sha256": "7045e0d0c63e9ad8860f9e29b8184edfed0b5779b98d1ae336a4b5115737d02e",
+          "size": 22642,
+          "chapters": 16
+        },
+        {
+          "code": "1CO",
+          "sha256": "81c7cab2b47c70f36f0e485f4000796ea99056d4357e98c72f7ca6540e378388",
+          "size": 19562,
+          "chapters": 16
+        },
+        {
+          "code": "2CO",
+          "sha256": "d44347f5b3b18bb57a9dbffbda6af6ad530dcfd7c8eaee15d67f08c4629d19de",
+          "size": 13509,
+          "chapters": 13
+        },
+        {
+          "code": "GAL",
+          "sha256": "7f26e8acf72c67f6e5d6452b4a52a492f40bcba7812cbe3060d0901ee3fb8a50",
+          "size": 8620,
+          "chapters": 6
+        },
+        {
+          "code": "EPH",
+          "sha256": "8eb89dd27a06436eb46984b5dbbfc0d9b19b108ea7d31602cde3c241c8e293d2",
+          "size": 8207,
+          "chapters": 6
+        },
+        {
+          "code": "PHP",
+          "sha256": "a7d392350829a8404742584c2b89b784fd1a64bfc52bb66601680b123eac3018",
+          "size": 6183,
+          "chapters": 4
+        },
+        {
+          "code": "COL",
+          "sha256": "cb707dc30dde1d92598ea4e1aee36e24b396be19b0582bcb305d01d301f4a1fb",
+          "size": 5902,
+          "chapters": 4
+        },
+        {
+          "code": "1TH",
+          "sha256": "e468c0d8efe4d2e109a29761518953e005cfba098e9067e8329d2abab110332e",
+          "size": 5269,
+          "chapters": 5
+        },
+        {
+          "code": "2TH",
+          "sha256": "5f49cf45cda1b4e620bc1af4ad94d4e853ff58770b9e04ead3faa4bf8abfa613",
+          "size": 3124,
+          "chapters": 3
+        },
+        {
+          "code": "1TI",
+          "sha256": "908ab947377b1f9a1c914400546d21076a7aed3a5048ba34ab78a7a460679121",
+          "size": 6929,
+          "chapters": 6
+        },
+        {
+          "code": "2TI",
+          "sha256": "8c0794625d2b6957e5669b44dda4000db49f95a4583bf84ea47c7237e3168aa6",
+          "size": 5290,
+          "chapters": 4
+        },
+        {
+          "code": "TIT",
+          "sha256": "23fa2c9e935b443da6543b375598bf51c8030f097a9c1687b624e4b72ca3a796",
+          "size": 3373,
+          "chapters": 3
+        },
+        {
+          "code": "PHM",
+          "sha256": "a56b50127d4798dd3908deac073536e5bf22d6abd73fbf32b20488c81a4ef549",
+          "size": 1801,
+          "chapters": 1
+        },
+        {
+          "code": "HEB",
+          "sha256": "45fc6c761d84b3bbcc9fe185f3c2af9adf1fe7b77572c1908bef1524f209166b",
+          "size": 18709,
+          "chapters": 13
+        },
+        {
+          "code": "JAS",
+          "sha256": "27df348ffffdddf97bdeddad23f1100410679153e3183b46c41aeaa5ace40f53",
+          "size": 6530,
+          "chapters": 5
+        },
+        {
+          "code": "1PE",
+          "sha256": "d5c150f329bcf42ebe2d2f259e92ba70386a56b819a23fb514a39716f4d9317c",
+          "size": 7677,
+          "chapters": 5
+        },
+        {
+          "code": "2PE",
+          "sha256": "2299228e03a0a1708da9935372661105745d9cff2cc117938f50c589c58a27b4",
+          "size": 4604,
+          "chapters": 3
+        },
+        {
+          "code": "1JN",
+          "sha256": "dceada0427d21a8f7286ca6357785e1af3edaae406647e9b66ff631d133c4668",
+          "size": 5030,
+          "chapters": 5
+        },
+        {
+          "code": "2JN",
+          "sha256": "b75a7796031f69e2d9b559f758fa3f53fc58d0d5c84e72c318fd65ddbcd12d12",
+          "size": 1321,
+          "chapters": 1
+        },
+        {
+          "code": "3JN",
+          "sha256": "92fcadc0f38e8dd9cef0dc2545a9dadf82af993a6f17def2c0c7cfcb922fe928",
+          "size": 1492,
+          "chapters": 1
+        },
+        {
+          "code": "JUD",
+          "sha256": "a2671a0c7e05864e06db4c9eaabd840449ad64dcf6ecf96272f7638a2b6aa219",
+          "size": 2411,
+          "chapters": 1
+        },
+        {
+          "code": "REV",
+          "sha256": "b4747cb676f0943155f5397c618236eba8a0e25fa0db316ab6800f0eae250067",
+          "size": 21830,
+          "chapters": 22
+        }
+      ]
+    },
+    {
+      "language": "en",
+      "id": "eng_kjv",
+      "source": "https://bible.helloao.org/api/eng_kjv/complete.json",
+      "licenseUrl": "https://ebible.org/Scriptures/details.php?id=eng-kjv2006",
+      "sourceSha256": "f38b0de589898b41111be72abc324259572d22a46d31a1aa59e74f0f2038b817",
+      "books": 66,
+      "chapters": 1189,
+      "verses": 31102,
+      "files": [
+        {
+          "code": "GEN",
+          "sha256": "2131e4a0383a8fe9b436c6f500f56d88159920432497e32f6fcfaf011af9cf5a",
+          "size": 76341,
+          "chapters": 50
+        },
+        {
+          "code": "EXO",
+          "sha256": "f0607262547fe14de4ac4d4bb3b38864eaefb88e9bf5ff2e687c0c356adcf2d0",
+          "size": 57432,
+          "chapters": 40
+        },
+        {
+          "code": "LEV",
+          "sha256": "533233b118d1eafb46c4adb0f1889f67eef5e18f995a1095dd2aa7fbf314c4d0",
+          "size": 37192,
+          "chapters": 27
+        },
+        {
+          "code": "NUM",
+          "sha256": "b020e9e7c5d2232ed889399fa691bbb479e081fbcf018ddfcc4fd62e08d45d03",
+          "size": 53866,
+          "chapters": 36
+        },
+        {
+          "code": "DEU",
+          "sha256": "da8e6dbc4815bc628c048a2fbf397e599990d93933be4b5e024fc2bf4cdb5399",
+          "size": 51949,
+          "chapters": 34
+        },
+        {
+          "code": "JOS",
+          "sha256": "e11b781efbf49884e44bce49ebec380f2533ed3b47c7b5819d27aa63d12f55bf",
+          "size": 34033,
+          "chapters": 24
+        },
+        {
+          "code": "JDG",
+          "sha256": "3ad7e5e6b36765620b241d05fe1bcb3b63e26727402896d5c409519fdba3aef3",
+          "size": 38446,
+          "chapters": 21
+        },
+        {
+          "code": "RUT",
+          "sha256": "02eaa5b668b574c7c5edb5eb846b9ece1114c2189bed1225993e89f33a439f71",
+          "size": 6507,
+          "chapters": 4
+        },
+        {
+          "code": "1SA",
+          "sha256": "93d41b278cf171e0431f8a1a83d9508476c2d468c5a52955316bb07bd0952cd9",
+          "size": 51303,
+          "chapters": 31
+        },
+        {
+          "code": "2SA",
+          "sha256": "8e778617eeed4acf35e564c1bdd38323140db0fb27bccab16f966d5b588e1737",
+          "size": 44795,
+          "chapters": 24
+        },
+        {
+          "code": "1KI",
+          "sha256": "3b2c02ff991690c2d289c6d4bf582ec0798ccad31a34a960ecf76922c8aa99f4",
+          "size": 48344,
+          "chapters": 22
+        },
+        {
+          "code": "2KI",
+          "sha256": "32df7a69409da3418ecb24c6cb1bc6bd7af57cc2bbed30cf3907b2219ad6761a",
+          "size": 44154,
+          "chapters": 25
+        },
+        {
+          "code": "1CH",
+          "sha256": "482d970f7aeb46ccd650ba6fd21ffb567eb250a5a3cb426751182513cb542474",
+          "size": 46625,
+          "chapters": 29
+        },
+        {
+          "code": "2CH",
+          "sha256": "0888ec2969fc835d97c61d2a5fb6cc583d34eb59b926e52621811bd4513770c4",
+          "size": 53145,
+          "chapters": 36
+        },
+        {
+          "code": "EZR",
+          "sha256": "0af12f9b705e1d6bec61de70bf6595945828f7f02c9348dc0decec58f14b696e",
+          "size": 16590,
+          "chapters": 10
+        },
+        {
+          "code": "NEH",
+          "sha256": "e91002810086f0c19726f4680840b97ac637c4522ea0b631963a2a2488c15c2b",
+          "size": 23348,
+          "chapters": 13
+        },
+        {
+          "code": "EST",
+          "sha256": "bdd0552e927195ba7d50a297880affc75e24d26570700e9a3da38881c292dbdc",
+          "size": 12718,
+          "chapters": 10
+        },
+        {
+          "code": "JOB",
+          "sha256": "a777ddca003722842894c677fd89a4429e742a63ac5d95dbd20728900e83da1d",
+          "size": 49412,
+          "chapters": 42
+        },
+        {
+          "code": "PSA",
+          "sha256": "33304d7cee0013ac983a50da2995c456e55669c70a3c177cedaeea5643940402",
+          "size": 112223,
+          "chapters": 150
+        },
+        {
+          "code": "PRO",
+          "sha256": "148948521731f4ffa6d9225fd8191ac93a66286cd4b815a848c344c6aef0f9eb",
+          "size": 38500,
+          "chapters": 31
+        },
+        {
+          "code": "ECC",
+          "sha256": "163e8bb1406af301643aff6e072d92fd29959c0d13393e20d3cff180042fc844",
+          "size": 13477,
+          "chapters": 12
+        },
+        {
+          "code": "SNG",
+          "sha256": "5ea08e11b840971ce274b1f283a899a8d4b1e8016ade0f5dab43c49a4b2f4dfd",
+          "size": 7462,
+          "chapters": 8
+        },
+        {
+          "code": "ISA",
+          "sha256": "a8161d99d61fbb7a8a893b4b9eb8e4a902645067cd5d91241b109e906354a148",
+          "size": 86449,
+          "chapters": 66
+        },
+        {
+          "code": "JER",
+          "sha256": "2b5fe27f05f519dd594780fbbd770231c06a181cdf4b9e6d209d32dc61a27b28",
+          "size": 84041,
+          "chapters": 52
+        },
+        {
+          "code": "LAM",
+          "sha256": "b6f65f0aeff58c11b33640b3d49ffc87c586f7ab8beb13d538a1017bde93523f",
+          "size": 9330,
+          "chapters": 5
+        },
+        {
+          "code": "EZK",
+          "sha256": "40b639bd6899843c5a5d10bf720a4e071456ffeabc600f6e2128c59f36d3eced",
+          "size": 73466,
+          "chapters": 48
+        },
+        {
+          "code": "DAN",
+          "sha256": "822f6eb9340ab3ee8d81922788b29248862e9743488335c4b3fc30484b3f2208",
+          "size": 25451,
+          "chapters": 12
+        },
+        {
+          "code": "HOS",
+          "sha256": "d1f75d7822482c600fffa28bbf6e85192c8dbb41d8a4ee3bcc8ea7306131cfe0",
+          "size": 13856,
+          "chapters": 14
+        },
+        {
+          "code": "JOL",
+          "sha256": "161b6c7a8e0c59e993365f7944efc1548bed3e990002c985af0b2b1000d4e121",
+          "size": 5611,
+          "chapters": 3
+        },
+        {
+          "code": "AMO",
+          "sha256": "c58f0bc0153f0c2a9cf32173082eb62b30a3150badaea765b3eb282bd0f984cd",
+          "size": 10650,
+          "chapters": 9
+        },
+        {
+          "code": "OBA",
+          "sha256": "293b46c5852758a7e146908a8a5b3992ee6f165fcb916558ee87f219ecab7ce6",
+          "size": 2405,
+          "chapters": 1
+        },
+        {
+          "code": "JON",
+          "sha256": "73c4545c4b92d2f972be75fc6f523de7d71342be8b25d6aac8e464ee4a0438c0",
+          "size": 4127,
+          "chapters": 4
+        },
+        {
+          "code": "MIC",
+          "sha256": "07764d1c5e004eddff1f72d409b654060c100692b28d80ca002d9e566d2b056a",
+          "size": 8850,
+          "chapters": 7
+        },
+        {
+          "code": "NAM",
+          "sha256": "57388708a46425a3e7daf7bfc0bf3b924d52f79b5c4caa1536eefdb4d66af5a1",
+          "size": 4599,
+          "chapters": 3
+        },
+        {
+          "code": "HAB",
+          "sha256": "4c066d52391316ba16131aaa6dc130c280def789f70d609729c2dce3493152e9",
+          "size": 5382,
+          "chapters": 3
+        },
+        {
+          "code": "ZEP",
+          "sha256": "b6647b52c55910f5203d77b18456f13c8b99440c33910c0927c0c4bf63660eb5",
+          "size": 4821,
+          "chapters": 3
+        },
+        {
+          "code": "HAG",
+          "sha256": "c8a6ec1ebc19eff1f9944552b42da277f966861c9f8ee6fe085c2dd5f643e64b",
+          "size": 2896,
+          "chapters": 2
+        },
+        {
+          "code": "ZEC",
+          "sha256": "abc29556d878d6e356cdbbf9047f2eefa1b88690da5faf4c2584006dc9773d2d",
+          "size": 14333,
+          "chapters": 14
+        },
+        {
+          "code": "MAL",
+          "sha256": "907b35b291960414092569fe54a9ad9b74307a086f7856ece600800303cd29b5",
+          "size": 5138,
+          "chapters": 4
+        },
+        {
+          "code": "MAT",
+          "sha256": "cf370144e889e081fb363fd90a95f607306740ca18c5bb4ed43e7dd4a918607b",
+          "size": 46597,
+          "chapters": 28
+        },
+        {
+          "code": "MRK",
+          "sha256": "61ba1d6c4caeb52c6cb1c82e83c6ddbe376394a569ac897335babc49a32022f8",
+          "size": 30051,
+          "chapters": 16
+        },
+        {
+          "code": "LUK",
+          "sha256": "9406ee3a224feb76c9cc1ea91edba1541140c111af0396b4eba39bfcb421d6b4",
+          "size": 51335,
+          "chapters": 24
+        },
+        {
+          "code": "JHN",
+          "sha256": "c0e3b5216649e96854f42dbff8a207d5d7b7d9cbcd24169449d891fbe9e037bf",
+          "size": 35937,
+          "chapters": 21
+        },
+        {
+          "code": "ACT",
+          "sha256": "cdc9624eeb9754b04c331a149c774a383628182930778c1af27359b7c33d2044",
+          "size": 48574,
+          "chapters": 28
+        },
+        {
+          "code": "ROM",
+          "sha256": "ba1db3c36c937868ec7762e05912c1a3e07a961439ed16b2b6a4396b24093759",
+          "size": 19847,
+          "chapters": 16
+        },
+        {
+          "code": "1CO",
+          "sha256": "44f04153cbd56734373bb405efd83441f63cc7e44557b10fca05879a2f474369",
+          "size": 19147,
+          "chapters": 16
+        },
+        {
+          "code": "2CO",
+          "sha256": "17bb9ad4f6b5ed00309f804da3985de6ccc97f14d4ca02bd8167e9fdc197618c",
+          "size": 13445,
+          "chapters": 13
+        },
+        {
+          "code": "GAL",
+          "sha256": "fce126115216f8cd6d5a28eb7d27b4c9264614de34534e05ed02e44ea9594164",
+          "size": 7425,
+          "chapters": 6
+        },
+        {
+          "code": "EPH",
+          "sha256": "bb9db37f1cd38e93ac3c362473ac1d370906e32b62cd7b37607d47189993b336",
+          "size": 7404,
+          "chapters": 6
+        },
+        {
+          "code": "PHP",
+          "sha256": "74561e2f36ded44ea0b613021524724867381cb5dbb804a2a32eeb28b18e6d55",
+          "size": 5732,
+          "chapters": 4
+        },
+        {
+          "code": "COL",
+          "sha256": "6281e91177c038ccd23578dbe7a0470065bca5ff679d3a89397121a0509f2008",
+          "size": 5359,
+          "chapters": 4
+        },
+        {
+          "code": "1TH",
+          "sha256": "80e8ca42c82e1590c0692cda163cf611070ec021da29b9112812a1609eb61206",
+          "size": 4811,
+          "chapters": 5
+        },
+        {
+          "code": "2TH",
+          "sha256": "cbce9cfd9e16ac10a2078ea284168060a84cf92dd41b137b708c966e954b9127",
+          "size": 3096,
+          "chapters": 3
+        },
+        {
+          "code": "1TI",
+          "sha256": "ffdd2ad962accc385c29f19f704091e854b3bdec3394d9c90d731c08afa3c117",
+          "size": 6369,
+          "chapters": 6
+        },
+        {
+          "code": "2TI",
+          "sha256": "20bdd0c26c34f35176d2cdf51796303c8020c653e9c827ea5df8bd8f5f684d09",
+          "size": 5006,
+          "chapters": 4
+        },
+        {
+          "code": "TIT",
+          "sha256": "31c51ba16c3469fc5eb19f5dabeeaa06473aca40b7ebf48722bce537cefb7cc7",
+          "size": 3177,
+          "chapters": 3
+        },
+        {
+          "code": "PHM",
+          "sha256": "030f53476d6c96be17b23c1a3a77aa7d05cd41aa385a285826b3ce0b447fc86b",
+          "size": 1819,
+          "chapters": 1
+        },
+        {
+          "code": "HEB",
+          "sha256": "4dda898e93e220a67931c57a86a7584f51a62c6acd18986662a3bc9a48c20a00",
+          "size": 15385,
+          "chapters": 13
+        },
+        {
+          "code": "JAS",
+          "sha256": "4578213837da10aa3b950bb609b0dc42f52ff2529462a1239f9b79ac696ba52a",
+          "size": 6063,
+          "chapters": 5
+        },
+        {
+          "code": "1PE",
+          "sha256": "f20a8479200fb4473caa7a302759c92a992b1511aaaea4966e19593872c87340",
+          "size": 6568,
+          "chapters": 5
+        },
+        {
+          "code": "2PE",
+          "sha256": "8aa34d661262d6d6de736e6f1fecdccd0f94b90259fc150b84ad1359dfdcf8ba",
+          "size": 4471,
+          "chapters": 3
+        },
+        {
+          "code": "1JN",
+          "sha256": "195bcce671311cd5cc78f738f21852b5dfef06cc2ba24de9a73f57b59738eb87",
+          "size": 5021,
+          "chapters": 5
+        },
+        {
+          "code": "2JN",
+          "sha256": "c3b80a0b41ed394af34f0985bc7c0b15945629afb5510782b1cb8191269a69d2",
+          "size": 1327,
+          "chapters": 1
+        },
+        {
+          "code": "3JN",
+          "sha256": "d4a0c7c40387621faf6855e6984ef18994755939991b35b1b06dc12f435cd018",
+          "size": 1391,
+          "chapters": 1
+        },
+        {
+          "code": "JUD",
+          "sha256": "ee0184f85af7638f3a142d546e22d8d7f0b5155f0a579890690c82ed42b581eb",
+          "size": 2344,
+          "chapters": 1
+        },
+        {
+          "code": "REV",
+          "sha256": "410a2c40bf45c8ac6b8d25480084fd20d4821fe9293052a1425ef029f9351a1c",
+          "size": 21172,
+          "chapters": 22
+        }
+      ]
+    }
+  ]
+}

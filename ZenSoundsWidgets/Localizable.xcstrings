@@ -1,0 +1,82 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ %lld:%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$lld:%3$lld"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@ %2$lld:%3$lld"
+          }
+        }
+      }
+    },
+    "%lld" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%lld"
+          }
+        }
+      }
+    },
+    "Show another verse" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Mostrar outro versículo"
+          }
+        }
+      }
+    },
+    "Shows a different Word of the Day verse." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Mostra um versículo diferente da Palavra do Dia."
+          }
+        }
+      }
+    },
+    "Today's verse from ZenSounds, with a quick way to read the full chapter." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "O versículo de hoje do ZenSounds, com uma forma rápida de ler o capítulo completo."
+          }
+        }
+      }
+    },
+    "Word of the Day" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Palavra do Dia"
+          }
+        }
+      }
+    },
+    "WORD OF THE DAY" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "PALAVRA DO DIA"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.3"
+}

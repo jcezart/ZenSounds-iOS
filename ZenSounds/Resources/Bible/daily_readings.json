@@ -1,0 +1,662 @@
+[
+  {
+    "book": "PSA",
+    "chapter": 46,
+    "verse": 1
+  },
+  {
+    "book": "HEB",
+    "chapter": 13,
+    "verse": 6
+  },
+  {
+    "book": "PSA",
+    "chapter": 30,
+    "verse": 5
+  },
+  {
+    "book": "LUK",
+    "chapter": 12,
+    "verse": 32
+  },
+  {
+    "book": "PSA",
+    "chapter": 91,
+    "verse": 2
+  },
+  {
+    "book": "PRO",
+    "chapter": 12,
+    "verse": 25
+  },
+  {
+    "book": "PHP",
+    "chapter": 4,
+    "verse": 6
+  },
+  {
+    "book": "1CO",
+    "chapter": 15,
+    "verse": 58
+  },
+  {
+    "book": "GEN",
+    "chapter": 28,
+    "verse": 15
+  },
+  {
+    "book": "MAT",
+    "chapter": 11,
+    "verse": 29
+  },
+  {
+    "book": "JHN",
+    "chapter": 15,
+    "verse": 12
+  },
+  {
+    "book": "LUK",
+    "chapter": 1,
+    "verse": 37
+  },
+  {
+    "book": "MAT",
+    "chapter": 6,
+    "verse": 26
+  },
+  {
+    "book": "DEU",
+    "chapter": 31,
+    "verse": 8
+  },
+  {
+    "book": "MAT",
+    "chapter": 28,
+    "verse": 20
+  },
+  {
+    "book": "PRO",
+    "chapter": 16,
+    "verse": 3
+  },
+  {
+    "book": "ISA",
+    "chapter": 26,
+    "verse": 3
+  },
+  {
+    "book": "PSA",
+    "chapter": 34,
+    "verse": 18
+  },
+  {
+    "book": "PSA",
+    "chapter": 145,
+    "verse": 18
+  },
+  {
+    "book": "PSA",
+    "chapter": 46,
+    "verse": 10
+  },
+  {
+    "book": "PRO",
+    "chapter": 15,
+    "verse": 1
+  },
+  {
+    "book": "PSA",
+    "chapter": 37,
+    "verse": 5
+  },
+  {
+    "book": "JHN",
+    "chapter": 14,
+    "verse": 1
+  },
+  {
+    "book": "EPH",
+    "chapter": 2,
+    "verse": 10
+  },
+  {
+    "book": "MAT",
+    "chapter": 7,
+    "verse": 7
+  },
+  {
+    "book": "1PE",
+    "chapter": 5,
+    "verse": 7
+  },
+  {
+    "book": "ROM",
+    "chapter": 5,
+    "verse": 5
+  },
+  {
+    "book": "HAB",
+    "chapter": 2,
+    "verse": 3
+  },
+  {
+    "book": "NEH",
+    "chapter": 8,
+    "verse": 10
+  },
+  {
+    "book": "PHP",
+    "chapter": 4,
+    "verse": 8
+  },
+  {
+    "book": "1CO",
+    "chapter": 16,
+    "verse": 14
+  },
+  {
+    "book": "ECC",
+    "chapter": 4,
+    "verse": 9
+  },
+  {
+    "book": "ISA",
+    "chapter": 40,
+    "verse": 29
+  },
+  {
+    "book": "2CO",
+    "chapter": 4,
+    "verse": 16
+  },
+  {
+    "book": "ISA",
+    "chapter": 40,
+    "verse": 31
+  },
+  {
+    "book": "ROM",
+    "chapter": 12,
+    "verse": 18
+  },
+  {
+    "book": "ECC",
+    "chapter": 3,
+    "verse": 11
+  },
+  {
+    "book": "HEB",
+    "chapter": 13,
+    "verse": 5
+  },
+  {
+    "book": "ZEP",
+    "chapter": 3,
+    "verse": 17
+  },
+  {
+    "book": "GAL",
+    "chapter": 6,
+    "verse": 9
+  },
+  {
+    "book": "2CO",
+    "chapter": 1,
+    "verse": 3
+  },
+  {
+    "book": "PSA",
+    "chapter": 119,
+    "verse": 114
+  },
+  {
+    "book": "PHP",
+    "chapter": 1,
+    "verse": 6
+  },
+  {
+    "book": "1JN",
+    "chapter": 4,
+    "verse": 16
+  },
+  {
+    "book": "1CO",
+    "chapter": 13,
+    "verse": 13
+  },
+  {
+    "book": "JHN",
+    "chapter": 16,
+    "verse": 33
+  },
+  {
+    "book": "ROM",
+    "chapter": 15,
+    "verse": 13
+  },
+  {
+    "book": "2CO",
+    "chapter": 12,
+    "verse": 9
+  },
+  {
+    "book": "PRO",
+    "chapter": 18,
+    "verse": 10
+  },
+  {
+    "book": "DEU",
+    "chapter": 31,
+    "verse": 6
+  },
+  {
+    "book": "PHP",
+    "chapter": 4,
+    "verse": 13
+  },
+  {
+    "book": "ROM",
+    "chapter": 8,
+    "verse": 37
+  },
+  {
+    "book": "1PE",
+    "chapter": 4,
+    "verse": 8
+  },
+  {
+    "book": "JHN",
+    "chapter": 15,
+    "verse": 9
+  },
+  {
+    "book": "PSA",
+    "chapter": 27,
+    "verse": 1
+  },
+  {
+    "book": "ROM",
+    "chapter": 8,
+    "verse": 28
+  },
+  {
+    "book": "PHP",
+    "chapter": 4,
+    "verse": 4
+  },
+  {
+    "book": "PRO",
+    "chapter": 17,
+    "verse": 22
+  },
+  {
+    "book": "COL",
+    "chapter": 3,
+    "verse": 12
+  },
+  {
+    "book": "1JN",
+    "chapter": 4,
+    "verse": 7
+  },
+  {
+    "book": "MIC",
+    "chapter": 6,
+    "verse": 8
+  },
+  {
+    "book": "ECC",
+    "chapter": 4,
+    "verse": 10
+  },
+  {
+    "book": "JOB",
+    "chapter": 19,
+    "verse": 25
+  },
+  {
+    "book": "PSA",
+    "chapter": 55,
+    "verse": 22
+  },
+  {
+    "book": "EPH",
+    "chapter": 5,
+    "verse": 2
+  },
+  {
+    "book": "HAB",
+    "chapter": 3,
+    "verse": 18
+  },
+  {
+    "book": "PSA",
+    "chapter": 139,
+    "verse": 14
+  },
+  {
+    "book": "1TH",
+    "chapter": 5,
+    "verse": 16
+  },
+  {
+    "book": "JHN",
+    "chapter": 14,
+    "verse": 27
+  },
+  {
+    "book": "ROM",
+    "chapter": 8,
+    "verse": 31
+  },
+  {
+    "book": "JOS",
+    "chapter": 1,
+    "verse": 9
+  },
+  {
+    "book": "PSA",
+    "chapter": 27,
+    "verse": 14
+  },
+  {
+    "book": "JER",
+    "chapter": 31,
+    "verse": 3
+  },
+  {
+    "book": "LAM",
+    "chapter": 3,
+    "verse": 25
+  },
+  {
+    "book": "PSA",
+    "chapter": 100,
+    "verse": 5
+  },
+  {
+    "book": "PSA",
+    "chapter": 23,
+    "verse": 1
+  },
+  {
+    "book": "RUT",
+    "chapter": 2,
+    "verse": 12
+  },
+  {
+    "book": "MAT",
+    "chapter": 6,
+    "verse": 34
+  },
+  {
+    "book": "ISA",
+    "chapter": 54,
+    "verse": 10
+  },
+  {
+    "book": "PSA",
+    "chapter": 16,
+    "verse": 11
+  },
+  {
+    "book": "ISA",
+    "chapter": 43,
+    "verse": 2
+  },
+  {
+    "book": "PHP",
+    "chapter": 4,
+    "verse": 7
+  },
+  {
+    "book": "2TH",
+    "chapter": 3,
+    "verse": 16
+  },
+  {
+    "book": "PSA",
+    "chapter": 23,
+    "verse": 4
+  },
+  {
+    "book": "LAM",
+    "chapter": 3,
+    "verse": 22
+  },
+  {
+    "book": "NAM",
+    "chapter": 1,
+    "verse": 7
+  },
+  {
+    "book": "ISA",
+    "chapter": 41,
+    "verse": 10
+  },
+  {
+    "book": "EPH",
+    "chapter": 4,
+    "verse": 32
+  },
+  {
+    "book": "GEN",
+    "chapter": 1,
+    "verse": 31
+  },
+  {
+    "book": "ISA",
+    "chapter": 58,
+    "verse": 11
+  },
+  {
+    "book": "MRK",
+    "chapter": 10,
+    "verse": 27
+  },
+  {
+    "book": "MAT",
+    "chapter": 5,
+    "verse": 9
+  },
+  {
+    "book": "1TH",
+    "chapter": 5,
+    "verse": 11
+  },
+  {
+    "book": "JHN",
+    "chapter": 8,
+    "verse": 12
+  },
+  {
+    "book": "LAM",
+    "chapter": 3,
+    "verse": 23
+  },
+  {
+    "book": "JER",
+    "chapter": 29,
+    "verse": 11
+  },
+  {
+    "book": "PSA",
+    "chapter": 121,
+    "verse": 2
+  },
+  {
+    "book": "REV",
+    "chapter": 21,
+    "verse": 4
+  },
+  {
+    "book": "COL",
+    "chapter": 3,
+    "verse": 15
+  },
+  {
+    "book": "1TH",
+    "chapter": 5,
+    "verse": 18
+  },
+  {
+    "book": "ISA",
+    "chapter": 49,
+    "verse": 15
+  },
+  {
+    "book": "1CO",
+    "chapter": 13,
+    "verse": 4
+  },
+  {
+    "book": "PSA",
+    "chapter": 118,
+    "verse": 24
+  },
+  {
+    "book": "PRO",
+    "chapter": 17,
+    "verse": 17
+  },
+  {
+    "book": "JAS",
+    "chapter": 1,
+    "verse": 17
+  },
+  {
+    "book": "PSA",
+    "chapter": 4,
+    "verse": 8
+  },
+  {
+    "book": "PSA",
+    "chapter": 62,
+    "verse": 1
+  },
+  {
+    "book": "PSA",
+    "chapter": 23,
+    "verse": 6
+  },
+  {
+    "book": "MAT",
+    "chapter": 11,
+    "verse": 28
+  },
+  {
+    "book": "PRO",
+    "chapter": 3,
+    "verse": 5
+  },
+  {
+    "book": "PRO",
+    "chapter": 3,
+    "verse": 6
+  },
+  {
+    "book": "PSA",
+    "chapter": 147,
+    "verse": 3
+  },
+  {
+    "book": "HEB",
+    "chapter": 10,
+    "verse": 23
+  },
+  {
+    "book": "2CO",
+    "chapter": 5,
+    "verse": 17
+  },
+  {
+    "book": "COL",
+    "chapter": 3,
+    "verse": 14
+  },
+  {
+    "book": "GEN",
+    "chapter": 50,
+    "verse": 20
+  },
+  {
+    "book": "EXO",
+    "chapter": 14,
+    "verse": 14
+  },
+  {
+    "book": "PSA",
+    "chapter": 94,
+    "verse": 19
+  },
+  {
+    "book": "2TI",
+    "chapter": 1,
+    "verse": 7
+  },
+  {
+    "book": "1JN",
+    "chapter": 4,
+    "verse": 19
+  },
+  {
+    "book": "GAL",
+    "chapter": 5,
+    "verse": 13
+  },
+  {
+    "book": "1TH",
+    "chapter": 5,
+    "verse": 17
+  },
+  {
+    "book": "PSA",
+    "chapter": 34,
+    "verse": 8
+  },
+  {
+    "book": "JAS",
+    "chapter": 1,
+    "verse": 5
+  },
+  {
+    "book": "ROM",
+    "chapter": 12,
+    "verse": 12
+  },
+  {
+    "book": "PSA",
+    "chapter": 103,
+    "verse": 8
+  },
+  {
+    "book": "PSA",
+    "chapter": 62,
+    "verse": 5
+  },
+  {
+    "book": "HEB",
+    "chapter": 4,
+    "verse": 16
+  },
+  {
+    "book": "JHN",
+    "chapter": 3,
+    "verse": 16
+  },
+  {
+    "book": "LUK",
+    "chapter": 6,
+    "verse": 31
+  },
+  {
+    "book": "1JN",
+    "chapter": 3,
+    "verse": 1
+  },
+  {
+    "book": "JER",
+    "chapter": 17,
+    "verse": 7
+  }
+]

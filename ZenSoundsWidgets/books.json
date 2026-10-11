@@ -1,0 +1,464 @@
+[
+  {
+    "code": "GEN",
+    "order": 1,
+    "chapters": 50,
+    "name_pt": "Gênesis",
+    "name_en": "Genesis"
+  },
+  {
+    "code": "EXO",
+    "order": 2,
+    "chapters": 40,
+    "name_pt": "Êxodo",
+    "name_en": "Exodus"
+  },
+  {
+    "code": "LEV",
+    "order": 3,
+    "chapters": 27,
+    "name_pt": "Levítico",
+    "name_en": "Leviticus"
+  },
+  {
+    "code": "NUM",
+    "order": 4,
+    "chapters": 36,
+    "name_pt": "Números",
+    "name_en": "Numbers"
+  },
+  {
+    "code": "DEU",
+    "order": 5,
+    "chapters": 34,
+    "name_pt": "Deuteronômio",
+    "name_en": "Deuteronomy"
+  },
+  {
+    "code": "JOS",
+    "order": 6,
+    "chapters": 24,
+    "name_pt": "Josué",
+    "name_en": "Joshua"
+  },
+  {
+    "code": "JDG",
+    "order": 7,
+    "chapters": 21,
+    "name_pt": "Juízes",
+    "name_en": "Judges"
+  },
+  {
+    "code": "RUT",
+    "order": 8,
+    "chapters": 4,
+    "name_pt": "Rute",
+    "name_en": "Ruth"
+  },
+  {
+    "code": "1SA",
+    "order": 9,
+    "chapters": 31,
+    "name_pt": "1 Samuel",
+    "name_en": "1 Samuel"
+  },
+  {
+    "code": "2SA",
+    "order": 10,
+    "chapters": 24,
+    "name_pt": "2 Samuel",
+    "name_en": "2 Samuel"
+  },
+  {
+    "code": "1KI",
+    "order": 11,
+    "chapters": 22,
+    "name_pt": "1 Reis",
+    "name_en": "1 Kings"
+  },
+  {
+    "code": "2KI",
+    "order": 12,
+    "chapters": 25,
+    "name_pt": "2 Reis",
+    "name_en": "2 Kings"
+  },
+  {
+    "code": "1CH",
+    "order": 13,
+    "chapters": 29,
+    "name_pt": "1 Crônicas",
+    "name_en": "1 Chronicles"
+  },
+  {
+    "code": "2CH",
+    "order": 14,
+    "chapters": 36,
+    "name_pt": "2 Crônicas",
+    "name_en": "2 Chronicles"
+  },
+  {
+    "code": "EZR",
+    "order": 15,
+    "chapters": 10,
+    "name_pt": "Esdras",
+    "name_en": "Ezra"
+  },
+  {
+    "code": "NEH",
+    "order": 16,
+    "chapters": 13,
+    "name_pt": "Neemias",
+    "name_en": "Nehemiah"
+  },
+  {
+    "code": "EST",
+    "order": 17,
+    "chapters": 10,
+    "name_pt": "Ester",
+    "name_en": "Esther"
+  },
+  {
+    "code": "JOB",
+    "order": 18,
+    "chapters": 42,
+    "name_pt": "Jó",
+    "name_en": "Job"
+  },
+  {
+    "code": "PSA",
+    "order": 19,
+    "chapters": 150,
+    "name_pt": "Salmos",
+    "name_en": "Psalms"
+  },
+  {
+    "code": "PRO",
+    "order": 20,
+    "chapters": 31,
+    "name_pt": "Provérbios",
+    "name_en": "Proverbs"
+  },
+  {
+    "code": "ECC",
+    "order": 21,
+    "chapters": 12,
+    "name_pt": "Eclesiastes",
+    "name_en": "Ecclesiastes"
+  },
+  {
+    "code": "SNG",
+    "order": 22,
+    "chapters": 8,
+    "name_pt": "Cantares",
+    "name_en": "Song of Solomon"
+  },
+  {
+    "code": "ISA",
+    "order": 23,
+    "chapters": 66,
+    "name_pt": "Isaías",
+    "name_en": "Isaiah"
+  },
+  {
+    "code": "JER",
+    "order": 24,
+    "chapters": 52,
+    "name_pt": "Jeremias",
+    "name_en": "Jeremiah"
+  },
+  {
+    "code": "LAM",
+    "order": 25,
+    "chapters": 5,
+    "name_pt": "Lamentações",
+    "name_en": "Lamentations"
+  },
+  {
+    "code": "EZK",
+    "order": 26,
+    "chapters": 48,
+    "name_pt": "Ezequiel",
+    "name_en": "Ezekiel"
+  },
+  {
+    "code": "DAN",
+    "order": 27,
+    "chapters": 12,
+    "name_pt": "Daniel",
+    "name_en": "Daniel"
+  },
+  {
+    "code": "HOS",
+    "order": 28,
+    "chapters": 14,
+    "name_pt": "Oseias",
+    "name_en": "Hosea"
+  },
+  {
+    "code": "JOL",
+    "order": 29,
+    "chapters": 3,
+    "name_pt": "Joel",
+    "name_en": "Joel"
+  },
+  {
+    "code": "AMO",
+    "order": 30,
+    "chapters": 9,
+    "name_pt": "Amós",
+    "name_en": "Amos"
+  },
+  {
+    "code": "OBA",
+    "order": 31,
+    "chapters": 1,
+    "name_pt": "Obadias",
+    "name_en": "Obadiah"
+  },
+  {
+    "code": "JON",
+    "order": 32,
+    "chapters": 4,
+    "name_pt": "Jonas",
+    "name_en": "Jonah"
+  },
+  {
+    "code": "MIC",
+    "order": 33,
+    "chapters": 7,
+    "name_pt": "Miqueias",
+    "name_en": "Micah"
+  },
+  {
+    "code": "NAM",
+    "order": 34,
+    "chapters": 3,
+    "name_pt": "Naum",
+    "name_en": "Nahum"
+  },
+  {
+    "code": "HAB",
+    "order": 35,
+    "chapters": 3,
+    "name_pt": "Habacuque",
+    "name_en": "Habakkuk"
+  },
+  {
+    "code": "ZEP",
+    "order": 36,
+    "chapters": 3,
+    "name_pt": "Sofonias",
+    "name_en": "Zephaniah"
+  },
+  {
+    "code": "HAG",
+    "order": 37,
+    "chapters": 2,
+    "name_pt": "Ageu",
+    "name_en": "Haggai"
+  },
+  {
+    "code": "ZEC",
+    "order": 38,
+    "chapters": 14,
+    "name_pt": "Zacarias",
+    "name_en": "Zechariah"
+  },
+  {
+    "code": "MAL",
+    "order": 39,
+    "chapters": 4,
+    "name_pt": "Malaquias",
+    "name_en": "Malachi"
+  },
+  {
+    "code": "MAT",
+    "order": 40,
+    "chapters": 28,
+    "name_pt": "Mateus",
+    "name_en": "Matthew"
+  },
+  {
+    "code": "MRK",
+    "order": 41,
+    "chapters": 16,
+    "name_pt": "Marcos",
+    "name_en": "Mark"
+  },
+  {
+    "code": "LUK",
+    "order": 42,
+    "chapters": 24,
+    "name_pt": "Lucas",
+    "name_en": "Luke"
+  },
+  {
+    "code": "JHN",
+    "order": 43,
+    "chapters": 21,
+    "name_pt": "João",
+    "name_en": "John"
+  },
+  {
+    "code": "ACT",
+    "order": 44,
+    "chapters": 28,
+    "name_pt": "Atos",
+    "name_en": "Acts"
+  },
+  {
+    "code": "ROM",
+    "order": 45,
+    "chapters": 16,
+    "name_pt": "Romanos",
+    "name_en": "Romans"
+  },
+  {
+    "code": "1CO",
+    "order": 46,
+    "chapters": 16,
+    "name_pt": "1 Coríntios",
+    "name_en": "1 Corinthians"
+  },
+  {
+    "code": "2CO",
+    "order": 47,
+    "chapters": 13,
+    "name_pt": "2 Coríntios",
+    "name_en": "2 Corinthians"
+  },
+  {
+    "code": "GAL",
+    "order": 48,
+    "chapters": 6,
+    "name_pt": "Gálatas",
+    "name_en": "Galatians"
+  },
+  {
+    "code": "EPH",
+    "order": 49,
+    "chapters": 6,
+    "name_pt": "Efésios",
+    "name_en": "Ephesians"
+  },
+  {
+    "code": "PHP",
+    "order": 50,
+    "chapters": 4,
+    "name_pt": "Filipenses",
+    "name_en": "Philippians"
+  },
+  {
+    "code": "COL",
+    "order": 51,
+    "chapters": 4,
+    "name_pt": "Colossenses",
+    "name_en": "Colossians"
+  },
+  {
+    "code": "1TH",
+    "order": 52,
+    "chapters": 5,
+    "name_pt": "1 Tessalonicenses",
+    "name_en": "1 Thessalonians"
+  },
+  {
+    "code": "2TH",
+    "order": 53,
+    "chapters": 3,
+    "name_pt": "2 Tessalonicenses",
+    "name_en": "2 Thessalonians"
+  },
+  {
+    "code": "1TI",
+    "order": 54,
+    "chapters": 6,
+    "name_pt": "1 Timóteo",
+    "name_en": "1 Timothy"
+  },
+  {
+    "code": "2TI",
+    "order": 55,
+    "chapters": 4,
+    "name_pt": "2 Timóteo",
+    "name_en": "2 Timothy"
+  },
+  {
+    "code": "TIT",
+    "order": 56,
+    "chapters": 3,
+    "name_pt": "Tito",
+    "name_en": "Titus"
+  },
+  {
+    "code": "PHM",
+    "order": 57,
+    "chapters": 1,
+    "name_pt": "Filemom",
+    "name_en": "Philemon"
+  },
+  {
+    "code": "HEB",
+    "order": 58,
+    "chapters": 13,
+    "name_pt": "Hebreus",
+    "name_en": "Hebrews"
+  },
+  {
+    "code": "JAS",
+    "order": 59,
+    "chapters": 5,
+    "name_pt": "Tiago",
+    "name_en": "James"
+  },
+  {
+    "code": "1PE",
+    "order": 60,
+    "chapters": 5,
+    "name_pt": "1 Pedro",
+    "name_en": "1 Peter"
+  },
+  {
+    "code": "2PE",
+    "order": 61,
+    "chapters": 3,
+    "name_pt": "2 Pedro",
+    "name_en": "2 Peter"
+  },
+  {
+    "code": "1JN",
+    "order": 62,
+    "chapters": 5,
+    "name_pt": "1 João",
+    "name_en": "1 John"
+  },
+  {
+    "code": "2JN",
+    "order": 63,
+    "chapters": 1,
+    "name_pt": "2 João",
+    "name_en": "2 John"
+  },
+  {
+    "code": "3JN",
+    "order": 64,
+    "chapters": 1,
+    "name_pt": "3 João",
+    "name_en": "3 John"
+  },
+  {
+    "code": "JUD",
+    "order": 65,
+    "chapters": 1,
+    "name_pt": "Judas",
+    "name_en": "Jude"
+  },
+  {
+    "code": "REV",
+    "order": 66,
+    "chapters": 22,
+    "name_pt": "Apocalipse",
+    "name_en": "Revelation"
+  }
+]
