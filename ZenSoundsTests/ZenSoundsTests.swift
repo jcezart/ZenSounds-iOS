@@ -57,7 +57,28 @@ struct DailyWordStoreTests {
     }
 }
 
+@MainActor
 struct MixRulesTests {
+    @Test func biblicalSoundscapesUseOnlyCatalogSoundsAndUniqueLayers() {
+        #expect(BiblicalSoundscapeCatalog.all.count == 4)
+        for soundscape in BiblicalSoundscapeCatalog.all {
+            let ids = soundscape.layers.map(\.soundId)
+            #expect(!ids.isEmpty)
+            #expect(Set(ids).count == ids.count)
+            #expect(ids.allSatisfy { SoundCatalog.sound(id: $0) != nil })
+            #expect(MixRules.normalize(soundscape.layers) == soundscape.layers)
+            #expect(BiblicalSoundscapeCatalog.soundscape(forMixID: soundscape.playableMix.id) == soundscape)
+            #expect(SoundCatalog.sound(id: soundscape.artworkName) != nil)
+        }
+    }
+
+    @Test func priorityExpansionSoundsAreAvailableInTheNatureCatalog() {
+        let expected = ["GalileeWaves", "MeadowSheep", "OliveGrove", "MorningBirds"]
+        for id in expected {
+            #expect(SoundCatalog.sound(id: id)?.category == .nature)
+        }
+    }
+
     @Test func normalizeDedupesUnknownSoundsAndClampsVolume() {
         let layers = [
             MixLayer(soundId: "Rain", volume: 1.5),
@@ -75,7 +96,27 @@ struct MixRulesTests {
     @Test func normalizeCapsAtMaxLayers() {
         let layers = SoundCatalog.all.map { MixLayer(soundId: $0.id, volume: 1.0) } + [MixLayer(soundId: "Rain", volume: 1.0)]
         let normalized = MixRules.normalize(layers)
-        #expect(normalized.count == MixRules.maxLayers)
+        #expect(normalized.count == min(MixRules.maxLayers, SoundCatalog.all.count))
+    }
+
+    @Test func removedSoundsAreUnavailableAndFilteredFromLegacyMixes() {
+        #expect(SoundCatalog.sound(id: "CarEngine") == nil)
+        #expect(SoundCatalog.sound(id: "TVStatic") == nil)
+
+        let legacyMixes = [
+            SavedMix(id: "mixed", name: "Mixed", layers: [
+                MixLayer(soundId: "Rain", volume: 0.8),
+                MixLayer(soundId: "TVStatic", volume: 0.2),
+            ]),
+            SavedMix(id: "removed", name: "Removed", layers: [
+                MixLayer(soundId: "CarEngine", volume: 1),
+            ]),
+        ]
+        let sanitized = UserPreferencesStore.removingUnavailableSounds(from: legacyMixes)
+
+        #expect(sanitized.count == 1)
+        #expect(sanitized[0].id == "mixed")
+        #expect(sanitized[0].layers.map(\.soundId) == ["Rain"])
     }
 
     @Test func gainsSumToMasterVolumeRegardlessOfLayerCount() {
@@ -114,5 +155,111 @@ struct NarrationRateRulesTests {
         #expect(NarrationRateRules.clamped(0.1) == NarrationRateRules.range.lowerBound)
         #expect(NarrationRateRules.clamped(0.9) == NarrationRateRules.range.upperBound)
         #expect(NarrationRateRules.clamped(0.5) == 0.5)
+    }
+}
+
+struct AudioStabilityRulesTests {
+    @Test func transportTransitionsBetweenStoppedPlayingAndPaused() {
+        var state = AudioTransportRules.nextState(from: .stopped, event: .startSucceeded)
+        #expect(state == .playing)
+        state = AudioTransportRules.nextState(from: state, event: .pause)
+        #expect(state == .paused)
+        state = AudioTransportRules.nextState(from: state, event: .resumeSucceeded)
+        #expect(state == .playing)
+        state = AudioTransportRules.nextState(from: state, event: .stop)
+        #expect(state == .stopped)
+    }
+
+    @Test func failedReplacementPreservesPreviousValidState() {
+        #expect(AudioTransportRules.nextState(from: .playing, event: .startFailed) == .playing)
+        #expect(AudioTransportRules.nextState(from: .paused, event: .startFailed) == .paused)
+    }
+
+    @Test func timerExpirationPausesWithoutDiscardingPlaybackState() {
+        #expect(AudioTransportRules.nextState(from: .playing, event: .timerExpired) == .paused)
+        #expect(AudioTransportRules.nextState(from: .paused, event: .timerExpired) == .paused)
+    }
+
+    @Test func operationGenerationRejectsStoppedAndSupersededWork() {
+        var generation = OperationGeneration()
+        let first = generation.begin()
+        let second = generation.begin()
+        #expect(!generation.isCurrent(first))
+        #expect(generation.isCurrent(second))
+        generation.invalidate()
+        #expect(!generation.isCurrent(second))
+    }
+
+    @Test func duckingIsTemporaryAndPreservesLayerProportions() {
+        let rain = AudioGainRules.effectiveGain(baseGain: 0.8, duckMultiplier: AudioGainRules.narrationDuckMultiplier)
+        let forest = AudioGainRules.effectiveGain(baseGain: 0.4, duckMultiplier: AudioGainRules.narrationDuckMultiplier)
+        #expect(abs(rain - 0.24) < 0.0001)
+        #expect(abs(forest - 0.12) < 0.0001)
+        #expect(abs((rain / forest) - 2) < 0.0001)
+        #expect(AudioGainRules.effectiveGain(baseGain: 0.65, duckMultiplier: 1) == 0.65)
+    }
+
+    @Test func userVolumeChangeDuringDuckingUsesTheNewBaseGain() {
+        let updated = AudioGainRules.effectiveGain(baseGain: 0.5, duckMultiplier: 0.3)
+        #expect(abs(updated - 0.15) < 0.0001)
+        #expect(AudioGainRules.effectiveGain(baseGain: 0.5, duckMultiplier: 1) == 0.5)
+    }
+}
+
+@MainActor
+struct NarrationStateRulesTests {
+    @Test func narrationStateTransitionsCoverPauseResumeFinishAndCancel() {
+        #expect(BibleNarrationService.nextState(after: .started) == .speaking)
+        #expect(BibleNarrationService.nextState(after: .paused) == .paused)
+        #expect(BibleNarrationService.nextState(after: .resumed) == .speaking)
+        #expect(BibleNarrationService.nextState(after: .finished) == .stopped)
+        #expect(BibleNarrationService.nextState(after: .cancelled) == .stopped)
+        #expect(BibleNarrationService.nextState(after: .failed) == .stopped)
+    }
+
+    @Test func voiceSelectionUsesInstalledPreferenceOrFallsBack() {
+        let voices = ["voice.pt.default", "voice.pt.enhanced"]
+        #expect(NarrationVoiceRules.resolvedIdentifier(
+            preferredIdentifier: "voice.pt.enhanced",
+            availableIdentifiers: voices
+        ) == "voice.pt.enhanced")
+        #expect(NarrationVoiceRules.resolvedIdentifier(
+            preferredIdentifier: "voice.removed",
+            availableIdentifiers: voices
+        ) == "voice.pt.default")
+        #expect(NarrationVoiceRules.resolvedIdentifier(
+            preferredIdentifier: nil,
+            availableIdentifiers: []
+        ) == nil)
+    }
+}
+
+struct WidgetIntegrationRulesTests {
+    @Test func appGroupSelectionPersistsUsingTheWidgetContract() {
+        let suiteName = "zensounds.widget.tests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let store = DailyWordStore(defaults: defaults)
+        let readings = [DailyReadingRef(book: "JHN", chapter: 3, verse: 16)]
+
+        let selected = store.reference(for: Date(timeIntervalSince1970: 1_700_000_000), readings: readings)
+
+        #expect(selected == readings[0])
+        #expect(defaults.string(forKey: "daily_word_book") == "JHN")
+        #expect(defaults.integer(forKey: "daily_word_chapter") == 3)
+        #expect(defaults.integer(forKey: "daily_word_verse") == 16)
+    }
+
+    @Test func widgetDeepLinkRoundTripsAndRejectsInvalidRoutes() {
+        let route = BibleDeepLink(book: "PSA", chapter: 23, verse: 1)
+        #expect(route.url.flatMap(BibleDeepLink.parse) == route)
+        #expect(BibleDeepLink.parse(URL(string: "zensounds://chapter/PSA/0/1")!) == nil)
+        #expect(BibleDeepLink.parse(URL(string: "https://example.com/chapter/PSA/23/1")!) == nil)
+    }
+
+    @Test func systemAndExplicitLanguageSelectionsResolveConsistently() {
+        #expect(AppLanguage.selection(from: "pt").bibleLanguage == .pt)
+        #expect(AppLanguage.selection(from: "en").bibleLanguage == .en)
+        #expect(AppLanguage.selection(from: "unknown") == .system)
     }
 }

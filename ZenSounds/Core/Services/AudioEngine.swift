@@ -36,6 +36,8 @@ final class AudioEngine: ObservableObject {
     private var narrationDuckMultiplier = 1.0
     private var isNarrationSessionActive = false
     private var isAudioConfigured = false
+    private var playbackRequests = OperationGeneration()
+    private var transportState: AudioTransportState = .stopped
 
     var isActive: Bool { activeSoundId != nil || activeMix != nil }
 
@@ -112,33 +114,60 @@ final class AudioEngine: ObservableObject {
         }
 
         playbackTask?.cancel()
+        let generation = playbackRequests.begin()
         playbackTask = Task { [weak self] in
-            await self?.startPlayback(layers: normalized, mix: mix, singleSoundId: singleSoundId)
+            await self?.startPlayback(
+                layers: normalized,
+                mix: mix,
+                singleSoundId: singleSoundId,
+                generation: generation
+            )
         }
     }
 
-    private func startPlayback(layers newLayers: [MixLayer], mix: SavedMix?, singleSoundId: String?) async {
-        ensureAudioConfigured()
-        guard await activateAudioSession(), !Task.isCancelled else { return }
+    private func startPlayback(
+        layers newLayers: [MixLayer],
+        mix: SavedMix?,
+        singleSoundId: String?,
+        generation: UInt64
+    ) async {
+        playbackError = nil
+        guard ensureAudioConfigured() else {
+            transitionTransport(.startFailed)
+            return
+        }
+        guard await activateAudioSession(), isCurrentPlayback(generation) else {
+            transitionTransport(.startFailed)
+            return
+        }
 
-        stopAllNodes()
+        var pendingPlayers: [String: LoopingPlayer] = [:]
+        for layer in newLayers {
+            guard isCurrentPlayback(generation),
+                  let player = makePlayer(soundId: layer.soundId) else {
+                dispose(pendingPlayers)
+                transitionTransport(.startFailed)
+                return
+            }
+            pendingPlayers[layer.soundId] = player
+        }
+
+        guard isCurrentPlayback(generation), startEngine() else {
+            dispose(pendingPlayers)
+            transitionTransport(.startFailed)
+            return
+        }
+
+        stopAllNodes(keepEngineRunning: true)
+        players = pendingPlayers
         activeSoundId = singleSoundId
         activeMix = mix
         layers = newLayers
-        playbackError = nil
-        for layer in newLayers {
-            startLayer(soundId: layer.soundId)
-        }
-        guard players.count == newLayers.count else {
-            stopAllNodes()
-            return
-        }
-        guard startEngine() else { return }
         applyVolumes()
         for player in players.values {
             player.start()
         }
-        isPlaying = true
+        transitionTransport(.startSucceeded)
         updateNowPlaying()
     }
 
@@ -151,19 +180,22 @@ final class AudioEngine: ObservableObject {
     func pause() {
         guard isPlaying else { return }
         players.values.forEach { $0.pause() }
-        isPlaying = false
+        transitionTransport(.pause)
         updateNowPlaying()
     }
 
     func resume() {
         guard !isPlaying, isActive else { return }
         playbackTask?.cancel()
+        let generation = playbackRequests.begin()
         playbackTask = Task { [weak self] in
-            guard let self, await self.startEngineIfNeeded(), !Task.isCancelled else { return }
+            guard let self,
+                  await self.startEngineIfNeeded(),
+                  self.isCurrentPlayback(generation) else { return }
             for player in self.players.values {
                 player.resume()
             }
-            self.isPlaying = true
+            self.transitionTransport(.resumeSucceeded)
             self.updateNowPlaying()
         }
     }
@@ -171,13 +203,14 @@ final class AudioEngine: ObservableObject {
     /// Full stop: tears down every layer and the timer. The compact/full player close button
     /// calls this — nothing keeps playing in the background afterward.
     func stop() {
+        playbackRequests.invalidate()
         playbackTask?.cancel()
         playbackTask = nil
         stopAllNodes()
         activeSoundId = nil
         activeMix = nil
         layers = []
-        isPlaying = false
+        transitionTransport(.stop)
         cancelTimer()
         clearNowPlaying()
         if !isNarrationSessionActive {
@@ -221,8 +254,17 @@ final class AudioEngine: ObservableObject {
         timerRemaining = remaining
         applyVolumes()
         if remaining <= 0 {
-            stop()
+            finishTimerPlayback()
         }
+    }
+
+    /// A sleep timer silences playback without discarding the selected sound or mix. Keeping the
+    /// nodes and metadata makes the full player remain useful and lets the user start it again.
+    private func finishTimerPlayback() {
+        players.values.forEach { $0.pause() }
+        transitionTransport(.timerExpired)
+        cancelTimer()
+        updateNowPlaying()
     }
 
     // MARK: - Volume
@@ -231,7 +273,7 @@ final class AudioEngine: ObservableObject {
         narrationDuckingTask?.cancel()
 
         let initialMultiplier = narrationDuckMultiplier
-        let targetMultiplier = active ? 0.30 : 1.0
+        let targetMultiplier = active ? AudioGainRules.narrationDuckMultiplier : 1.0
         guard abs(initialMultiplier - targetMultiplier) > 0.001 else {
             narrationDuckMultiplier = targetMultiplier
             applyVolumes()
@@ -259,11 +301,17 @@ final class AudioEngine: ObservableObject {
         }
     }
 
+    func clearPlaybackError() {
+        playbackError = nil
+    }
+
     private func applyVolumes() {
         let fade = currentFadeMultiplier()
         let gains = MixRules.gains(layers: layers, master: masterVolume, fade: fade)
         for (soundId, gain) in gains {
-            players[soundId]?.node.volume = Float(gain * narrationDuckMultiplier)
+            players[soundId]?.node.volume = Float(
+                AudioGainRules.effectiveGain(baseGain: gain, duckMultiplier: narrationDuckMultiplier)
+            )
         }
     }
 
@@ -275,7 +323,7 @@ final class AudioEngine: ObservableObject {
     // MARK: - Engine plumbing
 
     func prepareAudioSessionForNarration() async -> Bool {
-        ensureAudioConfigured()
+        guard ensureAudioConfigured() else { return false }
         let isReady = await activateAudioSession()
         if isReady {
             isNarrationSessionActive = true
@@ -285,7 +333,7 @@ final class AudioEngine: ObservableObject {
 
     private func startEngineIfNeeded() async -> Bool {
         guard !engine.isRunning else { return true }
-        ensureAudioConfigured()
+        guard ensureAudioConfigured() else { return false }
         guard await activateAudioSession() else { return false }
         return startEngine()
     }
@@ -307,6 +355,8 @@ final class AudioEngine: ObservableObject {
     }
 
     private func startEngine() -> Bool {
+        guard !engine.isRunning else { return true }
+        configureOutputConnectionIfNeeded()
         engine.prepare()
         do {
             try engine.start()
@@ -326,18 +376,27 @@ final class AudioEngine: ObservableObject {
         }
     }
 
-    private func startLayer(soundId: String) {
-        guard players[soundId] == nil, let url = Bundle.main.url(forResource: soundId, withExtension: "mp3") else {
-            playbackError = "missing_audio_\(soundId)"
-            return
+    private func makePlayer(soundId: String) -> LoopingPlayer? {
+        guard let url = Bundle.main.url(forResource: soundId, withExtension: "mp3") else {
+            playbackError = "The audio file for this sound is unavailable."
+            return nil
         }
         do {
             let player = try LoopingPlayer(url: url)
             engine.attach(player.node)
             engine.connect(player.node, to: engine.mainMixerNode, format: player.format)
-            players[soundId] = player
+            return player
         } catch {
             playbackError = error.localizedDescription
+            return nil
+        }
+    }
+
+    private func dispose(_ playersToDispose: [String: LoopingPlayer]) {
+        for player in playersToDispose.values {
+            player.stop()
+            engine.disconnectNodeOutput(player.node)
+            engine.detach(player.node)
         }
     }
 
@@ -353,34 +412,60 @@ final class AudioEngine: ObservableObject {
 
     // MARK: - Audio session, interruptions, route changes
 
-    private func ensureAudioConfigured() {
-        guard !isAudioConfigured else { return }
+    private func ensureAudioConfigured() -> Bool {
+        guard !isAudioConfigured else { return true }
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+        } catch {
+            playbackError = error.localizedDescription
+            return false
+        }
         isAudioConfigured = true
-        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
 
         let session = AVAudioSession.sharedInstance()
         NotificationCenter.default.addObserver(
             forName: AVAudioSession.interruptionNotification, object: session, queue: .main
         ) { [weak self] note in
-            Task { @MainActor in self?.handleInterruption(note) }
+            guard let typeValue = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt else { return }
+            let optionsValue = note.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt
+            Task { @MainActor [weak self] in
+                self?.handleInterruption(typeValue: typeValue, optionsValue: optionsValue)
+            }
         }
         NotificationCenter.default.addObserver(
             forName: AVAudioSession.routeChangeNotification, object: session, queue: .main
         ) { [weak self] note in
-            Task { @MainActor in self?.handleRouteChange(note) }
+            guard let reasonValue = note.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt else { return }
+            Task { @MainActor [weak self] in
+                self?.handleRouteChange(reasonValue: reasonValue)
+            }
         }
         configureRemoteCommands()
+        return true
     }
 
-    private func handleInterruption(_ note: Notification) {
-        guard let info = note.userInfo,
-              let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
-              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
+    private func configureOutputConnectionIfNeeded() {
+        let mixer = engine.mainMixerNode
+        guard engine.outputConnectionPoints(for: mixer, outputBus: 0).isEmpty else { return }
+        engine.connect(mixer, to: engine.outputNode, format: nil)
+    }
+
+    private func isCurrentPlayback(_ generation: UInt64) -> Bool {
+        !Task.isCancelled && playbackRequests.isCurrent(generation)
+    }
+
+    private func transitionTransport(_ event: AudioTransportEvent) {
+        transportState = AudioTransportRules.nextState(from: transportState, event: event)
+        isPlaying = transportState == .playing
+    }
+
+    private func handleInterruption(typeValue: UInt, optionsValue: UInt?) {
+        guard let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
         switch type {
         case .began:
             pause()
         case .ended:
-            if let optionsValue = info[AVAudioSessionInterruptionOptionKey] as? UInt,
+            if let optionsValue,
                AVAudioSession.InterruptionOptions(rawValue: optionsValue).contains(.shouldResume) {
                 resume()
             }
@@ -391,10 +476,8 @@ final class AudioEngine: ObservableObject {
 
     /// Mirrors system convention (and Android's "becoming noisy" handling): pause when the
     /// active output disappears (e.g. headphones unplugged) instead of suddenly playing out loud.
-    private func handleRouteChange(_ note: Notification) {
-        guard let info = note.userInfo,
-              let reasonValue = info[AVAudioSessionRouteChangeReasonKey] as? UInt,
-              let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else { return }
+    private func handleRouteChange(reasonValue: UInt) {
+        guard let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else { return }
         if reason == .oldDeviceUnavailable {
             pause()
         }
@@ -443,5 +526,60 @@ final class AudioEngine: ObservableObject {
 
     private func clearNowPlaying() {
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+    }
+}
+
+enum AudioGainRules {
+    static let narrationDuckMultiplier = 0.30
+
+    static func effectiveGain(baseGain: Double, duckMultiplier: Double) -> Double {
+        min(max(baseGain, 0), 1) * min(max(duckMultiplier, 0), 1)
+    }
+}
+
+struct OperationGeneration {
+    private(set) var current: UInt64 = 0
+
+    mutating func begin() -> UInt64 {
+        current &+= 1
+        return current
+    }
+
+    mutating func invalidate() {
+        current &+= 1
+    }
+
+    func isCurrent(_ generation: UInt64) -> Bool {
+        generation == current
+    }
+}
+
+enum AudioTransportState: Equatable {
+    case stopped
+    case playing
+    case paused
+}
+
+enum AudioTransportEvent {
+    case startSucceeded
+    case pause
+    case resumeSucceeded
+    case stop
+    case startFailed
+    case timerExpired
+}
+
+enum AudioTransportRules {
+    static func nextState(from current: AudioTransportState, event: AudioTransportEvent) -> AudioTransportState {
+        switch event {
+        case .startSucceeded, .resumeSucceeded:
+            return .playing
+        case .pause, .timerExpired:
+            return current == .playing ? .paused : current
+        case .stop:
+            return .stopped
+        case .startFailed:
+            return current
+        }
     }
 }

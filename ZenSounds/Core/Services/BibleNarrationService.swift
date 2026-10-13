@@ -10,6 +10,26 @@ final class BibleNarrationService: NSObject, ObservableObject {
         case paused
     }
 
+    enum PlaybackEvent {
+        case started
+        case paused
+        case resumed
+        case finished
+        case cancelled
+        case failed
+    }
+
+    static func nextState(after event: PlaybackEvent) -> PlaybackState {
+        switch event {
+        case .started, .resumed:
+            return .speaking
+        case .paused:
+            return .paused
+        case .finished, .cancelled, .failed:
+            return .stopped
+        }
+    }
+
     static let shared = BibleNarrationService()
 
     @Published private(set) var state: PlaybackState = .stopped
@@ -21,7 +41,7 @@ final class BibleNarrationService: NSObject, ObservableObject {
 
     private let synthesizer = AVSpeechSynthesizer()
     private var activeUtteranceIdentifier: ObjectIdentifier?
-    private var requestGeneration: UInt64 = 0
+    private var requests = OperationGeneration()
 
     private override init() {
         super.init()
@@ -73,12 +93,12 @@ final class BibleNarrationService: NSObject, ObservableObject {
 
     func resume() {
         guard state == .paused, synthesizer.isPaused else { return }
-        let generation = requestGeneration
+        let generation = requests.current
         isPreparing = true
         Task { [weak self] in
             guard let self else { return }
             let isReady = await AudioEngine.shared.prepareAudioSessionForNarration()
-            guard generation == requestGeneration else {
+            guard requests.isCurrent(generation) else {
                 if currentItemID == nil {
                     AudioEngine.shared.finishNarrationAudioSession()
                 }
@@ -90,7 +110,7 @@ final class BibleNarrationService: NSObject, ObservableObject {
             }
             AudioEngine.shared.setNarrationDucking(true)
             try? await Task.sleep(for: .milliseconds(180))
-            guard generation == requestGeneration else { return }
+            guard requests.isCurrent(generation) else { return }
             isPreparing = false
             if !synthesizer.continueSpeaking() {
                 failCurrentRequest("Narration could not be resumed.")
@@ -99,11 +119,11 @@ final class BibleNarrationService: NSObject, ObservableObject {
     }
 
     func stop() {
-        requestGeneration &+= 1
+        requests.invalidate()
         isPreparing = false
         activeUtteranceIdentifier = nil
         currentItemID = nil
-        state = .stopped
+        state = Self.nextState(after: .cancelled)
         if synthesizer.isSpeaking || synthesizer.isPaused {
             _ = synthesizer.stopSpeaking(at: .immediate)
         }
@@ -123,12 +143,11 @@ final class BibleNarrationService: NSObject, ObservableObject {
         let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedText.isEmpty else { return }
 
-        requestGeneration &+= 1
-        let generation = requestGeneration
+        let generation = requests.begin()
         errorMessage = nil
         isPreparing = true
         currentItemID = itemID
-        state = .stopped
+        state = Self.nextState(after: .cancelled)
 
         if synthesizer.isSpeaking || synthesizer.isPaused {
             activeUtteranceIdentifier = nil
@@ -138,7 +157,7 @@ final class BibleNarrationService: NSObject, ObservableObject {
         Task { [weak self] in
             guard let self else { return }
             let isReady = await AudioEngine.shared.prepareAudioSessionForNarration()
-            guard generation == requestGeneration else {
+            guard requests.isCurrent(generation) else {
                 if currentItemID == nil {
                     AudioEngine.shared.finishNarrationAudioSession()
                 }
@@ -159,7 +178,7 @@ final class BibleNarrationService: NSObject, ObservableObject {
 
             AudioEngine.shared.setNarrationDucking(true)
             try? await Task.sleep(for: .milliseconds(180))
-            guard generation == requestGeneration else { return }
+            guard requests.isCurrent(generation) else { return }
 
             let utterance = AVSpeechUtterance(string: trimmedText)
             utterance.voice = voice
@@ -173,10 +192,13 @@ final class BibleNarrationService: NSObject, ObservableObject {
     }
 
     private func failCurrentRequest(_ message: String) {
+        if synthesizer.isSpeaking || synthesizer.isPaused {
+            _ = synthesizer.stopSpeaking(at: .immediate)
+        }
         isPreparing = false
         currentItemID = nil
         activeUtteranceIdentifier = nil
-        state = .stopped
+        state = Self.nextState(after: .failed)
         errorMessage = message
         AudioEngine.shared.finishNarrationAudioSession()
     }
@@ -209,7 +231,7 @@ extension BibleNarrationService: AVSpeechSynthesizerDelegate {
         Task { @MainActor [weak self] in
             guard let self, identifier == activeUtteranceIdentifier else { return }
             isPreparing = false
-            state = .speaking
+            state = Self.nextState(after: .started)
         }
     }
 
@@ -217,7 +239,7 @@ extension BibleNarrationService: AVSpeechSynthesizerDelegate {
         let identifier = ObjectIdentifier(utterance)
         Task { @MainActor [weak self] in
             guard let self, identifier == activeUtteranceIdentifier else { return }
-            state = .paused
+            state = Self.nextState(after: .paused)
             AudioEngine.shared.setNarrationDucking(false)
         }
     }
@@ -226,7 +248,7 @@ extension BibleNarrationService: AVSpeechSynthesizerDelegate {
         let identifier = ObjectIdentifier(utterance)
         Task { @MainActor [weak self] in
             guard let self, identifier == activeUtteranceIdentifier else { return }
-            state = .speaking
+            state = Self.nextState(after: .resumed)
         }
     }
 

@@ -53,6 +53,17 @@ struct RootView: View {
         } message: {
             Text(narration.errorMessage ?? "")
         }
+        .alert(
+            "Audio unavailable",
+            isPresented: Binding(
+                get: { audio.playbackError != nil },
+                set: { if !$0 { audio.clearPlaybackError() } }
+            )
+        ) {
+            Button("OK", role: .cancel) { audio.clearPlaybackError() }
+        } message: {
+            Text(audio.playbackError ?? "Please try again.")
+        }
     }
 }
 

@@ -28,17 +28,37 @@ final class UserPreferencesStore: ObservableObject {
     @Published private(set) var savedMixes: [SavedMix]
     @Published private(set) var readingPosition: ReadingPosition?
 
-    private let defaults = UserDefaults.standard
+    private let defaults: UserDefaults
     private let soundsKey = "zensounds.favorite_sounds"
     private let versesKey = "zensounds.favorite_verses"
     private let mixesKey = "zensounds.saved_mixes"
     private let readingPositionKey = "zensounds.reading_position"
 
     private init() {
-        favoriteSoundIds = Set(defaults.stringArray(forKey: soundsKey) ?? [])
+        let defaults = UserDefaults.standard
+        self.defaults = defaults
+        let validSoundIDs = Set(SoundCatalog.all.map(\.id))
+        let storedFavoriteSoundIDs = Set(defaults.stringArray(forKey: soundsKey) ?? [])
+        favoriteSoundIds = storedFavoriteSoundIDs.intersection(validSoundIDs)
         favoriteVerses = Self.decode([FavoriteVerse].self, defaults.data(forKey: versesKey)) ?? []
-        savedMixes = Self.decode([SavedMix].self, defaults.data(forKey: mixesKey)) ?? []
+        let storedMixes = Self.decode([SavedMix].self, defaults.data(forKey: mixesKey)) ?? []
+        savedMixes = Self.removingUnavailableSounds(from: storedMixes)
         readingPosition = Self.decode(ReadingPosition.self, defaults.data(forKey: readingPositionKey))
+
+        if favoriteSoundIds != storedFavoriteSoundIDs {
+            defaults.set(Array(favoriteSoundIds), forKey: soundsKey)
+        }
+        if savedMixes != storedMixes {
+            defaults.set(Self.encode(savedMixes), forKey: mixesKey)
+        }
+    }
+
+    static func removingUnavailableSounds(from mixes: [SavedMix]) -> [SavedMix] {
+        mixes.compactMap { mix in
+            let validLayers = MixRules.normalize(mix.layers)
+            guard !validLayers.isEmpty else { return nil }
+            return SavedMix(id: mix.id, name: mix.name, layers: validLayers)
+        }
     }
 
     func isFavoriteSound(_ id: String) -> Bool {

@@ -1,4 +1,71 @@
 import SwiftUI
+import UIKit
+
+struct BiblicalSoundscapeCard: View {
+    let soundscape: BiblicalSoundscape
+    let onPlay: () -> Void
+    let onOpenPassage: () -> Void
+
+    @Environment(\.essencePalette) private var palette
+
+    var body: some View {
+        ZStack(alignment: .bottomLeading) {
+            Image(soundscape.artworkName)
+                .resizable()
+                .scaledToFill()
+                .frame(maxWidth: .infinity)
+                .frame(height: 190)
+                .clipped()
+
+            LinearGradient(
+                colors: [.black.opacity(0.08), .black.opacity(0.68)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 190)
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text(soundscape.localizedTitle)
+                    .font(.essenceTitleLarge)
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.82)
+
+                Button(action: onOpenPassage) {
+                    Label(soundscape.localizedReference, systemImage: "book.closed")
+                        .font(.essenceBodySmall)
+                        .foregroundStyle(.white.opacity(0.92))
+                }
+                .buttonStyle(.plain)
+                .accessibilityHint(AppLanguage.localized("soundscape_open_passage_hint", defaultValue: "Open the related Bible passage"))
+
+                Button(action: onPlay) {
+                    Label(
+                        AppLanguage.localized("soundscape_play", defaultValue: "Play soundscape"),
+                        systemImage: "play.fill"
+                    )
+                    .font(.essenceLabelLarge)
+                    .foregroundStyle(palette.accent)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .background(.white, in: Capsule())
+                }
+                .buttonStyle(.plain)
+                .padding(.top, 2)
+            }
+            .padding(16)
+        }
+        .frame(height: 190)
+        .clipped()
+        .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 25, style: .continuous)
+                .stroke(.white.opacity(0.18), lineWidth: 0.5)
+        }
+        .shadow(color: palette.accent.opacity(0.16), radius: 14, y: 7)
+        .accessibilityElement(children: .contain)
+    }
+}
 
 struct SoundRow: View {
     let sound: SoundItem
@@ -132,9 +199,24 @@ private struct SoundArtwork: View {
     let soundID: String
 
     var body: some View {
-        Image(soundID)
-            .resizable()
-            .scaledToFill()
+        Group {
+            if UIImage(named: soundID) != nil {
+                Image(soundID)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                ZStack {
+                    LinearGradient(
+                        colors: [.blue.opacity(0.72), .green.opacity(0.62)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    Image(systemName: artworkSymbol)
+                        .font(.system(size: 25, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.92))
+                }
+            }
+        }
             .frame(width: 62, height: 62)
             .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
             .overlay {
@@ -143,6 +225,17 @@ private struct SoundArtwork: View {
             }
             .shadow(color: .black.opacity(0.10), radius: 4, y: 2)
             .accessibilityHidden(true)
+    }
+
+    private var artworkSymbol: String {
+        switch soundID {
+        case "GalileeWaves": return "water.waves"
+        case "MeadowSheep": return "cloud.fill"
+        case "OliveGrove": return "leaf.fill"
+        case "MorningBirds": return "bird.fill"
+        case "NightCrickets": return "moon.stars.fill"
+        default: return "waveform"
+        }
     }
 }
 

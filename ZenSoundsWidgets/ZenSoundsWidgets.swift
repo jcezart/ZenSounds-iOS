@@ -386,6 +386,7 @@ struct ZenSoundsWidgets: Widget {
     }
 }
 
+#if DEBUG
 #Preview(as: .systemSmall) {
     ZenSoundsWidgets()
 } timeline: {
@@ -403,3 +404,4 @@ struct ZenSoundsWidgets: Widget {
 } timeline: {
     DailyWordEntry(date: .now, reading: WidgetReadingRef(book: "MAT", chapter: 28, verse: 20), text: "Ensinando-lhes a guardar todas as coisas que eu vos tenho mandado.", bookName: "Mateus", backgroundTheme: .terracotta)
 }
+#endif

@@ -75,9 +75,11 @@ final class BibleNarrationPreferences: ObservableObject {
 
     func resolvedVoice(for language: BibleLanguage, preferredIdentifier: String? = nil) -> AVSpeechSynthesisVoice? {
         let available = voices(for: language)
-        let identifier = preferredIdentifier ?? selectedVoiceIdentifier(for: language)
-        if let identifier,
-           let selected = available.first(where: { $0.identifier == identifier }) {
+        let identifier = NarrationVoiceRules.resolvedIdentifier(
+            preferredIdentifier: preferredIdentifier ?? selectedVoiceIdentifier(for: language),
+            availableIdentifiers: available.map(\.identifier)
+        )
+        if let identifier, let selected = available.first(where: { $0.identifier == identifier }) {
             return selected
         }
 
@@ -114,5 +116,17 @@ enum NarrationRateRules {
 
     static func clamped(_ value: Double) -> Double {
         min(max(value, range.lowerBound), range.upperBound)
+    }
+}
+
+enum NarrationVoiceRules {
+    static func resolvedIdentifier(
+        preferredIdentifier: String?,
+        availableIdentifiers: [String]
+    ) -> String? {
+        if let preferredIdentifier, availableIdentifiers.contains(preferredIdentifier) {
+            return preferredIdentifier
+        }
+        return availableIdentifiers.first
     }
 }

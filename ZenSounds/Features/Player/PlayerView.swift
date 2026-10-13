@@ -91,7 +91,12 @@ struct PlayerView: View {
         .accessibilityHidden(true)
     }
 
-    private var primaryArtworkName: String? { audio.activeSoundId ?? audio.layers.first?.soundId }
+    private var primaryArtworkName: String? {
+        if let soundscape = BiblicalSoundscapeCatalog.soundscape(forMixID: audio.activeMix?.id) {
+            return soundscape.artworkName
+        }
+        return audio.activeSoundId ?? audio.layers.first?.soundId
+    }
 
     private var titleBlock: some View {
         VStack(spacing: 4) {

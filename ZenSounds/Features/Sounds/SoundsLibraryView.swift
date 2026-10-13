@@ -19,6 +19,34 @@ struct SoundsLibraryView: View {
                         navigation.soundsPath.append(SoundsRoute.mixEditor(existingMixId: nil))
                     }
 
+                    SoundLibrarySection(
+                        title: AppLanguage.localized("soundscapes_section", defaultValue: "Biblical Soundscapes")
+                    ) {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 14) {
+                                ForEach(BiblicalSoundscapeCatalog.all) { soundscape in
+                                    BiblicalSoundscapeCard(
+                                        soundscape: soundscape,
+                                        onPlay: {
+                                            audio.playMix(soundscape.playableMix)
+                                            PlayerPresentation.shared.isFullPlayerPresented = true
+                                        },
+                                        onOpenPassage: {
+                                            navigation.openBible(
+                                                bookCode: soundscape.bookCode,
+                                                chapter: soundscape.chapter
+                                            )
+                                        }
+                                    )
+                                    .containerRelativeFrame(.horizontal, count: 1, spacing: 14)
+                                }
+                            }
+                            .scrollTargetLayout()
+                        }
+                        .contentMargins(.horizontal, 1, for: .scrollContent)
+                        .scrollTargetBehavior(.viewAligned)
+                    }
+
                     if !prefs.savedMixes.isEmpty {
                         SoundLibrarySection(title: AppLanguage.localized("My Mixes", defaultValue: "My Mixes")) {
                             ForEach(prefs.savedMixes) { mix in

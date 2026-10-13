@@ -11,7 +11,6 @@ struct HomeView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var isSettingsPresented = false
-    @State private var isReadingMode = true
 
     var body: some View {
         ScrollView {
@@ -20,29 +19,21 @@ struct HomeView: View {
                     isSettingsPresented = true
                 }
 
-                HomeModePicker(isReadingMode: $isReadingMode)
+                DailyWordCard(
+                    state: viewModel.state,
+                    isFavorite: viewModel.state.verse.map(preferences.isFavoriteVerse) ?? false,
+                    onToggleFavorite: toggleDailyFavorite,
+                    onShuffle: shuffleDailyWord,
+                    onExplore: openDailyReading
+                )
 
-                if isReadingMode {
-                    DailyWordCard(
-                        state: viewModel.state,
-                        isFavorite: viewModel.state.verse.map(preferences.isFavoriteVerse) ?? false,
-                        onToggleFavorite: toggleDailyFavorite,
-                        onShuffle: shuffleDailyWord,
-                        onExplore: openDailyReading
-                    )
-
-                    HomeReadingShortcuts(
-                        position: preferences.readingPosition,
-                        dailyBookCode: viewModel.state.reading?.book,
-                        language: viewModel.language,
-                        onResume: openReadingPosition,
-                        onExplore: openDailyBook
-                    )
-                } else {
-                    HomeRelaxCard {
-                        navigation.selectedTab = .sounds
-                    }
-                }
+                HomeReadingShortcuts(
+                    position: preferences.readingPosition,
+                    dailyBookCode: viewModel.state.reading?.book,
+                    language: viewModel.language,
+                    onResume: openReadingPosition,
+                    onExplore: openDailyBook
+                )
 
                 HomeSoundPauseSection(
                     isRainPlaying: audio.activeSoundId == "Rain" && audio.isPlaying,
@@ -155,41 +146,6 @@ private struct HomeBrandHeader: View {
     }
 }
 
-private struct HomeModePicker: View {
-    @Binding var isReadingMode: Bool
-    @Environment(\.essencePalette) private var palette
-
-    var body: some View {
-        HStack(spacing: 0) {
-            modeButton(title: "Read", systemImage: "book", isSelected: isReadingMode) {
-                isReadingMode = true
-            }
-            modeButton(title: "Relax", systemImage: "leaf", isSelected: !isReadingMode) {
-                isReadingMode = false
-            }
-        }
-        .padding(3)
-        .background(palette.lilac, in: Capsule())
-    }
-
-    private func modeButton(
-        title: LocalizedStringKey,
-        systemImage: String,
-        isSelected: Bool,
-        action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
-            Label(title, systemImage: systemImage)
-                .font(.essenceTitleMedium)
-                .foregroundStyle(isSelected ? palette.onAccent : palette.text)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 11)
-                .background(isSelected ? palette.accent : .clear, in: Capsule())
-        }
-        .buttonStyle(.plain)
-    }
-}
-
 private struct HomeReadingShortcuts: View {
     let position: ReadingPosition?
     let dailyBookCode: String?
@@ -277,27 +233,6 @@ private struct HomeReadingShortcuts: View {
             return AppLanguage.localized("Bible", defaultValue: "Bible")
         }
         return book.name(for: language)
-    }
-}
-
-private struct HomeRelaxCard: View {
-    let onExplore: () -> Void
-    @Environment(\.essencePalette) private var palette
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Label("A pause for you", systemImage: "leaf")
-                .font(.essenceTitleLarge)
-                .foregroundStyle(palette.text)
-            Text("Combine nature sounds and create a calm atmosphere for prayer, focus, or rest.")
-                .font(.essenceBodyMedium)
-                .foregroundStyle(palette.secondaryText)
-            Button("Explore sounds", action: onExplore)
-                .font(.essenceLabelLarge)
-                .padding(.top, 6)
-        }
-        .padding(20)
-        .background(palette.lilac, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
     }
 }
 

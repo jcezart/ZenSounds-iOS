@@ -54,7 +54,7 @@ struct CompactPlayerView: View {
 
     private var artwork: some View {
         Group {
-            if let id = audio.activeSoundId ?? audio.layers.first?.soundId, UIImage(named: id) != nil {
+            if let id = artworkName, UIImage(named: id) != nil {
                 Image(id).resizable().scaledToFill()
             } else {
                 palette.lilac
@@ -62,5 +62,12 @@ struct CompactPlayerView: View {
         }
         .frame(width: 36, height: 36)
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+    }
+
+    private var artworkName: String? {
+        if let soundscape = BiblicalSoundscapeCatalog.soundscape(forMixID: audio.activeMix?.id) {
+            return soundscape.artworkName
+        }
+        return audio.activeSoundId ?? audio.layers.first?.soundId
     }
 }

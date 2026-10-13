@@ -96,16 +96,6 @@
         }
       }
     },
-    "A pause for you" : {
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Uma pausa para você"
-          }
-        }
-      }
-    },
     "A pause with sound" : {
       "localizations" : {
         "pt-BR" : {
@@ -196,6 +186,9 @@
           }
         }
       }
+    },
+    "Audio unavailable" : {
+
     },
     "Bible" : {
       "localizations" : {
@@ -292,23 +285,6 @@
         }
       }
     },
-    "category_vehicles" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vehicle Sounds"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Sons de Veículos"
-          }
-        }
-      }
-    },
     "Chapter" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -356,16 +332,6 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Fechar"
-          }
-        }
-      }
-    },
-    "Combine nature sounds and create a calm atmosphere for prayer, focus, or rest." : {
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Combine sons da natureza e crie um ambiente tranquilo para oração, foco ou descanso."
           }
         }
       }
@@ -490,16 +456,6 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Explorar %@"
-          }
-        }
-      }
-    },
-    "Explore sounds" : {
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Explorar sons"
           }
         }
       }
@@ -888,16 +844,6 @@
         }
       }
     },
-    "Read" : {
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Ler"
-          }
-        }
-      }
-    },
     "Reading speed" : {
       "localizations" : {
         "pt-BR" : {
@@ -908,12 +854,46 @@
         }
       }
     },
-    "Relax" : {
+    "reference_luke_2_8" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Relaxar"
+            "state" : "translated",
+            "value" : "Lucas 2:8"
+          }
+        }
+      }
+    },
+    "reference_mark_4_39" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marcos 4:39"
+          }
+        }
+      }
+    },
+    "reference_matthew_26_36" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mateus 26:36"
+          }
+        }
+      }
+    },
+    "reference_psalm_23" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salmo 23"
           }
         }
       }
@@ -1078,23 +1058,6 @@
         }
       }
     },
-    "sound_car_engine" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Car Engine"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Motor de Carro"
-          }
-        }
-      }
-    },
     "sound_fireplace" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1125,6 +1088,61 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Floresta"
+          }
+        }
+      }
+    },
+    "sound_galilee_waves" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ondas da Galileia"
+          }
+        }
+      }
+    },
+    "sound_meadow_sheep" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ovelhas no Campo"
+          }
+        }
+      }
+    },
+    "sound_morning_birds" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pássaros ao Amanhecer"
+          }
+        }
+      }
+    },
+    "sound_night_crickets" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grilos Noturnos"
+          }
+        }
+      }
+    },
+    "sound_olive_grove" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jardim de Oliveiras"
           }
         }
       }
@@ -1180,23 +1198,6 @@
         }
       }
     },
-    "sound_tv_static" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "TV Static"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Estática de TV"
-          }
-        }
-      }
-    },
     "sound_wind" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1220,6 +1221,83 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Sons"
+          }
+        }
+      }
+    },
+    "soundscape_bethlehem_night" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uma Noite em Belém"
+          }
+        }
+      }
+    },
+    "soundscape_garden_prayer" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oração no Jardim"
+          }
+        }
+      }
+    },
+    "soundscape_good_shepherd" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Bom Pastor"
+          }
+        }
+      }
+    },
+    "soundscape_open_passage_hint" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir a passagem bíblica relacionada"
+          }
+        }
+      }
+    },
+    "soundscape_peace_galilee" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paz na Galileia"
+          }
+        }
+      }
+    },
+    "soundscape_play" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reproduzir cenário"
+          }
+        }
+      }
+    },
+    "soundscapes_section" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cenários Bíblicos"
           }
         }
       }
