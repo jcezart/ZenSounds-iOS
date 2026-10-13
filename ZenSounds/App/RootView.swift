@@ -4,6 +4,7 @@ struct RootView: View {
     @ObservedObject private var navigation = NavigationModel.shared
     @ObservedObject private var playerPresentation = PlayerPresentation.shared
     @ObservedObject private var audio = AudioEngine.shared
+    @ObservedObject private var narration = BibleNarrationService.shared
     @Environment(\.essencePalette) private var palette
 
     var body: some View {
@@ -41,6 +42,17 @@ struct RootView: View {
             PlayerView()
         }
         .environmentObject(navigation)
+        .alert(
+            "Narration unavailable",
+            isPresented: Binding(
+                get: { narration.errorMessage != nil },
+                set: { if !$0 { narration.clearError() } }
+            )
+        ) {
+            Button("OK", role: .cancel) { narration.clearError() }
+        } message: {
+            Text(narration.errorMessage ?? "")
+        }
     }
 }
 

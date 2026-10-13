@@ -11,6 +11,11 @@ struct FavoriteVerse: Identifiable, Hashable, Codable {
     var id: String { "\(language.rawValue):\(book):\(chapter):\(verseNumber)" }
 }
 
+struct ReadingPosition: Equatable, Codable {
+    let bookCode: String
+    let chapter: Int
+}
+
 /// Favorites (sounds + verses) and saved mixes, persisted locally. Mirrors the Android app's
 /// `data/EssencePreferences.kt` (SharedPreferences-backed, exposed reactively) — same shape,
 /// `UserDefaults` + JSON instead of SharedPreferences.
@@ -21,16 +26,19 @@ final class UserPreferencesStore: ObservableObject {
     @Published private(set) var favoriteSoundIds: Set<String>
     @Published private(set) var favoriteVerses: [FavoriteVerse]
     @Published private(set) var savedMixes: [SavedMix]
+    @Published private(set) var readingPosition: ReadingPosition?
 
     private let defaults = UserDefaults.standard
     private let soundsKey = "zensounds.favorite_sounds"
     private let versesKey = "zensounds.favorite_verses"
     private let mixesKey = "zensounds.saved_mixes"
+    private let readingPositionKey = "zensounds.reading_position"
 
     private init() {
         favoriteSoundIds = Set(defaults.stringArray(forKey: soundsKey) ?? [])
         favoriteVerses = Self.decode([FavoriteVerse].self, defaults.data(forKey: versesKey)) ?? []
         savedMixes = Self.decode([SavedMix].self, defaults.data(forKey: mixesKey)) ?? []
+        readingPosition = Self.decode(ReadingPosition.self, defaults.data(forKey: readingPositionKey))
     }
 
     func isFavoriteSound(_ id: String) -> Bool {
@@ -84,6 +92,13 @@ final class UserPreferencesStore: ObservableObject {
     func removeMix(id: String) {
         savedMixes.removeAll { $0.id == id }
         defaults.set(Self.encode(savedMixes), forKey: mixesKey)
+    }
+
+    func saveReading(bookCode: String, chapter: Int) {
+        let position = ReadingPosition(bookCode: bookCode, chapter: chapter)
+        guard position != readingPosition else { return }
+        readingPosition = position
+        defaults.set(Self.encode(position), forKey: readingPositionKey)
     }
 
     private static func encode<T: Encodable>(_ value: T) -> Data? { try? JSONEncoder().encode(value) }

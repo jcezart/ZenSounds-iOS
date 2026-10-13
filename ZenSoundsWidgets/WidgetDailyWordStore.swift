@@ -58,11 +58,8 @@ struct WidgetDailyWordStore {
     }
 
     private static func dayKey(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.timeZone = .current
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        return formatter.string(from: date)
+        let components = Calendar.current.dateComponents([.year, .month, .day], from: date)
+        return "\(components.year ?? 0)-\(components.month ?? 0)-\(components.day ?? 0)"
     }
 
     private static func deterministicReading(for date: Date, readings: [DailyReadingText]) -> WidgetReadingRef {

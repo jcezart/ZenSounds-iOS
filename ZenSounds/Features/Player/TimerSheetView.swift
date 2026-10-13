@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct TimerSheetView: View {
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     @ObservedObject private var audio = AudioEngine.shared
     @Environment(\.dismiss) private var dismiss
     @State private var customMinutesText = ""
@@ -46,7 +47,7 @@ struct TimerSheetView: View {
                     }
                 }
             }
-            .navigationTitle("Sleep timer")
+            .navigationTitle(AppLanguage.localized("Sleep timer", defaultValue: "Sleep timer"))
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") { dismiss() }

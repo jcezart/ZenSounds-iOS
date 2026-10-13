@@ -2,71 +2,111 @@ import SwiftUI
 
 struct DailyWordCard: View {
     let state: DailyWordViewModel.State
+    let isFavorite: Bool
+    let onToggleFavorite: () -> Void
     let onShuffle: () -> Void
     let onExplore: () -> Void
 
     @Environment(\.essencePalette) private var palette
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("WORD OF THE DAY")
-                .font(.essenceLabelMedium)
-                .foregroundStyle(palette.onVerse.opacity(0.8))
+        ZStack(alignment: .bottomTrailing) {
+            Circle()
+                .fill(palette.onVerse.opacity(0.07))
+                .frame(width: 210, height: 210)
+                .offset(x: 78, y: 65)
+                .accessibilityHidden(true)
 
-            if let verse = state.verse {
-                Text(verse.text)
-                    .font(.essenceBodyLarge)
-                    .foregroundStyle(palette.onVerse)
-                    .fixedSize(horizontal: false, vertical: true)
-                Text(reference(verse))
-                    .font(.essenceLabelLarge)
-                    .foregroundStyle(palette.onVerse.opacity(0.85))
-            } else if state.isLoading {
-                ProgressView().tint(palette.onVerse)
-            } else {
-                Text("No verse available offline.")
-                    .foregroundStyle(palette.onVerse)
-            }
+            BotanicalArtwork(color: Color.black.opacity(0.22))
+                .frame(width: 104, height: 230)
+                .offset(x: 14, y: 16)
 
-            HStack {
-                Button(action: onExplore) {
-                    Label(exploreLabel, systemImage: "book")
-                        .font(.essenceLabelLarge)
-                        .foregroundStyle(palette.onVerse)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 8)
-                        .background(Color.black.opacity(0.12))
-                        .clipShape(Capsule())
+            VStack(alignment: .leading, spacing: 16) {
+                Text(header)
+                    .font(.essenceLabelMedium)
+                    .tracking(1.2)
+                    .foregroundStyle(palette.onVerse.opacity(0.88))
+
+                Group {
+                    if let verse = state.verse {
+                        Text(verse.text)
+                            .font(.custom(EssenceFont.regular, size: 24, relativeTo: .title2))
+                            .foregroundStyle(palette.onVerse)
+                            .fixedSize(horizontal: false, vertical: true)
+                    } else if state.isLoading {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                                .tint(palette.onVerse)
+                            Spacer()
+                        }
+                        .frame(minHeight: 112)
+                    } else {
+                        Text("No verse available offline.")
+                            .font(.essenceBodyLarge)
+                            .foregroundStyle(palette.onVerse)
+                            .frame(minHeight: 112, alignment: .topLeading)
+                    }
                 }
 
-                Spacer()
+                HStack(spacing: 6) {
+                    Button(action: onToggleFavorite) {
+                        Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
+                    }
+                    .disabled(state.verse == nil)
+                    .accessibilityLabel(isFavorite ? "Remove verse from favorites" : "Add verse to favorites")
 
-                Button(action: onShuffle) {
-                    Image(systemName: "shuffle")
-                        .foregroundStyle(palette.onVerse)
-                        .padding(10)
-                        .background(Color.black.opacity(0.12))
-                        .clipShape(Circle())
+                    if let verse = state.verse {
+                        ShareLink(item: "\(verse.text) — \(reference(verse)) · ZenSounds") {
+                            Image(systemName: "square.and.arrow.up")
+                        }
+                        .accessibilityLabel("Share verse")
+                    }
+
+                    Button(action: onShuffle) {
+                        Image(systemName: "shuffle")
+                    }
+                    .disabled(state.isLoading)
+                    .accessibilityLabel("Show another verse")
+
+                    if let verse = state.verse {
+                        VerseNarrationControls(verse: verse, tint: palette.onVerse)
+                    }
+
+                    Spacer()
+
+                    Button(action: onExplore) {
+                        HStack(spacing: 9) {
+                            Text("Open chapter")
+                                .font(.essenceLabelMedium)
+                            Image(systemName: "arrow.right")
+                                .font(.system(size: 14, weight: .semibold))
+                                .frame(width: 34, height: 34)
+                                .background(palette.onVerse, in: Circle())
+                                .foregroundStyle(palette.verseBackground)
+                        }
+                    }
+                    .disabled(state.verse == nil)
                 }
-                .accessibilityLabel("Show another verse")
+                .font(.system(size: 18, weight: .medium))
+                .foregroundStyle(palette.onVerse)
+                .buttonStyle(.plain)
             }
+            .padding(20)
         }
-        .padding(20)
         .background(palette.verseBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+    }
+
+    private var header: String {
+        guard let verse = state.verse else {
+            return AppLanguage.localized("WORD OF THE DAY", defaultValue: "WORD OF THE DAY")
+        }
+        return AppLanguage.localized("TODAY", defaultValue: "TODAY") + " · " + reference(verse)
     }
 
     private func reference(_ verse: Verse) -> String {
         let bookName = BibleCatalog.shared.book(code: verse.book)?.name(for: verse.language) ?? verse.book
         return "\(bookName) \(verse.chapter):\(verse.number)"
-    }
-
-    private var exploreLabel: String {
-        guard let reading = state.reading, let book = BibleCatalog.shared.book(code: reading.book) else {
-            return NSLocalizedString("Explore", comment: "Fallback label when no daily reading is available yet")
-        }
-        let language = state.verse?.language ?? .en
-        let format = NSLocalizedString("Explore %@", comment: "Explore <book name>, opens that book's chapter")
-        return String(format: format, book.name(for: language))
     }
 }

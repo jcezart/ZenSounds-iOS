@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct AddSoundToMixSheet: View {
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     let excluding: Set<String>
     let onSelect: (String) -> Void
 
@@ -13,11 +14,11 @@ struct AddSoundToMixSheet: View {
                 Button {
                     onSelect(sound.id)
                 } label: {
-                    Text(NSLocalizedString(sound.titleKey, value: sound.id, comment: ""))
+                    Text(LocalizedStringKey(sound.titleKey))
                         .foregroundStyle(palette.text)
                 }
             }
-            .navigationTitle("Add sound")
+            .navigationTitle(AppLanguage.localized("Add sound", defaultValue: "Add sound"))
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") { dismiss() }

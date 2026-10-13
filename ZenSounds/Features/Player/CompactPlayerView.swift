@@ -20,7 +20,6 @@ struct CompactPlayerView: View {
                             .font(.essenceLabelLarge)
                             .foregroundStyle(palette.text)
                             .lineLimit(1)
-                        ThinProgressView(progress: progress)
                     }
                 }
             }
@@ -53,12 +52,6 @@ struct CompactPlayerView: View {
         .overlay(Rectangle().frame(height: 1).foregroundStyle(palette.outline), alignment: .top)
     }
 
-    private var progress: Double {
-        guard let remaining = audio.timerRemaining, let minutes = audio.timerDurationMinutes, minutes > 0 else { return 0 }
-        let total = Double(minutes * 60)
-        return 1 - (remaining / total)
-    }
-
     private var artwork: some View {
         Group {
             if let id = audio.activeSoundId ?? audio.layers.first?.soundId, UIImage(named: id) != nil {
@@ -69,20 +62,5 @@ struct CompactPlayerView: View {
         }
         .frame(width: 36, height: 36)
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-    }
-}
-
-struct ThinProgressView: View {
-    let progress: Double
-    @Environment(\.essencePalette) private var palette
-
-    var body: some View {
-        GeometryReader { geo in
-            ZStack(alignment: .leading) {
-                Capsule().fill(palette.track)
-                Capsule().fill(palette.accent).frame(width: geo.size.width * min(max(progress, 0), 1))
-            }
-        }
-        .frame(height: 3)
     }
 }

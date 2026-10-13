@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "%@ volume" : {
       "localizations" : {
         "pt-BR" : {
@@ -93,6 +96,26 @@
         }
       }
     },
+    "A pause for you" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Uma pausa para você"
+          }
+        }
+      }
+    },
+    "A pause with sound" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Uma pausa com som"
+          }
+        }
+      }
+    },
     "About" : {
       "localizations" : {
         "pt-BR" : {
@@ -123,7 +146,18 @@
         }
       }
     },
+    "Add favorite" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Adicionar aos favoritos"
+          }
+        }
+      }
+    },
     "Add sound" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -173,7 +207,18 @@
         }
       }
     },
+    "Bible reading voice" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Voz para leitura da Bíblia"
+          }
+        }
+      }
+    },
     "Bible translation" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -264,6 +309,17 @@
         }
       }
     },
+    "Chapter" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Capítulo"
+          }
+        }
+      }
+    },
     "Chapter %lld" : {
       "localizations" : {
         "pt-BR" : {
@@ -284,12 +340,42 @@
         }
       }
     },
+    "Choose a sound to accompany your reading, prayer, or rest." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolha um som para acompanhar sua leitura, oração ou descanso."
+          }
+        }
+      }
+    },
     "Close" : {
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Fechar"
+          }
+        }
+      }
+    },
+    "Combine nature sounds and create a calm atmosphere for prayer, focus, or rest." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Combine sons da natureza e crie um ambiente tranquilo para oração, foco ou descanso."
+          }
+        }
+      }
+    },
+    "Continue" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Continuar"
           }
         }
       }
@@ -355,6 +441,7 @@
       }
     },
     "Edit mix" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -374,6 +461,16 @@
         }
       }
     },
+    "English voice" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Voz em inglês"
+          }
+        }
+      }
+    },
     "Explore" : {
       "comment" : "Fallback label when no daily reading is available yet",
       "localizations" : {
@@ -387,11 +484,33 @@
     },
     "Explore %@" : {
       "comment" : "Explore <book name>, opens that book's chapter",
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Explorar %@"
+          }
+        }
+      }
+    },
+    "Explore sounds" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Explorar sons"
+          }
+        }
+      }
+    },
+    "Explore the Bible" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Explorar a Bíblia"
           }
         }
       }
@@ -412,6 +531,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Duração do fade out"
+          }
+        }
+      }
+    },
+    "Fast" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rápida"
           }
         }
       }
@@ -466,6 +595,46 @@
         }
       }
     },
+    "Listen" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ouvir"
+          }
+        }
+      }
+    },
+    "Listen to verse" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ouvir versículo"
+          }
+        }
+      }
+    },
+    "Listen to voice sample" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ouvir amostra de voz"
+          }
+        }
+      }
+    },
+    "Loading ZenSounds" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Carregando ZenSounds"
+          }
+        }
+      }
+    },
     "Master volume" : {
       "localizations" : {
         "pt-BR" : {
@@ -496,8 +665,19 @@
         }
       }
     },
+    "My mix" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Minha mistura"
+          }
+        }
+      }
+    },
     "My Mixes" : {
       "comment" : "Section header for the user's saved sound mixes",
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -507,7 +687,18 @@
         }
       }
     },
+    "Narration unavailable" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Narração indisponível"
+          }
+        }
+      }
+    },
     "New mix" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -518,7 +709,14 @@
       }
     },
     "Next sound" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Próximo som"
+          }
+        }
+      }
     },
     "No favorites yet" : {
       "localizations" : {
@@ -540,6 +738,56 @@
         }
       }
     },
+    "No voice available" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Nenhuma voz disponível"
+          }
+        }
+      }
+    },
+    "Normal" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Normal"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "Only voices currently available on this iPhone are shown. Additional voices can be installed in iPhone Settings under Accessibility, Spoken Content, Voices." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "São mostradas apenas as vozes disponíveis atualmente neste iPhone. Outras vozes podem ser instaladas em Ajustes do iPhone, em Acessibilidade, Conteúdo Falado, Vozes."
+          }
+        }
+      }
+    },
+    "Open chapter" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Abrir capítulo"
+          }
+        }
+      }
+    },
     "Open player: %@" : {
       "localizations" : {
         "pt-BR" : {
@@ -551,7 +799,14 @@
       }
     },
     "Other sounds" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Outros sons"
+          }
+        }
+      }
     },
     "Pause" : {
       "localizations" : {
@@ -569,6 +824,26 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Reproduzir"
+          }
+        }
+      }
+    },
+    "Play mix" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Reproduzir mix"
+          }
+        }
+      }
+    },
+    "Play sound" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Reproduzir som"
           }
         }
       }
@@ -593,8 +868,55 @@
         }
       }
     },
+    "Portuguese voice" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Voz em Português"
+          }
+        }
+      }
+    },
     "Previous sound" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Som anterior"
+          }
+        }
+      }
+    },
+    "Read" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ler"
+          }
+        }
+      }
+    },
+    "Reading speed" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Velocidade de Leitura"
+          }
+        }
+      }
+    },
+    "Relax" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Relaxar"
+          }
+        }
+      }
     },
     "Remove %@ from favorites" : {
       "localizations" : {
@@ -646,6 +968,16 @@
         }
       }
     },
+    "Resume the Bible" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Retomar a Bíblia"
+          }
+        }
+      }
+    },
     "Save" : {
       "localizations" : {
         "pt-BR" : {
@@ -662,6 +994,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Salvar mix"
+          }
+        }
+      }
+    },
+    "See all" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ver todos"
           }
         }
       }
@@ -687,7 +1029,14 @@
       }
     },
     "Share verse" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Compartilhar versículo"
+          }
+        }
+      }
     },
     "Show another verse" : {
       "localizations" : {
@@ -715,6 +1064,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Temporizador de sono: restam %@"
+          }
+        }
+      }
+    },
+    "Slow" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Lenta"
           }
         }
       }
@@ -875,12 +1234,52 @@
         }
       }
     },
+    "Start the Bible" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Começar a Bíblia"
+          }
+        }
+      }
+    },
+    "Stop" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Parar"
+          }
+        }
+      }
+    },
     "Stop and close player" : {
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Parar e fechar player"
+          }
+        }
+      }
+    },
+    "Stop reading" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Parar leitura"
+          }
+        }
+      }
+    },
+    "Stop voice sample" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Parar amostra de voz"
           }
         }
       }
@@ -905,6 +1304,16 @@
         }
       }
     },
+    "System default" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Padrão do Sistema"
+          }
+        }
+      }
+    },
     "Tap the heart on a sound or verse to save it here." : {
       "localizations" : {
         "pt-BR" : {
@@ -925,7 +1334,19 @@
         }
       }
     },
+    "TODAY" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "HOJE"
+          }
+        }
+      }
+    },
     "Verses" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -936,6 +1357,7 @@
       }
     },
     "WORD OF THE DAY" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -946,11 +1368,22 @@
       }
     },
     "Zen" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Zen"
+          }
+        }
+      }
+    },
+    "ZenSounds" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ZenSounds"
           }
         }
       }

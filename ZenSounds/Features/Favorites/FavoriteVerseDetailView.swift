@@ -1,40 +1,80 @@
 import SwiftUI
 
-struct FavoriteVerseDetailView: View {
-    let verse: FavoriteVerse
+struct VerseDetailView: View {
+    let verse: Verse
 
-    @ObservedObject private var prefs = UserPreferencesStore.shared
+    @ObservedObject private var preferences = UserPreferencesStore.shared
     @Environment(\.essencePalette) private var palette
 
+    private var isFavorite: Bool {
+        preferences.isFavoriteVerse(verse)
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(reference)
-                .font(.essenceTitleMedium)
-                .foregroundStyle(palette.accent)
-            Text(verse.text)
-                .font(.essenceBodyLarge)
-                .foregroundStyle(palette.text)
-            Spacer()
-            HStack {
-                ShareLink(item: "\(verse.text) — \(reference)") {
-                    Label("Share", systemImage: "square.and.arrow.up")
+        ZStack {
+            palette.background
+                .ignoresSafeArea()
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 22) {
+                    Text(reference)
+                        .font(.essenceTitleMedium)
+                        .foregroundStyle(palette.accent)
+
+                    Text(verse.text)
+                        .font(.custom(EssenceFont.regular, size: 25, relativeTo: .title2))
+                        .foregroundStyle(palette.text)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    ViewThatFits(in: .horizontal) {
+                        HStack(spacing: 14) {
+                            VerseNarrationControls(verse: verse, style: .labeled)
+                            shareButton
+                            Spacer()
+                            favoriteButton
+                        }
+
+                        VStack(alignment: .leading, spacing: 12) {
+                            VerseNarrationControls(verse: verse, style: .labeled)
+                            HStack(spacing: 14) {
+                                shareButton
+                                favoriteButton
+                            }
+                        }
+                    }
+                    .font(.essenceLabelLarge)
+                    .foregroundStyle(palette.accent)
+                    .buttonStyle(.bordered)
                 }
-                Spacer()
-                Button(role: .destructive) {
-                    prefs.toggleFavoriteVerse(Verse(book: verse.book, chapter: verse.chapter, number: verse.verseNumber, text: verse.text, language: verse.language))
-                } label: {
-                    Label("Remove favorite", systemImage: "heart.slash")
-                }
+                .padding(24)
             }
         }
-        .padding(24)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(palette.background)
         .navigationTitle(reference)
+        .navigationBarTitleDisplayMode(.inline)
+        .accessibilityAction(named: "Listen to verse") {
+            BibleNarrationService.shared.speak(verse)
+        }
     }
 
     private var reference: String {
         let bookName = BibleCatalog.shared.book(code: verse.book)?.name(for: verse.language) ?? verse.book
-        return "\(bookName) \(verse.chapter):\(verse.verseNumber)"
+        return "\(bookName) \(verse.chapter):\(verse.number)"
+    }
+
+    private var shareButton: some View {
+        ShareLink(item: "\(verse.text) — \(reference) · ZenSounds") {
+            Label("Share", systemImage: "square.and.arrow.up")
+        }
+    }
+
+    private var favoriteButton: some View {
+        Button {
+            preferences.toggleFavoriteVerse(verse)
+        } label: {
+            Label(
+                isFavorite ? "Remove favorite" : "Add favorite",
+                systemImage: isFavorite ? "heart.fill" : "heart"
+            )
+        }
     }
 }

@@ -18,6 +18,7 @@
       }
     },
     "%lld" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -26,6 +27,27 @@
           }
         }
       }
+    },
+    "Background color" : {
+
+    },
+    "Choose the widget background color." : {
+
+    },
+    "Customize Widget" : {
+
+    },
+    "Forest" : {
+
+    },
+    "Midnight" : {
+
+    },
+    "Ocean" : {
+
+    },
+    "Plum" : {
+
     },
     "Show another verse" : {
       "localizations" : {
@@ -46,6 +68,9 @@
           }
         }
       }
+    },
+    "Terracotta" : {
+
     },
     "Today's verse from ZenSounds, with a quick way to read the full chapter." : {
       "localizations" : {
@@ -76,6 +101,9 @@
           }
         }
       }
+    },
+    "ZENSOUNDS" : {
+
     }
   },
   "version" : "1.3"

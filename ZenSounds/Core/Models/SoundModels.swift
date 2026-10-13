@@ -15,6 +15,14 @@ enum SoundCategory: String, CaseIterable, Identifiable, Codable {
         case .vehicles: return "category_vehicles"
         }
     }
+
+    var defaultTitle: String {
+        switch self {
+        case .nature: return "Nature Sounds"
+        case .objects: return "Object Sounds"
+        case .vehicles: return "Vehicle Sounds"
+        }
+    }
 }
 
 /// A single playable sound. `id` doubles as the audio/artwork resource name

@@ -26,28 +26,28 @@ final class AudioEngine: ObservableObject {
     @Published private(set) var timerRemaining: TimeInterval?
     @Published private(set) var playbackError: String?
 
-    private let engine = AVAudioEngine()
+    private lazy var engine: AVAudioEngine = {
+        AVAudioEngine()
+    }()
     private var players: [String: LoopingPlayer] = [:]
     private var tickTask: Task<Void, Never>?
+    private var playbackTask: Task<Void, Never>?
+    private var narrationDuckingTask: Task<Void, Never>?
+    private var narrationDuckMultiplier = 1.0
+    private var isNarrationSessionActive = false
+    private var isAudioConfigured = false
 
     var isActive: Bool { activeSoundId != nil || activeMix != nil }
 
     var displayTitle: String {
         if let mix = activeMix { return mix.name }
         if let soundId = activeSoundId, let sound = SoundCatalog.sound(id: soundId) {
-            return NSLocalizedString(sound.titleKey, value: soundId, comment: "")
+            return AppLanguage.localized(sound.titleKey, defaultValue: soundId)
         }
         return "ZenSounds"
     }
 
-    private init() {
-        // AVAudioEngine only lazily realizes `outputNode` once something is connected to it.
-        // Without this, `engine.start()` throws "inputNode != nullptr || outputNode != nullptr"
-        // because nothing in the graph ever references the hardware output.
-        engine.connect(engine.mainMixerNode, to: engine.outputNode, format: nil)
-        configureAudioSession()
-        configureRemoteCommands()
-    }
+    private init() {}
 
     // MARK: - Single sound
 
@@ -111,16 +111,33 @@ final class AudioEngine: ObservableObject {
             return
         }
 
+        playbackTask?.cancel()
+        playbackTask = Task { [weak self] in
+            await self?.startPlayback(layers: normalized, mix: mix, singleSoundId: singleSoundId)
+        }
+    }
+
+    private func startPlayback(layers newLayers: [MixLayer], mix: SavedMix?, singleSoundId: String?) async {
+        ensureAudioConfigured()
+        guard await activateAudioSession(), !Task.isCancelled else { return }
+
         stopAllNodes()
         activeSoundId = singleSoundId
         activeMix = mix
-        layers = normalized
+        layers = newLayers
         playbackError = nil
-        startEngineIfNeeded()
-        for layer in normalized {
+        for layer in newLayers {
             startLayer(soundId: layer.soundId)
         }
+        guard players.count == newLayers.count else {
+            stopAllNodes()
+            return
+        }
+        guard startEngine() else { return }
         applyVolumes()
+        for player in players.values {
+            player.start()
+        }
         isPlaying = true
         updateNowPlaying()
     }
@@ -140,15 +157,22 @@ final class AudioEngine: ObservableObject {
 
     func resume() {
         guard !isPlaying, isActive else { return }
-        startEngineIfNeeded()
-        players.values.forEach { $0.resume() }
-        isPlaying = true
-        updateNowPlaying()
+        playbackTask?.cancel()
+        playbackTask = Task { [weak self] in
+            guard let self, await self.startEngineIfNeeded(), !Task.isCancelled else { return }
+            for player in self.players.values {
+                player.resume()
+            }
+            self.isPlaying = true
+            self.updateNowPlaying()
+        }
     }
 
     /// Full stop: tears down every layer and the timer. The compact/full player close button
     /// calls this — nothing keeps playing in the background afterward.
     func stop() {
+        playbackTask?.cancel()
+        playbackTask = nil
         stopAllNodes()
         activeSoundId = nil
         activeMix = nil
@@ -156,7 +180,9 @@ final class AudioEngine: ObservableObject {
         isPlaying = false
         cancelTimer()
         clearNowPlaying()
-        deactivateAudioSession()
+        if !isNarrationSessionActive {
+            deactivateAudioSession()
+        }
     }
 
     // MARK: - Timer
@@ -201,11 +227,43 @@ final class AudioEngine: ObservableObject {
 
     // MARK: - Volume
 
+    func setNarrationDucking(_ active: Bool) {
+        narrationDuckingTask?.cancel()
+
+        let initialMultiplier = narrationDuckMultiplier
+        let targetMultiplier = active ? 0.30 : 1.0
+        guard abs(initialMultiplier - targetMultiplier) > 0.001 else {
+            narrationDuckMultiplier = targetMultiplier
+            applyVolumes()
+            return
+        }
+
+        narrationDuckingTask = Task { [weak self] in
+            let steps = 14
+            for step in 1...steps {
+                guard let self, !Task.isCancelled else { return }
+                let progress = Double(step) / Double(steps)
+                self.narrationDuckMultiplier = initialMultiplier
+                    + ((targetMultiplier - initialMultiplier) * progress)
+                self.applyVolumes()
+                try? await Task.sleep(for: .milliseconds(25))
+            }
+        }
+    }
+
+    func finishNarrationAudioSession() {
+        isNarrationSessionActive = false
+        setNarrationDucking(false)
+        if !isActive {
+            deactivateAudioSession()
+        }
+    }
+
     private func applyVolumes() {
         let fade = currentFadeMultiplier()
         let gains = MixRules.gains(layers: layers, master: masterVolume, fade: fade)
         for (soundId, gain) in gains {
-            players[soundId]?.node.volume = Float(gain)
+            players[soundId]?.node.volume = Float(gain * narrationDuckMultiplier)
         }
     }
 
@@ -216,22 +274,55 @@ final class AudioEngine: ObservableObject {
 
     // MARK: - Engine plumbing
 
-    private func startEngineIfNeeded() {
-        guard !engine.isRunning else { return }
-        // Must be synchronous and ordered before `engine.start()`: AVAudioEngine needs an
-        // active session to realize its I/O nodes, and starting it before activation completes
-        // throws "inputNode != nullptr || outputNode != nullptr". Apple logs a main-thread
-        // hang-risk advisory for synchronous activation, but it's a single quick call made
-        // only once per playback start (user-initiated tap) — not the repeated/blocking use
-        // the warning is about.
-        try? AVAudioSession.sharedInstance().setActive(true)
+    func prepareAudioSessionForNarration() async -> Bool {
+        ensureAudioConfigured()
+        let isReady = await activateAudioSession()
+        if isReady {
+            isNarrationSessionActive = true
+        }
+        return isReady
+    }
+
+    private func startEngineIfNeeded() async -> Bool {
+        guard !engine.isRunning else { return true }
+        ensureAudioConfigured()
+        guard await activateAudioSession() else { return false }
+        return startEngine()
+    }
+
+    private func activateAudioSession() async -> Bool {
+        let activationError = await Task.detached(priority: .userInitiated) {
+            do {
+                try AVAudioSession.sharedInstance().setActive(true)
+                return nil as String?
+            } catch {
+                return error.localizedDescription
+            }
+        }.value
+        guard activationError == nil else {
+            playbackError = activationError ?? "audio_session_activation_failed"
+            return false
+        }
+        return true
+    }
+
+    private func startEngine() -> Bool {
         engine.prepare()
-        try? engine.start()
+        do {
+            try engine.start()
+            return true
+        } catch {
+            playbackError = error.localizedDescription
+            return false
+        }
     }
 
     private func deactivateAudioSession() {
         Task.detached(priority: .utility) {
-            try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+            try? AVAudioSession.sharedInstance().setActive(
+                false,
+                options: .notifyOthersOnDeactivation
+            )
         }
     }
 
@@ -245,25 +336,26 @@ final class AudioEngine: ObservableObject {
             engine.attach(player.node)
             engine.connect(player.node, to: engine.mainMixerNode, format: player.format)
             players[soundId] = player
-            player.start()
         } catch {
             playbackError = error.localizedDescription
         }
     }
 
-    private func stopAllNodes() {
+    private func stopAllNodes(keepEngineRunning: Bool = false) {
         for (_, player) in players {
             player.stop()
             engine.disconnectNodeOutput(player.node)
             engine.detach(player.node)
         }
         players.removeAll()
-        if engine.isRunning { engine.stop() }
+        if engine.isRunning && !keepEngineRunning { engine.stop() }
     }
 
     // MARK: - Audio session, interruptions, route changes
 
-    private func configureAudioSession() {
+    private func ensureAudioConfigured() {
+        guard !isAudioConfigured else { return }
+        isAudioConfigured = true
         try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
 
         let session = AVAudioSession.sharedInstance()
@@ -277,6 +369,7 @@ final class AudioEngine: ObservableObject {
         ) { [weak self] note in
             Task { @MainActor in self?.handleRouteChange(note) }
         }
+        configureRemoteCommands()
     }
 
     private func handleInterruption(_ note: Notification) {

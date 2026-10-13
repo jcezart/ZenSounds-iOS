@@ -11,6 +11,7 @@ final class LoopingPlayer {
 
     private let file: AVAudioFile
     private var isLooping = false
+    private var playbackGeneration: UInt64 = 0
     private let scheduleQueue = DispatchQueue(label: "com.juliocezar.zensounds.loopingplayer")
 
     init(url: URL) throws {
@@ -18,27 +19,58 @@ final class LoopingPlayer {
     }
 
     func start() {
-        isLooping = true
-        scheduleQueue.async { [weak self] in
-            self?.scheduleNextLocked()
-            self?.scheduleNextLocked()
+        scheduleQueue.sync {
+            guard !isLooping else {
+                if !node.isPlaying {
+                    node.play()
+                }
+                return
+            }
+
+            isLooping = true
+            playbackGeneration &+= 1
+            let generation = playbackGeneration
+
+            // Queue two complete file segments before starting the node. While the second segment
+            // is playing, completion of the first schedules the next one, keeping long MP3 loops
+            // continuous without loading the file into an in-memory PCM buffer.
+            scheduleNextLocked(generation: generation)
+            scheduleNextLocked(generation: generation)
+            node.play()
         }
-        node.play()
     }
 
-    func pause() { node.pause() }
-    func resume() { node.play() }
+    func pause() {
+        scheduleQueue.sync {
+            guard isLooping, node.isPlaying else { return }
+            node.pause()
+        }
+    }
+
+    func resume() {
+        scheduleQueue.sync {
+            guard isLooping, !node.isPlaying else { return }
+            node.play()
+        }
+    }
 
     func stop() {
-        isLooping = false
-        node.stop()
+        scheduleQueue.sync {
+            guard isLooping || node.isPlaying else { return }
+            isLooping = false
+            playbackGeneration &+= 1
+            node.stop()
+        }
     }
 
-    private func scheduleNextLocked() {
-        guard isLooping else { return }
+    private func scheduleNextLocked(generation: UInt64) {
+        guard isLooping, generation == playbackGeneration else { return }
         file.framePosition = 0
         node.scheduleFile(file, at: nil, completionCallbackType: .dataRendered) { [weak self] _ in
-            self?.scheduleQueue.async { self?.scheduleNextLocked() }
+            guard let self else { return }
+            self.scheduleQueue.async { [weak self] in
+                self?.scheduleNextLocked(generation: generation)
+            }
         }
     }
 }

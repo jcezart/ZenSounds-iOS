@@ -3,7 +3,7 @@ import Foundation
 /// Reads chapters from the bundled, pre-decompressed Bible JSON files
 /// (`Resources/Bible/{BOOKCODE}_{lang}.json`, flattened at the bundle root).
 /// Fully offline — no network access, matching the Android app's behavior.
-final class BibleRepository {
+nonisolated final class BibleRepository: @unchecked Sendable {
     static let shared = BibleRepository()
 
     private let cache = NSCache<NSString, NSArray>()
@@ -40,5 +40,16 @@ final class BibleRepository {
 
     func verse(bookCode: String, chapter: Int, number: Int, language: BibleLanguage) -> Verse? {
         self.chapter(bookCode: bookCode, number: chapter, language: language).first { $0.number == number }
+    }
+
+    func chapterAsync(bookCode: String, number: Int, language: BibleLanguage) async -> [Verse] {
+        await Task.detached(priority: .userInitiated) { [self] in
+            chapter(bookCode: bookCode, number: number, language: language)
+        }.value
+    }
+
+    func verseAsync(bookCode: String, chapter: Int, number: Int, language: BibleLanguage) async -> Verse? {
+        await chapterAsync(bookCode: bookCode, number: chapter, language: language)
+            .first { $0.number == number }
     }
 }

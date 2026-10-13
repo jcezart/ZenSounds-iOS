@@ -27,6 +27,14 @@ enum WidgetLanguage: String {
     static var systemDefault: WidgetLanguage {
         Locale.preferredLanguages.first?.lowercased().hasPrefix("pt") == true ? .pt : .en
     }
+
+    static var preferred: WidgetLanguage {
+        let defaults = UserDefaults(suiteName: WidgetDailyWordStore.appGroupID)
+        guard let rawValue = defaults?.string(forKey: "zensounds.bible_language"), rawValue != "system" else {
+            return systemDefault
+        }
+        return Self(rawValue: rawValue) ?? systemDefault
+    }
 }
 
 final class WidgetDataSource {

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SoundMixEditorView: View {
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     let existingMixId: String?
 
     @ObservedObject private var prefs = UserPreferencesStore.shared
@@ -22,7 +23,7 @@ struct SoundMixEditorView: View {
                             get: { isSelected },
                             set: { toggle(sound.id, isOn: $0) }
                         )) {
-                            Text(NSLocalizedString(sound.titleKey, value: sound.id, comment: ""))
+                            Text(LocalizedStringKey(sound.titleKey))
                         }
                         .tint(palette.accent)
 
@@ -37,7 +38,11 @@ struct SoundMixEditorView: View {
                 }
             }
         }
-        .navigationTitle(existingMixId == nil ? "New mix" : "Edit mix")
+        .navigationTitle(
+            existingMixId == nil
+                ? AppLanguage.localized("New mix", defaultValue: "New mix")
+                : AppLanguage.localized("Edit mix", defaultValue: "Edit mix")
+        )
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Play") {

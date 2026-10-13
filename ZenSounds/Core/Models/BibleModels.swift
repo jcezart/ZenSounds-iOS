@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 enum BibleLanguage: String, Codable, CaseIterable, Identifiable {
     case pt
@@ -7,9 +8,94 @@ enum BibleLanguage: String, Codable, CaseIterable, Identifiable {
     var id: String { rawValue }
 
     static let storageKey = "zensounds.bible_language"
+    static let sharedDefaults = UserDefaults(suiteName: "group.com.juliocezar.zensounds") ?? .standard
 
     static var systemDefault: BibleLanguage {
         Locale.preferredLanguages.first?.lowercased().hasPrefix("pt") == true ? .pt : .en
+    }
+}
+
+enum AppLanguage: String, CaseIterable, Identifiable {
+    case system
+    case pt
+    case en
+
+    var id: String { rawValue }
+
+    static let storageKey = BibleLanguage.storageKey
+    static let sharedDefaults = BibleLanguage.sharedDefaults
+
+    var locale: Locale {
+        switch self {
+        case .system:
+            return .autoupdatingCurrent
+        case .pt:
+            return Locale(identifier: "pt-BR")
+        case .en:
+            return Locale(identifier: "en")
+        }
+    }
+
+    var bibleLanguage: BibleLanguage {
+        switch self {
+        case .system:
+            return BibleLanguage.systemDefault
+        case .pt:
+            return .pt
+        case .en:
+            return .en
+        }
+    }
+
+    static func selection(from rawValue: String) -> AppLanguage {
+        AppLanguage(rawValue: rawValue) ?? .system
+    }
+
+    static var current: AppLanguage {
+        selection(from: sharedDefaults.string(forKey: storageKey) ?? system.rawValue)
+    }
+
+    static func localized(_ key: String, defaultValue: String) -> String {
+        let selection = current
+        if selection == .en || (selection == .system && BibleLanguage.systemDefault == .en) {
+            return defaultValue
+        }
+        let languageCode: String
+        switch selection {
+        case .system:
+            languageCode = Locale.preferredLanguages.first ?? "en"
+        case .pt:
+            languageCode = "pt-BR"
+        case .en:
+            languageCode = "en"
+        }
+
+        let candidates = [languageCode, Locale(identifier: languageCode).language.languageCode?.identifier]
+            .compactMap { $0 }
+        for candidate in candidates {
+            if let path = Bundle.main.path(forResource: candidate, ofType: "lproj"),
+               let bundle = Bundle(path: path) {
+                return bundle.localizedString(forKey: key, value: defaultValue, table: nil)
+            }
+        }
+        return Bundle.main.localizedString(forKey: key, value: defaultValue, table: nil)
+    }
+}
+
+@MainActor
+final class AppLanguageStore: ObservableObject {
+    static let shared = AppLanguageStore()
+
+    @Published var selection: AppLanguage {
+        didSet {
+            AppLanguage.sharedDefaults.set(selection.rawValue, forKey: AppLanguage.storageKey)
+        }
+    }
+
+    private init() {
+        selection = AppLanguage.selection(
+            from: AppLanguage.sharedDefaults.string(forKey: AppLanguage.storageKey) ?? AppLanguage.system.rawValue
+        )
     }
 }
 
@@ -79,7 +165,7 @@ struct BibleManifest: Codable {
 /// Raw decoding types mirroring the HelloAO Bible JSON schema bundled from the Android app
 /// (`schema: 1`). Kept separate from the app-facing `Verse` model because the source JSON
 /// represents verse text as an array of pieces (plain strings or `{lineBreak:true}` markers).
-enum BibleContentPiece: Decodable {
+nonisolated enum BibleContentPiece: Decodable {
     case text(String)
     case lineBreak
 
@@ -105,12 +191,12 @@ enum BibleContentPiece: Decodable {
     }
 }
 
-struct BibleRawVerseItem: Decodable {
+nonisolated struct BibleRawVerseItem: Decodable {
     let number: Int
     let content: [BibleContentPiece]
 }
 
-enum BibleRawContentItem: Decodable {
+nonisolated enum BibleRawContentItem: Decodable {
     case verse(BibleRawVerseItem)
     case other
 
@@ -127,17 +213,17 @@ enum BibleRawContentItem: Decodable {
     }
 }
 
-struct BibleRawChapterContent: Decodable {
+nonisolated struct BibleRawChapterContent: Decodable {
     let number: Int
     let content: [BibleRawContentItem]
 }
 
-struct BibleRawChapterWrapper: Decodable {
+nonisolated struct BibleRawChapterWrapper: Decodable {
     let numberOfVerses: Int
     let chapter: BibleRawChapterContent
 }
 
-struct BibleRawBookHeader: Decodable {
+nonisolated struct BibleRawBookHeader: Decodable {
     let id: String
     let name: String?
     let commonName: String?
@@ -145,7 +231,7 @@ struct BibleRawBookHeader: Decodable {
     let numberOfChapters: Int
 }
 
-struct BibleRawFile: Decodable {
+nonisolated struct BibleRawFile: Decodable {
     let schema: Int
     let book: BibleRawBookHeader
     let chapters: [String: BibleRawChapterWrapper]

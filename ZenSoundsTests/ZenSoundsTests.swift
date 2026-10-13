@@ -108,3 +108,11 @@ struct TimerRulesTests {
         #expect(TimerRules.fadeMultiplier(deadline: deadline, now: 50, fadeSeconds: 0) == 1.0)
     }
 }
+
+struct NarrationRateRulesTests {
+    @Test func clampsRateToSupportedRange() {
+        #expect(NarrationRateRules.clamped(0.1) == NarrationRateRules.range.lowerBound)
+        #expect(NarrationRateRules.clamped(0.9) == NarrationRateRules.range.upperBound)
+        #expect(NarrationRateRules.clamped(0.5) == 0.5)
+    }
+}

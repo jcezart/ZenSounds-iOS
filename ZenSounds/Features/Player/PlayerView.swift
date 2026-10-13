@@ -280,7 +280,7 @@ struct PlayerView: View {
 
     private func soundTitle(_ id: String) -> String {
         guard let sound = SoundCatalog.sound(id: id) else { return id }
-        return NSLocalizedString(sound.titleKey, value: id, comment: "")
+        return AppLanguage.localized(sound.titleKey, defaultValue: id)
     }
 
     private static func formattedRemaining(_ interval: TimeInterval) -> String {

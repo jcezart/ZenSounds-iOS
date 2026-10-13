@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct BibleBooksView: View {
-    @AppStorage(BibleLanguage.storageKey) private var languageRaw = BibleLanguage.systemDefault.rawValue
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     @Environment(\.essencePalette) private var palette
 
-    private var language: BibleLanguage { BibleLanguage(rawValue: languageRaw) ?? .systemDefault }
+    private var language: BibleLanguage { languageStore.selection.bibleLanguage }
     private var books: [BibleBook] { BibleCatalog.shared.books }
 
     var body: some View {
@@ -15,7 +15,7 @@ struct BibleBooksView: View {
                     .foregroundStyle(palette.text)
             }
         }
-        .navigationTitle("Bible")
+        .navigationTitle(AppLanguage.localized("Bible", defaultValue: "Bible"))
         .navigationDestination(for: BibleRoute.self) { route in
             BibleRouteDestination(route: route, language: language)
         }
