@@ -9,7 +9,7 @@ struct WidgetReadingRef: Equatable {
 /// Re-implements the main app's `DailyWordStore` key scheme (same App Group suite, same key
 /// names, same local-day logic) so both processes always agree on today's selection without
 /// sharing Swift source across targets. Keep this in sync with
-/// `MyApp/Core/Services/DailyWordStore.swift` if those keys ever change.
+/// `ZenSounds/Core/Services/DailyWordStore.swift` if those keys ever change.
 struct WidgetDailyWordStore {
     static let appGroupID = "group.com.juliocezar.zensounds"
     private static let dateKey = "daily_word_date"

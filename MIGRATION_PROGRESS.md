@@ -215,3 +215,15 @@ Build final completo (iOS simulator), testes unitários (BibleRepository/DailyWo
 - `circle.hexagongrid.fill` foi usado como símbolo da aba por remeter a contas e estar disponível antes do iOS 18, evitando símbolos médicos.
 - As meditações são frases originais e curtas; Assunção e Coroação permanecem sem referência bíblica direta.
 - Comandos remotos continuam exclusivos do `AudioEngine`; o Terço não registra handlers em `MPRemoteCommandCenter`.
+
+## Sessão 2026-10-14 — Auditoria de prontidão para App Store
+
+- Corrigido o host do target de testes após o rename MyApp → ZenSounds; o runner passou de 39 `No result` para 48/48 testes aprovados.
+- Adicionados testes de preferências/mixes, deep links, integridade dos 66 livros em dois idiomas, sons/artes, paisagens e fontes.
+- Corrigidos pausa/fim do timer e corrida da AVAudioSession, preservando retomada; sessão agora é liberada quando não há conteúdo audível.
+- Corrigidos IDs/nomes de mixes, compartilhamento localizado de versículo, mensagens de erro e todas as strings pt-BR pendentes do app/widget.
+- Adicionados manifests de privacidade ao app e widget; removidos recursos órfãos/legados; três PNGs pesados foram convertidos para JPEG e o ícone 1024 passou a não ter alpha.
+- Corrigidos quatro alvos de toque do cartão diário para 44×44 pt.
+- Build-for-testing final: sucesso em 2,453 s, zero avisos. Testes finais: 48 aprovados, 0 reprovados.
+- A execução visual confirmou Início e Bíblia; a ferramenta depois falhou três vezes com `Target device has invalid screen scale`, portanto os demais fluxos não foram declarados aprovados.
+- Relatório detalhado: `APP_STORE_READINESS_AUDIT.md`. Archive/Validate, Instruments/sanitizers de Scheme e testes físicos permanecem pendentes.

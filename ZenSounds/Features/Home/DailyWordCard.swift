@@ -52,19 +52,22 @@ struct DailyWordCard: View {
                 HStack(spacing: 6) {
                     Button(action: onToggleFavorite) {
                         Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
+                            .frame(width: 44, height: 44)
                     }
                     .disabled(state.verse == nil)
                     .accessibilityLabel(isFavorite ? "Remove verse from favorites" : "Add verse to favorites")
 
                     if let verse = state.verse {
-                        ShareLink(item: "\(verse.text) — \(reference(verse)) · ZenSounds") {
+                        ShareLink(item: "\(verse.text) — \(reference(verse)) · Orante") {
                             Image(systemName: "square.and.arrow.up")
+                                .frame(width: 44, height: 44)
                         }
                         .accessibilityLabel("Share verse")
                     }
 
                     Button(action: onShuffle) {
                         Image(systemName: "shuffle")
+                            .frame(width: 44, height: 44)
                     }
                     .disabled(state.isLoading)
                     .accessibilityLabel("Show another verse")

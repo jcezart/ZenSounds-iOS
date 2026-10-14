@@ -769,7 +769,18 @@
         }
       }
     },
+    "Loading Orante" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Carregando Orante"
+          }
+        }
+      }
+    },
     "Loading ZenSounds" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -837,6 +848,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Meus Mixes"
+          }
+        }
+      }
+    },
+    "Narration is unavailable right now." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "A narração não está disponível no momento."
           }
         }
       }
@@ -959,6 +980,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Abrir player: %@"
+          }
+        }
+      }
+    },
+    "Orante" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Orante"
           }
         }
       }
@@ -1759,6 +1790,16 @@
         }
       }
     },
+    "The audio file for this sound is unavailable." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "O arquivo de áudio deste som não está disponível."
+          }
+        }
+      }
+    },
     "Theme" : {
       "localizations" : {
         "pt-BR" : {
@@ -1834,6 +1875,7 @@
       }
     },
     "ZenSounds" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {

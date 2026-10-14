@@ -155,7 +155,7 @@ private struct FavoriteVerseRow: View {
             .buttonStyle(.plain)
 
             HStack {
-                ShareLink(item: "\(favorite.text) — \(reference) · ZenSounds") {
+                ShareLink(item: "\(favorite.text) — \(reference) · Orante") {
                     Image(systemName: "square.and.arrow.up")
                         .frame(width: 40, height: 40)
                 }

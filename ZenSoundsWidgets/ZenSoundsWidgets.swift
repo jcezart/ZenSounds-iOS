@@ -191,7 +191,7 @@ struct LockScreenRectangularView: View {
             VStack(alignment: .leading, spacing: 1) {
                 HStack(spacing: 3) {
                     Image(systemName: "leaf.fill")
-                    Text("ZENSOUNDS")
+                    Text("ORANTE")
                         .tracking(0.7)
                 }
                 .font(.system(size: 7, weight: .bold))
@@ -381,7 +381,7 @@ struct ZenSoundsWidgets: Widget {
             ZenSoundsWidgetsEntryView(entry: entry)
         }
         .configurationDisplayName("Word of the Day")
-        .description("Today's verse from ZenSounds, with a quick way to read the full chapter.")
+        .description("Today's verse from Orante, with a quick way to read the full chapter.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .accessoryRectangular, .accessoryInline])
     }
 }

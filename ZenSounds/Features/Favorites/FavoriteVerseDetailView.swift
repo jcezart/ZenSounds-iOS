@@ -62,7 +62,7 @@ struct VerseDetailView: View {
     }
 
     private var shareButton: some View {
-        ShareLink(item: "\(verse.text) — \(reference) · ZenSounds") {
+        ShareLink(item: "\(verse.text) — \(reference) · Orante") {
             Label("Share", systemImage: "square.and.arrow.up")
         }
     }

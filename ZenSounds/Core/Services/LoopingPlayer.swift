@@ -4,7 +4,7 @@ import AVFoundation
 /// Apple-recommended pattern of keeping two file-length segments queued ahead of playback
 /// (re-scheduling from the start as each segment finishes rendering) rather than loading the
 /// whole file into an in-memory buffer — important here since some bundled sounds (e.g. the
-/// thunder loop) are over ten minutes long.
+/// storm loop) are several minutes long.
 final class LoopingPlayer {
     let node = AVAudioPlayerNode()
     var format: AVAudioFormat { file.processingFormat }

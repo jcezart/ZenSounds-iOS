@@ -34,8 +34,12 @@ final class UserPreferencesStore: ObservableObject {
     private let mixesKey = "zensounds.saved_mixes"
     private let readingPositionKey = "zensounds.reading_position"
 
-    private init() {
-        let defaults = UserDefaults.standard
+    private convenience init() {
+        self.init(defaults: .standard)
+    }
+
+    /// Internal injection point used by unit tests without changing the production singleton.
+    init(defaults: UserDefaults) {
         self.defaults = defaults
         let validSoundIDs = Set(SoundCatalog.all.map(\.id))
         let storedFavoriteSoundIDs = Set(defaults.stringArray(forKey: soundsKey) ?? [])
@@ -90,17 +94,25 @@ final class UserPreferencesStore: ObservableObject {
         defaults.set(Self.encode(favoriteVerses), forKey: versesKey)
     }
 
-    /// Saves (or, if a mix with the same name already exists, overwrites) a named combination.
+    /// Saves a new mix or updates the mix identified by `existingId`.
+    /// Duplicate names are rejected to avoid silently overwriting another saved mix.
     @discardableResult
     func saveMix(name: String, layers: [MixLayer], existingId: String? = nil) -> SavedMix? {
         let normalized = MixRules.normalize(layers)
         let trimmedName = String(name.trimmingCharacters(in: .whitespacesAndNewlines).prefix(40))
         guard !trimmedName.isEmpty, !normalized.isEmpty else { return nil }
 
+        if savedMixes.contains(where: {
+            $0.id != existingId && $0.name.caseInsensitiveCompare(trimmedName) == .orderedSame
+        }) {
+            return nil
+        }
+
         let mix: SavedMix
-        if let matchIndex = savedMixes.firstIndex(where: { $0.name.caseInsensitiveCompare(trimmedName) == .orderedSame }) {
-            mix = SavedMix(id: savedMixes[matchIndex].id, name: trimmedName, layers: normalized)
-            savedMixes[matchIndex] = mix
+        if let existingId,
+           let existingIndex = savedMixes.firstIndex(where: { $0.id == existingId }) {
+            mix = SavedMix(id: existingId, name: trimmedName, layers: normalized)
+            savedMixes[existingIndex] = mix
         } else {
             mix = SavedMix(id: existingId ?? UUID().uuidString, name: trimmedName, layers: normalized)
             savedMixes.insert(mix, at: 0)

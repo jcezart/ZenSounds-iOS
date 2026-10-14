@@ -23,6 +23,7 @@ struct VerseNarrationControls: View {
                     Label(primaryTitle, systemImage: primaryIcon)
                 } else {
                     Image(systemName: primaryIcon)
+                        .frame(width: 44, height: 44)
                 }
             }
             .disabled(isPreparing)
@@ -35,6 +36,7 @@ struct VerseNarrationControls: View {
                         Label("Stop", systemImage: "stop.fill")
                     } else {
                         Image(systemName: "stop.fill")
+                            .frame(width: 44, height: 44)
                     }
                 }
                 .accessibilityLabel("Stop reading")

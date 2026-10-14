@@ -36,6 +36,7 @@ final class AudioEngine: ObservableObject {
     private var narrationDuckMultiplier = 1.0
     private var isNarrationSessionActive = false
     private var isAudioConfigured = false
+    private let audioSessionQueue = DispatchQueue(label: "com.juliocezar.zensounds.audio-session")
     private var playbackRequests = OperationGeneration()
     private var transportState: AudioTransportState = .stopped
 
@@ -46,7 +47,7 @@ final class AudioEngine: ObservableObject {
         if let soundId = activeSoundId, let sound = SoundCatalog.sound(id: soundId) {
             return AppLanguage.localized(sound.titleKey, defaultValue: soundId)
         }
-        return "ZenSounds"
+        return "Orante"
     }
 
     private init() {}
@@ -180,8 +181,14 @@ final class AudioEngine: ObservableObject {
     func pause() {
         guard isPlaying else { return }
         players.values.forEach { $0.pause() }
+        if engine.isRunning {
+            engine.pause()
+        }
         transitionTransport(.pause)
         updateNowPlaying()
+        if !isNarrationSessionActive {
+            deactivateAudioSession()
+        }
     }
 
     func resume() {
@@ -262,9 +269,15 @@ final class AudioEngine: ObservableObject {
     /// nodes and metadata makes the full player remain useful and lets the user start it again.
     private func finishTimerPlayback() {
         players.values.forEach { $0.pause() }
+        if engine.isRunning {
+            engine.pause()
+        }
         transitionTransport(.timerExpired)
         cancelTimer()
         updateNowPlaying()
+        if !isNarrationSessionActive {
+            deactivateAudioSession()
+        }
     }
 
     // MARK: - Volume
@@ -339,14 +352,16 @@ final class AudioEngine: ObservableObject {
     }
 
     private func activateAudioSession() async -> Bool {
-        let activationError = await Task.detached(priority: .userInitiated) {
-            do {
-                try AVAudioSession.sharedInstance().setActive(true)
-                return nil as String?
-            } catch {
-                return error.localizedDescription
+        let activationError = await withCheckedContinuation { continuation in
+            audioSessionQueue.async {
+                do {
+                    try AVAudioSession.sharedInstance().setActive(true)
+                    continuation.resume(returning: nil as String?)
+                } catch {
+                    continuation.resume(returning: error.localizedDescription)
+                }
             }
-        }.value
+        }
         guard activationError == nil else {
             playbackError = activationError ?? "audio_session_activation_failed"
             return false
@@ -368,7 +383,7 @@ final class AudioEngine: ObservableObject {
     }
 
     private func deactivateAudioSession() {
-        Task.detached(priority: .utility) {
+        audioSessionQueue.async {
             try? AVAudioSession.sharedInstance().setActive(
                 false,
                 options: .notifyOthersOnDeactivation
@@ -378,7 +393,7 @@ final class AudioEngine: ObservableObject {
 
     private func makePlayer(soundId: String) -> LoopingPlayer? {
         guard let url = Bundle.main.url(forResource: soundId, withExtension: "mp3") else {
-            playbackError = "The audio file for this sound is unavailable."
+            playbackError = String(localized: "The audio file for this sound is unavailable.")
             return nil
         }
         do {
@@ -508,7 +523,7 @@ final class AudioEngine: ObservableObject {
     private func updateNowPlaying() {
         var info: [String: Any] = [
             MPMediaItemPropertyTitle: displayTitle,
-            MPMediaItemPropertyArtist: "ZenSounds",
+            MPMediaItemPropertyArtist: "Orante",
             MPNowPlayingInfoPropertyPlaybackRate: isPlaying ? 1.0 : 0.0,
             MPNowPlayingInfoPropertyIsLiveStream: true,
         ]

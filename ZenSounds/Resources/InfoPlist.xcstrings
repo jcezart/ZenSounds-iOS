@@ -8,13 +8,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "ZenSounds"
+            "value" : "Orante"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
-            "value" : "ZenSounds"
+            "value" : "Orante"
           }
         }
       }
@@ -31,8 +31,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "ZenSounds"
+            "state" : "machine_translated",
+            "value" : "Orante"
           }
         }
       }

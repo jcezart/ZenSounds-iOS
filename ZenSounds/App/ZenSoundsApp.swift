@@ -37,7 +37,7 @@ private struct AppLaunchView: View {
                     ProgressView()
                         .tint(palette.accent)
                         .controlSize(.small)
-                        .accessibilityLabel("Loading ZenSounds")
+                        .accessibilityLabel("Loading Orante")
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(palette.background)

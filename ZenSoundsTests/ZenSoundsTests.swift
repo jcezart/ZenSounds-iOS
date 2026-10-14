@@ -26,6 +26,7 @@ struct BibleRepositoryTests {
     }
 }
 
+@MainActor
 struct DailyWordStoreTests {
     private func freshStore() -> DailyWordStore {
         DailyWordStore(defaults: UserDefaults(suiteName: "zensounds.tests.\(UUID().uuidString)")!)
@@ -158,6 +159,7 @@ struct NarrationRateRulesTests {
     }
 }
 
+@MainActor
 struct AudioStabilityRulesTests {
     @Test func transportTransitionsBetweenStoppedPlayingAndPaused() {
         var state = AudioTransportRules.nextState(from: .stopped, event: .startSucceeded)
@@ -234,6 +236,7 @@ struct NarrationStateRulesTests {
     }
 }
 
+@MainActor
 struct WidgetIntegrationRulesTests {
     @Test func appGroupSelectionPersistsUsingTheWidgetContract() {
         let suiteName = "zensounds.widget.tests.\(UUID().uuidString)"

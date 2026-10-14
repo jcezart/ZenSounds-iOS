@@ -29,25 +29,84 @@
       }
     },
     "Background color" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Cor de Fundo"
+          }
+        }
+      }
     },
     "Choose the widget background color." : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Escolha a cor de fundo do widget."
+          }
+        }
+      }
     },
     "Customize Widget" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Personalizar Widget"
+          }
+        }
+      }
     },
     "Forest" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Floresta"
+          }
+        }
+      }
     },
     "Midnight" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Meia-noite"
+          }
+        }
+      }
     },
     "Ocean" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Oceano"
+          }
+        }
+      }
+    },
+    "ORANTE" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ORANTE"
+          }
+        }
+      }
     },
     "Plum" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ameixa"
+          }
+        }
+      }
     },
     "Show another verse" : {
       "localizations" : {
@@ -70,9 +129,27 @@
       }
     },
     "Terracotta" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Terracota"
+          }
+        }
+      }
+    },
+    "Today's verse from Orante, with a quick way to read the full chapter." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "O versículo de hoje do Orante, com uma forma rápida de ler o capítulo completo."
+          }
+        }
+      }
     },
     "Today's verse from ZenSounds, with a quick way to read the full chapter." : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -103,7 +180,15 @@
       }
     },
     "ZENSOUNDS" : {
-
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ZENSOUNDS"
+          }
+        }
+      }
     }
   },
   "version" : "1.3"

@@ -6,7 +6,7 @@ enum SoundCategory: String, CaseIterable, Identifiable, Codable {
 
     var id: String { rawValue }
 
-    /// String Catalog key — see Core/Theme/LocalizedLabels.swift.
+    /// String Catalog key resolved by `AppLanguage.localized`.
     var titleKey: String {
         switch self {
         case .nature: return "category_nature"

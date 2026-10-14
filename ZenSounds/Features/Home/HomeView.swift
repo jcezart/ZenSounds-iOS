@@ -123,15 +123,11 @@ private struct HomeBrandHeader: View {
 
     var body: some View {
         HStack {
-            HStack(spacing: 0) {
-                Text(verbatim: "Zen")
-                    .foregroundStyle(palette.text)
-                Text(verbatim: "Sounds")
-                    .foregroundStyle(palette.accent)
-            }
+            Text(verbatim: "Orante")
+                .foregroundStyle(palette.accent)
             .font(.essenceTitleLarge)
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("ZenSounds")
+            .accessibilityLabel("Orante")
 
             Spacer()
 

@@ -118,13 +118,17 @@ struct VerseRow: View {
                         .foregroundStyle(palette.accent)
                 }
                 .accessibilityLabel(isFavorite ? "Remove verse from favorites" : "Add verse to favorites")
-                ShareLink(item: "\(verse.text) — \(verse.book) \(verse.chapter):\(verse.number)") {
+                ShareLink(item: "\(verse.text) — \(localizedBookName) \(verse.chapter):\(verse.number)") {
                     Image(systemName: "square.and.arrow.up")
                         .foregroundStyle(palette.secondaryText)
                 }
                 .accessibilityLabel("Share verse")
             }
         }
+    }
+
+    private var localizedBookName: String {
+        BibleCatalog.shared.book(code: verse.book)?.name(for: verse.language) ?? verse.book
     }
 }
 

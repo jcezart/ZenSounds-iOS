@@ -113,7 +113,7 @@ final class BibleNarrationService: NSObject, ObservableObject {
             guard let self else { return }
             let ready = await audioCoordinator.prepareAudioSessionForNarration()
             guard requests.isCurrent(generation) else { return }
-            guard ready else { failCurrentRequest("Narration is unavailable right now."); return }
+            guard ready else { failCurrentRequest(String(localized: "Narration is unavailable right now.")); return }
             sessionPrepared = true
             audioCoordinator.setNarrationDucking(true)
             try? await Task.sleep(for: .milliseconds(180))
@@ -152,7 +152,7 @@ final class BibleNarrationService: NSObject, ObservableObject {
             let ready: Bool
             if canReuseSession { ready = true } else { ready = await audioCoordinator.prepareAudioSessionForNarration() }
             guard requests.isCurrent(generation) else { return }
-            guard ready else { failCurrentRequest("Narration is unavailable right now."); return }
+            guard ready else { failCurrentRequest(String(localized: "Narration is unavailable right now.")); return }
             guard let voice = preferences.resolvedVoice(for: language, preferredIdentifier: preferredVoiceIdentifier) else {
                 failCurrentRequest("No compatible voice is installed for this language."); return
             }
