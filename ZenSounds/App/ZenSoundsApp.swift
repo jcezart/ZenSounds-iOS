@@ -3,6 +3,11 @@ import SwiftUI
 @main
 struct ZenSoundsApp: App {
     @StateObject private var languageStore = AppLanguageStore.shared
+    private let superwall = SuperwallService.shared
+
+    init() {
+        superwall.configure(language: AppLanguageStore.shared.selection)
+    }
 
     var body: some Scene {
         WindowGroup {
@@ -10,15 +15,31 @@ struct ZenSoundsApp: App {
                 AppLaunchView()
             }
             .environment(\.locale, languageStore.selection.locale)
-            .onOpenURL { url in
-                DeepLinkHandler.handle(url)
+            .onOpenURL(perform: handleIncomingURL)
+            .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { activity in
+                guard let url = activity.webpageURL else { return }
+                handleIncomingURL(url)
             }
+            .onChange(of: languageStore.selection) {
+                superwall.updateUserProperties(language: languageStore.selection)
+            }
+        }
+    }
+
+    private func handleIncomingURL(_ url: URL) {
+        OnboardingState.shared.suppressForCurrentLaunch()
+        NotificationCenter.default.post(name: .oranteDeepLinkReceived, object: nil)
+        if BibleDeepLink.parse(url) != nil {
+            DeepLinkHandler.handle(url)
+        } else if !superwall.handleDeepLink(url) {
+            DeepLinkHandler.handle(url)
         }
     }
 }
 
 private struct AppLaunchView: View {
     @State private var isReady = false
+    @State private var isOnboardingPresented = false
     @Environment(\.essencePalette) private var palette
 
     var body: some View {
@@ -48,6 +69,16 @@ private struct AppLaunchView: View {
             await Task.yield()
             try? await Task.sleep(for: .milliseconds(180))
             isReady = true
+            isOnboardingPresented = OnboardingState.shared.shouldPresent
+        }
+        .fullScreenCover(isPresented: $isOnboardingPresented) {
+            OnboardingView {
+                OnboardingState.shared.markSeen()
+                isOnboardingPresented = false
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .oranteDeepLinkReceived)) { _ in
+            isOnboardingPresented = false
         }
     }
 }

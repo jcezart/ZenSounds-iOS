@@ -105,14 +105,21 @@ struct HomeView: View {
     }
 
     private func play(soundID: String) {
-        audio.play(soundId: soundID)
-        PlayerPresentation.shared.isFullPlayerPresented = true
+        SuperwallService.shared.gate(
+            .sound(id: soundID),
+            parameters: ["sound_id": soundID]
+        ) {
+            audio.play(soundId: soundID)
+            PlayerPresentation.shared.isFullPlayerPresented = true
+        }
     }
 
     private func openMixEditor() {
-        navigation.selectedTab = .sounds
-        navigation.soundsPath = NavigationPath()
-        navigation.soundsPath.append(SoundsRoute.mixEditor(existingMixId: nil))
+        SuperwallService.shared.gate(.mixer, parameters: ["source": "home"]) {
+            navigation.selectedTab = .sounds
+            navigation.soundsPath = NavigationPath()
+            navigation.soundsPath.append(SoundsRoute.mixEditor(existingMixId: nil))
+        }
     }
 }
 

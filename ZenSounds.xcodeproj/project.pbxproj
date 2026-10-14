@@ -10,6 +10,7 @@
 		490CC7B0307B2DF300F20C57 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 490CC7AF307B2DF300F20C57 /* WidgetKit.framework */; };
 		490CC7B2307B2DF300F20C57 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 490CC7B1307B2DF300F20C57 /* SwiftUI.framework */; };
 		490CC7BD307B2DF500F20C57 /* ZenSoundsWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 490CC7AD307B2DF300F20C57 /* ZenSoundsWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		497DF1EE308027FB00E36E5B /* SuperwallKit in Frameworks */ = {isa = PBXBuildFile; productRef = 497DF1ED308027FB00E36E5B /* SuperwallKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		490CC7B1307B2DF300F20C57 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = /System/Library/Frameworks/SwiftUI.framework; sourceTree = "<absolute>"; };
 		490CC7C3307B2E0D00F20C57 /* ZenSoundsWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ZenSoundsWidgetsExtension.entitlements; sourceTree = "<group>"; };
 		490CC7DC307B349400F20C57 /* ZenSoundsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZenSoundsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		497DF1FC308049C100E36E5B /* Orante.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Orante.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -95,6 +97,7 @@
 		000000000000000130000000 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
+				497DF1EE308027FB00E36E5B /* SuperwallKit in Frameworks */,
 			);
 		};
 		490CC7AA307B2DF300F20C57 /* Frameworks */ = {
@@ -115,6 +118,7 @@
 		000000000000000000000001 = {
 			isa = PBXGroup;
 			children = (
+				497DF1FC308049C100E36E5B /* Orante.storekit */,
 				490CC7C3307B2E0D00F20C57 /* ZenSoundsWidgetsExtension.entitlements */,
 				000000000000000000000010 /* ZenSounds */,
 				490CC7B3307B2DF300F20C57 /* ZenSoundsWidgets */,
@@ -164,6 +168,9 @@
 				000000000000000000000010 /* ZenSounds */,
 			);
 			name = ZenSounds;
+			packageProductDependencies = (
+				497DF1ED308027FB00E36E5B /* SuperwallKit */,
+			);
 			productName = MyApp;
 			productReference = 000000000000000000000120 /* ZenSounds.app */;
 			productType = "com.apple.product-type.application";
@@ -239,6 +246,9 @@
 			);
 			mainGroup = 000000000000000000000001;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				497DF1EC308027FB00E36E5B /* XCRemoteSwiftPackageReference "Superwall-iOS" */,
+			);
 			preferredProjectObjectVersion = 90;
 			productRefGroup = 000000000000000000000020 /* Products */;
 			projectDirPath = "";
@@ -468,12 +478,13 @@
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -512,12 +523,13 @@
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -695,6 +707,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		497DF1EC308027FB00E36E5B /* XCRemoteSwiftPackageReference "Superwall-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/superwall/Superwall-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.17.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		497DF1ED308027FB00E36E5B /* SuperwallKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 497DF1EC308027FB00E36E5B /* XCRemoteSwiftPackageReference "Superwall-iOS" */;
+			productName = SuperwallKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 000000000000000000000000 /* Project object */;
 }

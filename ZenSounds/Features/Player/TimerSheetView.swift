@@ -14,7 +14,10 @@ struct TimerSheetView: View {
                 Section("Duration") {
                     ForEach(presets, id: \.self) { minutes in
                         Button("\(minutes) min") {
-                            audio.setTimer(minutes: minutes, fadeSeconds: audio.timerFadeSeconds)
+                            let fade = SuperwallService.shared.hasPlus
+                                ? audio.timerFadeSeconds
+                                : TimerRules.defaultFadeSeconds
+                            audio.setTimer(minutes: minutes, fadeSeconds: fade)
                             dismiss()
                         }
                     }
@@ -24,15 +27,28 @@ struct TimerSheetView: View {
                             .accessibilityLabel("Custom minutes")
                         Button("Start") {
                             if let minutes = Int(customMinutesText) {
-                                audio.setTimer(minutes: minutes, fadeSeconds: audio.timerFadeSeconds)
-                                dismiss()
+                                SuperwallService.shared.gate(.customTimer) {
+                                    audio.setTimer(minutes: minutes, fadeSeconds: audio.timerFadeSeconds)
+                                    dismiss()
+                                }
                             }
                         }
                         .disabled(Int(customMinutesText) == nil)
                     }
                 }
                 Section("Fade out") {
-                    Slider(value: $audio.timerFadeSeconds, in: 0...TimerRules.maxFadeSeconds, step: 5)
+                    Slider(
+                        value: Binding(
+                            get: { audio.timerFadeSeconds },
+                            set: { value in
+                                SuperwallService.shared.gate(.customTimer) {
+                                    audio.timerFadeSeconds = value
+                                }
+                            }
+                        ),
+                        in: 0...TimerRules.maxFadeSeconds,
+                        step: 5
+                    )
                         .accessibilityLabel("Fade-out duration")
                     Text(audio.timerFadeSeconds == 0 ? "Stops abruptly, no fade" : "\(Int(audio.timerFadeSeconds))s volume fade before stopping")
                         .font(.essenceBodySmall)

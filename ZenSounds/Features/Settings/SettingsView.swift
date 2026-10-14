@@ -2,13 +2,21 @@ import SwiftUI
 import WidgetKit
 import AVFoundation
 import Combine
+import StoreKit
+import UIKit
 
 struct SettingsView: View {
     @ObservedObject private var themeManager = ThemeManager.shared
     @ObservedObject private var languageStore = AppLanguageStore.shared
+    @ObservedObject private var superwall = SuperwallService.shared
     @Environment(\.dismiss) private var dismiss
     @Environment(\.essencePalette) private var palette
     @Environment(\.scenePhase) private var scenePhase
+    @State private var restoreMessage: LocalizedStringResource?
+    @State private var isRestoring = false
+
+    private static let privacyPolicyURL = URL(string: "https://jc.app.dev/orante/privacidade")!
+    private static let termsURL = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
 
     var body: some View {
         NavigationStack {
@@ -29,6 +37,48 @@ struct SettingsView: View {
                     .pickerStyle(.inline)
                     .labelsHidden()
                     .accessibilityLabel("Language")
+                }
+                Section("Orante+") {
+                    LabeledContent("Status") {
+                        Text(superwall.hasPlus ? "Active" : "Not subscribed")
+                            .foregroundStyle(.secondary)
+                    }
+
+                    if !superwall.hasPlus {
+                        Button("Discover Orante+") {
+                            superwall.registerNonGated(
+                                placement: SuperwallService.Placement.settingsUpgrade
+                            )
+                        }
+                    }
+
+                    Button("Restore purchases") {
+                        restore()
+                    }
+                    .disabled(isRestoring)
+
+                    if superwall.hasPlus {
+                        Button("Manage subscription") {
+                            Task { await manageSubscription() }
+                        }
+                    }
+
+                    Button {
+                        superwall.gate(.widgetTheme(id: "premium")) {}
+                    } label: {
+                        HStack {
+                            Text("Widget themes")
+                            Spacer()
+                            if !superwall.hasPlus {
+                                Text("+")
+                                    .font(.headline)
+                                    .accessibilityLabel("Requires Orante+")
+                            }
+                        }
+                    }
+
+                    Link("Terms of Use", destination: Self.termsURL)
+                    Link("Privacy Policy", destination: Self.privacyPolicyURL)
                 }
                 BibleNarrationSettingsSection()
                 Section("About") {
@@ -65,8 +115,42 @@ struct SettingsView: View {
                     Button("Done") { dismiss() }
                 }
             }
+            .alert(
+                "Restore purchases",
+                isPresented: Binding(
+                    get: { restoreMessage != nil },
+                    set: { if !$0 { restoreMessage = nil } }
+                )
+            ) {
+                Button("OK", role: .cancel) { restoreMessage = nil }
+            } message: {
+                if let restoreMessage { Text(restoreMessage) }
+            }
         }
         .id(languageStore.selection)
+    }
+
+    private func restore() {
+        isRestoring = true
+        Task {
+            let outcome = await superwall.restorePurchases()
+            switch outcome {
+            case .restored:
+                restoreMessage = "Your Orante+ subscription was restored."
+            case .nothingFound:
+                restoreMessage = "No active subscription was found."
+            case .failed:
+                restoreMessage = "Purchases couldn't be restored. Please try again."
+            }
+            isRestoring = false
+        }
+    }
+
+    private func manageSubscription() async {
+        guard let scene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive }) else { return }
+        try? await AppStore.showManageSubscriptions(in: scene)
     }
 }
 

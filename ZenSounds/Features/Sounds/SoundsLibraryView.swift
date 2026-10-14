@@ -16,7 +16,9 @@ struct SoundsLibraryView: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 30) {
                     SoundsLibraryHeader {
-                        navigation.soundsPath.append(SoundsRoute.mixEditor(existingMixId: nil))
+                        SuperwallService.shared.gate(.mixer, parameters: ["source": "library"]) {
+                            navigation.soundsPath.append(SoundsRoute.mixEditor(existingMixId: nil))
+                        }
                     }
 
                     SoundLibrarySection(
@@ -28,8 +30,13 @@ struct SoundsLibraryView: View {
                                     BiblicalSoundscapeCard(
                                         soundscape: soundscape,
                                         onPlay: {
-                                            audio.playMix(soundscape.playableMix)
-                                            PlayerPresentation.shared.isFullPlayerPresented = true
+                                            SuperwallService.shared.gate(
+                                                .soundscape(id: soundscape.id),
+                                                parameters: ["soundscape_id": soundscape.id]
+                                            ) {
+                                                audio.playMix(soundscape.playableMix)
+                                                PlayerPresentation.shared.isFullPlayerPresented = true
+                                            }
                                         },
                                         onOpenPassage: {
                                             navigation.openBible(
@@ -53,8 +60,10 @@ struct SoundsLibraryView: View {
                                 MixRow(
                                     mix: mix,
                                     onTap: {
-                                        audio.playMix(mix)
-                                        PlayerPresentation.shared.isFullPlayerPresented = true
+                                        SuperwallService.shared.gate(.savedMix, parameters: ["source": "saved_mix"]) {
+                                            audio.playMix(mix)
+                                            PlayerPresentation.shared.isFullPlayerPresented = true
+                                        }
                                     },
                                     onDelete: { prefs.removeMix(id: mix.id) }
                                 )
@@ -68,8 +77,13 @@ struct SoundsLibraryView: View {
                         ) {
                             ForEach(SoundCatalog.sounds(in: category)) { sound in
                                 SoundRow(sound: sound) {
-                                    audio.play(soundId: sound.id)
-                                    PlayerPresentation.shared.isFullPlayerPresented = true
+                                    SuperwallService.shared.gate(
+                                        .sound(id: sound.id),
+                                        parameters: ["sound_id": sound.id]
+                                    ) {
+                                        audio.play(soundId: sound.id)
+                                        PlayerPresentation.shared.isFullPlayerPresented = true
+                                    }
                                 }
                             }
                         }

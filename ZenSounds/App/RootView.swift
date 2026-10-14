@@ -5,6 +5,7 @@ struct RootView: View {
     @ObservedObject private var playerPresentation = PlayerPresentation.shared
     @ObservedObject private var audio = AudioEngine.shared
     @ObservedObject private var narration = BibleNarrationService.shared
+    @ObservedObject private var trialReminder = TrialReminderService.shared
     @Environment(\.essencePalette) private var palette
 
     var body: some View {
@@ -70,6 +71,14 @@ struct RootView: View {
             Button("OK", role: .cancel) { audio.clearPlaybackError() }
         } message: {
             Text(audio.playbackError ?? "Please try again.")
+        }
+        .alert("Trial reminder", isPresented: $trialReminder.shouldExplainPermission) {
+            Button("Not now", role: .cancel) {}
+            Button("Allow reminders") {
+                Task { await trialReminder.requestAndSchedule() }
+            }
+        } message: {
+            Text("We'll notify you 2 days before your Orante+ trial ends.")
         }
     }
 }

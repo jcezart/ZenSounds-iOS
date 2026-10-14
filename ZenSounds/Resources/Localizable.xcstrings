@@ -167,6 +167,16 @@
         }
       }
     },
+    "+" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "+"
+          }
+        }
+      }
+    },
     "A pause with sound" : {
       "localizations" : {
         "pt-BR" : {
@@ -183,6 +193,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Sobre"
+          }
+        }
+      }
+    },
+    "Active" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ativo"
           }
         }
       }
@@ -244,6 +264,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Adicionar versículo aos favoritos"
+          }
+        }
+      }
+    },
+    "Allow reminders" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Permitir lembretes"
           }
         }
       }
@@ -524,6 +554,16 @@
         }
       }
     },
+    "Discover Orante+" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Conhecer o Orante+"
+          }
+        }
+      }
+    },
     "Done" : {
       "localizations" : {
         "pt-BR" : {
@@ -699,6 +739,16 @@
         }
       }
     },
+    "If you don't want to continue, cancel in iPhone Settings." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Se não quiser continuar, cancele nos Ajustes do iPhone."
+          }
+        }
+      }
+    },
     "Improve narration quality" : {
       "localizations" : {
         "pt-BR" : {
@@ -749,6 +799,16 @@
         }
       }
     },
+    "Listen to the Word and pray peacefully" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ouça a Palavra e reze com tranquilidade"
+          }
+        }
+      }
+    },
     "Listen to verse" : {
       "localizations" : {
         "pt-BR" : {
@@ -786,6 +846,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Carregando ZenSounds"
+          }
+        }
+      }
+    },
+    "Manage subscription" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gerenciar assinatura"
           }
         }
       }
@@ -903,6 +973,16 @@
         }
       }
     },
+    "No active subscription was found." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Nenhuma assinatura ativa foi encontrada."
+          }
+        }
+      }
+    },
     "No favorites yet" : {
       "localizations" : {
         "pt-BR" : {
@@ -939,6 +1019,26 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Normal"
+          }
+        }
+      }
+    },
+    "Not now" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Agora não"
+          }
+        }
+      }
+    },
+    "Not subscribed" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Não assinante"
           }
         }
       }
@@ -990,6 +1090,26 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Orante"
+          }
+        }
+      }
+    },
+    "Orante+" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Orante+"
+          }
+        }
+      }
+    },
+    "Orante+ adds complete narration, guided prayer, mixes, and more sounds." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "O Orante+ oferece narração completa, oração guiada, mixes e mais sons."
           }
         }
       }
@@ -1094,6 +1214,26 @@
         }
       }
     },
+    "Pray the Rosary and accompany your quiet moments with biblical soundscapes." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Reze o Rosário e acompanhe seus momentos de tranquilidade com paisagens sonoras bíblicas."
+          }
+        }
+      }
+    },
+    "Prayer and peaceful soundscapes" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Oração e paisagens sonoras tranquilas"
+          }
+        }
+      }
+    },
     "Prayer mode" : {
       "localizations" : {
         "pt-BR" : {
@@ -1134,6 +1274,16 @@
         }
       }
     },
+    "Privacy Policy" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Política de Privacidade"
+          }
+        }
+      }
+    },
     "Progress: %lld of %lld, decade %lld" : {
       "localizations" : {
         "en" : {
@@ -1150,6 +1300,16 @@
         }
       }
     },
+    "Purchases couldn't be restored. Please try again." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Não foi possível restaurar as compras. Tente novamente."
+          }
+        }
+      }
+    },
     "Read in the Bible" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1157,6 +1317,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Ler na Bíblia"
+          }
+        }
+      }
+    },
+    "Read the complete Bible offline and begin each day with the Word of the Day." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Leia a Bíblia completa off-line e comece cada dia com a Palavra do Dia."
           }
         }
       }
@@ -1261,6 +1431,26 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Remover versículo dos favoritos"
+          }
+        }
+      }
+    },
+    "Requires Orante+" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Requer Orante+"
+          }
+        }
+      }
+    },
+    "Restore purchases" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Restaurar Compras"
           }
         }
       }
@@ -1381,6 +1571,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Mostrar outro versículo"
+          }
+        }
+      }
+    },
+    "Skip" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Pular"
           }
         }
       }
@@ -1699,6 +1899,16 @@
         }
       }
     },
+    "Status" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Status"
+          }
+        }
+      }
+    },
     "Stop" : {
       "localizations" : {
         "pt-BR" : {
@@ -1790,12 +2000,32 @@
         }
       }
     },
+    "Terms of Use" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Termos de Uso"
+          }
+        }
+      }
+    },
     "The audio file for this sound is unavailable." : {
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "O arquivo de áudio deste som não está disponível."
+          }
+        }
+      }
+    },
+    "The Bible, always with you" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "A Bíblia, sempre com você"
           }
         }
       }
@@ -1831,6 +2061,16 @@
         }
       }
     },
+    "Trial reminder" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Lembrete do Teste Grátis"
+          }
+        }
+      }
+    },
     "Verses" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1838,6 +2078,26 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Versículos"
+          }
+        }
+      }
+    },
+    "We'll notify you 2 days before your Orante+ trial ends." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Vamos avisar você 2 dias antes do fim do teste grátis do Orante+."
+          }
+        }
+      }
+    },
+    "Widget themes" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Temas do Widget"
           }
         }
       }
@@ -1859,6 +2119,26 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Você pode baixar vozes Aprimoradas ou Premium nos Ajustes do iPhone para uma leitura mais natural. Em geral: Ajustes > Acessibilidade > Conteúdo Falado > Vozes (os nomes podem variar conforme a versão do iOS)."
+          }
+        }
+      }
+    },
+    "Your Orante+ subscription was restored." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "A assinatura do Orante+ foi restaurada."
+          }
+        }
+      }
+    },
+    "Your Orante+ trial ends in 2 days" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Seu teste grátis do Orante+ termina em 2 dias"
           }
         }
       }

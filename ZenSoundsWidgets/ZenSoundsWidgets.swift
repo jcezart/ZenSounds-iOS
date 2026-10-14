@@ -17,6 +17,10 @@ enum WidgetBackgroundTheme: String, AppEnum, Sendable {
         .plum: "Plum",
         .ocean: "Ocean"
     ]
+
+    static func resolved(_ selected: Self, hasPlus: Bool) -> Self {
+        hasPlus ? selected : .terracotta
+    }
 }
 
 struct ZenSoundsWidgetConfigurationIntent: WidgetConfigurationIntent {
@@ -72,12 +76,14 @@ struct DailyWordProvider: AppIntentTimelineProvider {
         let reading = source.readings.first { $0.book == ref.book && $0.chapter == ref.chapter && $0.verse == ref.verse }
         let text = reading.map { source.text(for: $0, language: language) } ?? ""
         let bookName = source.book(code: ref.book).map { language == .pt ? $0.name_pt : $0.name_en } ?? ref.book
+        let hasPlus = UserDefaults(suiteName: "group.com.juliocezar.zensounds")?
+            .bool(forKey: "plus_active") ?? false
         return DailyWordEntry(
             date: Date(),
             reading: ref,
             text: text,
             bookName: bookName,
-            backgroundTheme: backgroundTheme
+            backgroundTheme: .resolved(backgroundTheme, hasPlus: hasPlus)
         )
     }
 }

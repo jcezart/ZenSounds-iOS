@@ -56,6 +56,10 @@ final class AudioEngine: ObservableObject {
 
     func play(soundId: String) {
         guard SoundCatalog.sound(id: soundId) != nil else { return }
+        guard AudioPremiumSafety.decisionForSoundStart(
+            id: soundId,
+            hasPlus: SuperwallService.shared.hasPlus
+        ) == .startRequestedSound else { return }
         play(layers: [MixLayer(soundId: soundId, volume: SoundCatalog.sound(id: soundId)?.defaultVolume ?? 1)], mix: nil, singleSoundId: soundId)
     }
 
@@ -65,16 +69,27 @@ final class AudioEngine: ObservableObject {
         guard let current = activeSoundId, let currentIndex = SoundCatalog.all.firstIndex(where: { $0.id == current }) else { return }
         let count = SoundCatalog.all.count
         let nextIndex = ((currentIndex + offset) % count + count) % count
-        play(soundId: SoundCatalog.all[nextIndex].id)
+        let nextSoundID = SoundCatalog.all[nextIndex].id
+        SuperwallService.shared.gate(
+            .sound(id: nextSoundID),
+            parameters: ["sound_id": nextSoundID]
+        ) { [weak self] in
+            self?.play(soundId: nextSoundID)
+        }
     }
 
     // MARK: - Mix
 
     func playMix(_ mix: SavedMix) {
+        guard AudioPremiumSafety.canStartMix(
+            id: mix.id,
+            hasPlus: SuperwallService.shared.hasPlus
+        ) else { return }
         play(layers: mix.layers, mix: mix, singleSoundId: nil)
     }
 
     func playAdHocMix(layers: [MixLayer]) {
+        guard SuperwallService.shared.hasPlus else { return }
         play(layers: layers, mix: nil, singleSoundId: nil)
     }
 
@@ -86,6 +101,7 @@ final class AudioEngine: ObservableObject {
 
     /// Adds the currently-playing single sound as a new mix layer (the Android "use in mix" action).
     func addLayer(soundId: String) {
+        guard SuperwallService.shared.hasPlus else { return }
         guard !layers.contains(where: { $0.soundId == soundId }), layers.count < MixRules.maxLayers else { return }
         var newLayers = layers
         newLayers.append(MixLayer(soundId: soundId))

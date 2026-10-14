@@ -70,10 +70,12 @@ struct SoundMixEditorView: View {
         .alert("Save mix", isPresented: $isSaveAlertPresented) {
             TextField("Mix name", text: $mixName)
             Button("Save") {
-                if let saved = prefs.saveMix(name: mixName, layers: layers, existingId: existingMixId) {
-                    layers = saved.layers
+                SuperwallService.shared.gate(.mixer, parameters: ["source": "library"]) {
+                    if let saved = prefs.saveMix(name: mixName, layers: layers, existingId: existingMixId) {
+                        layers = saved.layers
+                        dismiss()
+                    }
                 }
-                dismiss()
             }
             Button("Cancel", role: .cancel) {}
         }

@@ -85,9 +85,9 @@ No simulador foram efetivamente abertas Início e Bíblia; não houve crash e a 
 | Privacy manifests | Criados para app e widget; copiados uma vez por target no build |
 | UserDefaults | CA92.1 (app) e 1C8F.1 (App Group) |
 | System uptime | 35F9.1 no app, para timer por tempo decorrido |
-| Coleta/tracking | código sem analytics, rede ou identificadores; arrays vazios e tracking false |
+| Coleta/tracking | Superwall adicionado depois da auditoria inicial; sem tracking, mas o manifesto do SDK declara histórico de compras para funcionalidade |
 | App Group | OK e idêntico nos dois entitlements |
-| Dependências de terceiros | nenhuma encontrada |
+| Dependências de terceiros | SuperwallKit 4.17.0 e dependência Superscript 1.0.15; ambos adicionados depois da auditoria inicial |
 
 O relatório de privacidade gerado pelo Archive ainda precisa ser conferido no Organizer.
 
@@ -105,7 +105,7 @@ O relatório de privacidade gerado pelo Archive ainda precisa ser conferido no O
 ## App Store Connect
 
 - Classificação etária: preencher como sem violência, sexualidade, drogas, apostas ou conteúdo gerado por usuários; tema religioso.
-- Privacidade: “Dados não coletados”, condicionado à confirmação do Archive e da política operacional.
+- Privacidade: revisar após a integração do Superwall; o manifesto do SDK declara histórico de compras, não vinculado e usado para funcionalidade. Não selecionar automaticamente “Dados não coletados”.
 - Screenshots: iPhone 6,9”/6,5” e iPad 13” enquanto `TARGETED_DEVICE_FAMILY = 1,2`.
 - Categoria: **Estilo de Vida** principal (uso cotidiano para oração/relaxamento) e **Referência** secundária; Saúde e Fitness só é preferível se o marketing priorizar relaxamento.
 - Exportação: respondida por `ITSAppUsesNonExemptEncryption = NO`.
@@ -138,6 +138,20 @@ O relatório de privacidade gerado pelo Archive ainda precisa ser conferido no O
 8. iPad retrato/paisagem, Split View e Slide Over.
 9. Primeiro lançamento sem dados, modo avião e idioma do sistema inglês.
 10. Archive, Validate App e Generate Privacy Report.
+
+## Adendo — assinatura Orante+ (2026-10-14)
+
+O app implementa um único nível `plus`, sem semanal ou vitalício. Recursos bíblicos de leitura, Palavra do Dia (incluindo narração), Terço manual, três sons, Bom Pastor, timers predefinidos e Terracota permanecem grátis. Os demais recursos seguem os placements documentados em `SUPERWALL_INTEGRATION.md` e possuem defesa adicional no motor de áudio.
+
+Checklist App Store Connect pendente do proprietário:
+
+1. Criar grupo “Orante+” e os produtos anual/mensal com IDs, preços e localizações descritos no relatório de integração.
+2. Configurar teste introdutório gratuito de sete dias apenas no anual e ativar Compartilhamento Familiar nos dois.
+3. Anexar produtos ao Superwall, criar entitlement `plus`, configurar campanhas Gated/Non Gated e publicar o paywall com preço, período, renovação, restauração, Termos e Privacidade.
+4. Informar Purchase History para Analytics + App Functionality, sem tracking; revisar o relatório agregado de privacidade no Archive.
+5. Publicar `https://jc.app.dev/orante/privacidade`, fornecer screenshot de revisão do paywall e testar tudo no sandbox/TestFlight.
+
+Validação local desta sessão: build-for-testing aprovado; novos testes cobrem matriz, placement, acesso grátis em `.unknown`, segurança de áudio, rebaixamento, onboarding e data do lembrete. Compras reais, campanhas remotas, restauração em outro aparelho, Family Sharing, expiração e abertura offline assinada dependem de sandbox/TestFlight.
 
 ## Arquivos
 

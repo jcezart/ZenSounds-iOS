@@ -36,8 +36,13 @@ struct FavoritesView: View {
                                     FavoriteSoundRow(
                                         sound: sound,
                                         onPlay: {
-                                            AudioEngine.shared.play(soundId: sound.id)
-                                            PlayerPresentation.shared.isFullPlayerPresented = true
+                                            SuperwallService.shared.gate(
+                                                .sound(id: sound.id),
+                                                parameters: ["sound_id": sound.id]
+                                            ) {
+                                                AudioEngine.shared.play(soundId: sound.id)
+                                                PlayerPresentation.shared.isFullPlayerPresented = true
+                                            }
                                         },
                                         onDelete: {
                                             preferences.toggleFavoriteSound(sound.id)

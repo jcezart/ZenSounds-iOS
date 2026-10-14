@@ -7,6 +7,7 @@ struct VerseNarrationControls: View {
     }
 
     let verse: Verse
+    var isDailyWord = false
     var style: Style = .compact
     var tint: Color? = nil
 
@@ -83,7 +84,15 @@ struct VerseNarrationControls: View {
 
     private func primaryAction() {
         guard isActiveVerse else {
-            narration.speak(verse)
+            SuperwallService.shared.gate(
+                .verseNarration(isDailyWord: isDailyWord),
+                parameters: [
+                    "book": verse.book,
+                    "chapter": String(verse.chapter)
+                ]
+            ) {
+                narration.speak(verse)
+            }
             return
         }
         switch narration.state {

@@ -69,8 +69,10 @@ struct PlayerView: View {
         .alert("Save mix", isPresented: $isSaveMixAlertPresented) {
             TextField("Mix name", text: $mixNameDraft)
             Button("Save") {
-                _ = prefs.saveMix(name: mixNameDraft, layers: audio.layers)
-                mixNameDraft = ""
+                SuperwallService.shared.gate(.mixer, parameters: ["source": "player"]) {
+                    _ = prefs.saveMix(name: mixNameDraft, layers: audio.layers)
+                    mixNameDraft = ""
+                }
             }
             Button("Cancel", role: .cancel) {}
         }
@@ -243,7 +245,12 @@ struct PlayerView: View {
                 HStack(spacing: 16) {
                     ForEach(SoundCatalog.all.filter { $0.id != audio.activeSoundId }) { sound in
                         Button {
-                            audio.play(soundId: sound.id)
+                            SuperwallService.shared.gate(
+                                .sound(id: sound.id),
+                                parameters: ["sound_id": sound.id]
+                            ) {
+                                audio.play(soundId: sound.id)
+                            }
                         } label: {
                             VStack(spacing: 8) {
                                 Group {
@@ -273,7 +280,9 @@ struct PlayerView: View {
         Group {
             if audio.isActive, audio.layers.count < MixRules.maxLayers {
                 Button {
-                    isAddSoundSheetPresented = true
+                    SuperwallService.shared.gate(.mixer, parameters: ["source": "player"]) {
+                        isAddSoundSheetPresented = true
+                    }
                 } label: {
                     Label("Add another sound", systemImage: "plus.circle")
                         .font(.essenceLabelLarge)

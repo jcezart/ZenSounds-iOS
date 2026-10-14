@@ -73,7 +73,7 @@ struct DailyWordCard: View {
                     .accessibilityLabel("Show another verse")
 
                     if let verse = state.verse {
-                        VerseNarrationControls(verse: verse, tint: palette.onVerse)
+                        VerseNarrationControls(verse: verse, isDailyWord: true, tint: palette.onVerse)
                     }
 
                     Spacer()

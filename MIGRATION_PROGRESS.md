@@ -227,3 +227,26 @@ Build final completo (iOS simulator), testes unitários (BibleRepository/DailyWo
 - Build-for-testing final: sucesso em 2,453 s, zero avisos. Testes finais: 48 aprovados, 0 reprovados.
 - A execução visual confirmou Início e Bíblia; a ferramenta depois falhou três vezes com `Target device has invalid screen scale`, portanto os demais fluxos não foram declarados aprovados.
 - Relatório detalhado: `APP_STORE_READINESS_AUDIT.md`. Archive/Validate, Instruments/sanitizers de Scheme e testes físicos permanecem pendentes.
+
+## Sessão 2026-10-14 — Integração Superwall
+
+- Plataforma confirmada como iOS nativo e caminho de compras padrão escolhido; não havia StoreKit, RevenueCat, outro billing SDK ou analytics.
+- SuperwallKit 4.17.0 instalado via Swift Package Manager, com Superscript 1.0.15.
+- `SuperwallService` configura a chave pública no lançamento, acompanha assinatura pelo delegate, publica `isSubscribed`, define atributos não sensíveis e expõe identify/reset para um futuro login por UUID.
+- Deep links passam primeiro por `Superwall.handleDeepLink` e preservam as rotas bíblicas existentes quando não reconhecidos. O esquema `zensounds://` foi mantido.
+- Placements registrados: `play_sound`, `create_mix`, `bible_narration` e `guided_rosary`.
+- Build-for-testing aprovado sem avisos. Duas tentativas iniciais retornaram `No result`; após o build final, o runner executou e aprovou os 48 testes, sem falhas.
+- O manifesto do SDK declara histórico de compras para funcionalidade e sem tracking; revisar o rótulo de privacidade no App Store Connect e o relatório agregado do Archive.
+- Checklist e ações pendentes do dashboard: `SUPERWALL_INTEGRATION.md`.
+
+## Sessão 2026-10-14 — Monetização Orante+
+
+- Implementada a matriz grátis × Orante+ em `PremiumAccessRules`, com protocolo `EntitlementProviding`, cache do último entitlement ativo para o estado inicial/offline e `PremiumGate` injetável.
+- O entitlement agora exige especificamente o id `plus`. Estado `.unknown` não mostra cadeados; assinante previamente confirmado mantém acesso enquanto o SDK resolve o estado.
+- Substituído `play_sound` por `premium_sound` e `premium_soundscape`; Rain, Forest, Stream, Bom Pastor e narração da Palavra do Dia passam direto, sem placement.
+- Gates aplicados a biblioteca/Home/Favoritos/player, paisagens, mixes, narração comum, modo Guiado, timer customizado e temas do widget. O `AudioEngine` ganhou uma rede de segurança sem interromper áudio já em curso no rebaixamento.
+- Adicionados onboarding opcional de três páginas, seção Orante+ em Ajustes (upgrade, restaurar, gerenciar, termos e privacidade), sincronização `plus_active` com o widget e fallback Terracota.
+- O evento real `freeTrialStart` da versão 4.17.0 dispara uma pré-tela de permissão e agenda o lembrete local cinco dias depois.
+- Criado `Orante.storekit` com anual/mensal, grupo, Family Sharing e teste anual de sete dias. Associação manual ao scheme Debug ainda é necessária.
+- Atributo `app_name` removido do Superwall para minimizar dados. Novos textos localizados em en/pt-BR, com zero chaves pt-BR pendentes.
+- Baseline: 48/48. Após as fases intermediárias: 52/52 e 54/54; validação final registrada no relatório de prontidão.

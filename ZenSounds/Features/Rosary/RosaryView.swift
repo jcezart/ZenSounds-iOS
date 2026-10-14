@@ -68,10 +68,20 @@ struct RosaryView: View {
     }
 
     private var modePicker: some View {
-        Picker("Prayer mode", selection: Binding(get: { model.mode }, set: model.setMode)) {
+        Picker("Prayer mode", selection: Binding(get: { model.mode }, set: setMode)) {
             Text("Manual").tag(RosaryMode.manual)
             Text("Guided").tag(RosaryMode.guided)
         }.pickerStyle(.segmented)
+    }
+
+    private func setMode(_ mode: RosaryMode) {
+        guard mode == .guided else {
+            model.setMode(mode)
+            return
+        }
+        SuperwallService.shared.gate(.guidedRosary) {
+            model.setMode(mode)
+        }
     }
 
     private var currentPrayerCard: some View {
@@ -146,7 +156,7 @@ struct RosaryView: View {
             .opacity(model.currentIndex == 0 || model.isCompleted ? 0.35 : 1)
             .accessibilityLabel("Previous")
 
-            Button { model.guidedPrimaryAction(language: language) } label: {
+            Button(action: guidedPrimaryAction) {
                 Image(systemName: guidedIcon)
                     .font(.system(size: 58))
                     .foregroundStyle(palette.accent)
@@ -227,6 +237,18 @@ struct RosaryView: View {
     }
 
     private var language: BibleLanguage { languageStore.selection.bibleLanguage }
+
+    private func guidedPrimaryAction() {
+        switch model.guided.state {
+        case .idle, .completed:
+            SuperwallService.shared.gate(.guidedRosary) {
+                model.guidedPrimaryAction(language: language)
+            }
+        case .preparing, .speaking, .paused:
+            model.guidedPrimaryAction(language: language)
+        }
+    }
+
     private var guidedTitle: LocalizedStringKey {
         switch model.guided.state { case .speaking, .preparing: "Pause"; case .paused: "Continue"; case .idle, .completed: "Start" }
     }
