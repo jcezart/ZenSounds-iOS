@@ -12,6 +12,7 @@ final class NavigationModel: ObservableObject {
     @Published var selectedTab: AppTab = .home
     @Published var homePath = NavigationPath()
     @Published var biblePath = NavigationPath()
+    @Published var rosaryPath = NavigationPath()
     @Published var soundsPath = NavigationPath()
     @Published var favoritesPath = NavigationPath()
 
@@ -31,6 +32,7 @@ final class NavigationModel: ObservableObject {
         switch tab {
         case .home: homePath = NavigationPath()
         case .bible: biblePath = NavigationPath()
+        case .rosary: rosaryPath = NavigationPath()
         case .sounds: soundsPath = NavigationPath()
         case .favorites: favoritesPath = NavigationPath()
         }

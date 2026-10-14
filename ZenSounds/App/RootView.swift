@@ -23,6 +23,13 @@ struct RootView: View {
             .tabItem { Label("Bible", systemImage: AppTab.bible.systemImage) }
             .tag(AppTab.bible)
 
+            NavigationStack(path: $navigation.rosaryPath) {
+                RosaryView()
+            }
+            .withCompactPlayer()
+            .tabItem { Label("Rosary", systemImage: AppTab.rosary.systemImage) }
+            .tag(AppTab.rosary)
+
             NavigationStack(path: $navigation.soundsPath) {
                 SoundsLibraryView()
             }

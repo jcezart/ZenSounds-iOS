@@ -3,6 +3,7 @@ import Foundation
 enum AppTab: String, CaseIterable, Identifiable, Hashable {
     case home
     case bible
+    case rosary
     case sounds
     case favorites
 
@@ -12,6 +13,7 @@ enum AppTab: String, CaseIterable, Identifiable, Hashable {
         switch self {
         case .home: return "house.fill"
         case .bible: return "book.fill"
+        case .rosary: return "circle.hexagongrid.fill"
         case .sounds: return "waveform"
         case .favorites: return "heart.fill"
         }

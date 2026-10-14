@@ -2,7 +2,30 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : ""
+          }
+        }
+      }
+    },
+    "%@ · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
     },
     "%@ volume" : {
       "localizations" : {
@@ -30,6 +53,22 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "%lld min"
+          }
+        }
+      }
+    },
+    "%lld of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$lld de %2$lld"
           }
         }
       }
@@ -82,6 +121,38 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "%lld. %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld. %2$@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$lld. %2$@"
+          }
+        }
+      }
+    },
+    "%lldº · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lldº · %2$@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$lldº · %2$@"
           }
         }
       }
@@ -188,7 +259,14 @@
       }
     },
     "Audio unavailable" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Áudio indisponível"
+          }
+        }
+      }
     },
     "Bible" : {
       "localizations" : {
@@ -285,6 +363,26 @@
         }
       }
     },
+    "Change" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Alterar"
+          }
+        }
+      }
+    },
+    "Changing the mysteries restarts the current progress." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Alterar os mistérios reinicia o progresso atual."
+          }
+        }
+      }
+    },
     "Chapter" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -326,12 +424,32 @@
         }
       }
     },
+    "Choose Mysteries" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Escolha os mistérios"
+          }
+        }
+      }
+    },
     "Close" : {
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Fechar"
+          }
+        }
+      }
+    },
+    "Complete" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Concluir"
           }
         }
       }
@@ -372,6 +490,26 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Escuro"
+          }
+        }
+      }
+    },
+    "Decade %lld" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dezena %1$lld"
+          }
+        }
+      }
+    },
+    "Default" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Padrão"
           }
         }
       }
@@ -433,6 +571,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Voz em inglês"
+          }
+        }
+      }
+    },
+    "Enhanced" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Aprimorada"
           }
         }
       }
@@ -501,6 +649,16 @@
         }
       }
     },
+    "Fatima Prayer" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Oração de Fátima"
+          }
+        }
+      }
+    },
     "Favorites" : {
       "localizations" : {
         "pt-BR" : {
@@ -511,12 +669,42 @@
         }
       }
     },
+    "Guided" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Guiado"
+          }
+        }
+      }
+    },
+    "Holy Rosary" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Santo Rosário"
+          }
+        }
+      }
+    },
     "Home" : {
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Início"
+          }
+        }
+      }
+    },
+    "Improve narration quality" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Melhore a qualidade da narração"
           }
         }
       }
@@ -587,6 +775,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Carregando ZenSounds"
+          }
+        }
+      }
+    },
+    "Manual" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Manual"
           }
         }
       }
@@ -664,6 +862,16 @@
         }
       }
     },
+    "Next bead" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Próxima conta"
+          }
+        }
+      }
+    },
     "Next sound" : {
       "localizations" : {
         "pt-BR" : {
@@ -725,6 +933,7 @@
       }
     },
     "Only voices currently available on this iPhone are shown. Additional voices can be installed in iPhone Settings under Accessibility, Spoken Content, Voices." : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -834,12 +1043,89 @@
         }
       }
     },
+    "Pray again" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rezar novamente"
+          }
+        }
+      }
+    },
+    "Pray at your pace or follow the guided reading." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Reze no seu ritmo ou acompanhe a leitura guiada."
+          }
+        }
+      }
+    },
+    "Prayer mode" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Modo de Oração"
+          }
+        }
+      }
+    },
+    "Premium" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Premium"
+          }
+        }
+      }
+    },
+    "Previous" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Anterior"
+          }
+        }
+      }
+    },
     "Previous sound" : {
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Som anterior"
+          }
+        }
+      }
+    },
+    "Progress: %lld of %lld, decade %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Progress: %1$lld of %2$lld, decade %3$lld"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Progresso: %1$lld de %2$lld, dezena %3$lld"
+          }
+        }
+      }
+    },
+    "Read in the Bible" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ler na Bíblia"
           }
         }
       }
@@ -958,6 +1244,36 @@
         }
       }
     },
+    "Rosary" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rosário"
+          }
+        }
+      }
+    },
+    "Rosary completed" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rosário concluído"
+          }
+        }
+      }
+    },
+    "Rosary overview" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Visão geral do Rosário"
+          }
+        }
+      }
+    },
     "Save" : {
       "localizations" : {
         "pt-BR" : {
@@ -984,6 +1300,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Ver todos"
+          }
+        }
+      }
+    },
+    "Selected" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Selecionado"
           }
         }
       }
@@ -1312,6 +1638,26 @@
         }
       }
     },
+    "Start a new Rosary?" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Iniciar um novo Rosário?"
+          }
+        }
+      }
+    },
+    "Start new" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Iniciar novo"
+          }
+        }
+      }
+    },
     "Start the Bible" : {
       "localizations" : {
         "pt-BR" : {
@@ -1372,6 +1718,16 @@
         }
       }
     },
+    "Suggested today" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sugerido para hoje"
+          }
+        }
+      }
+    },
     "System" : {
       "localizations" : {
         "pt-BR" : {
@@ -1383,6 +1739,7 @@
       }
     },
     "System default" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -1423,6 +1780,16 @@
         }
       }
     },
+    "Today's Mysteries" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Mistérios de hoje"
+          }
+        }
+      }
+    },
     "Verses" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1441,6 +1808,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "PALAVRA DO DIA"
+          }
+        }
+      }
+    },
+    "You can download Enhanced or Premium voices in iPhone Settings for more natural reading. In general: Settings > Accessibility > Spoken Content > Voices (names may vary by iOS version)." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Você pode baixar vozes Aprimoradas ou Premium nos Ajustes do iPhone para uma leitura mais natural. Em geral: Ajustes > Acessibilidade > Conteúdo Falado > Vozes (os nomes podem variar conforme a versão do iOS)."
           }
         }
       }

@@ -198,3 +198,20 @@ Repo Android clonado em `/tmp/ZenSounds-analysis` (pode não persistir entre ses
 ## Próxima etapa
 
 Build final completo (iOS simulator), testes unitários (BibleRepository/DailyWordStore/MixRules/TimerRules), relatório de entrega (módulo 17).
+
+## Sessão 2026-10-13 — Seletor de vozes e Santo Terço
+
+- O seletor de TTS agora usa `VoiceDescriptor` e regras puras: filtra por idioma, exclui Novelty/Personal Voice, agrupa Premium/Aprimorada/Padrão e resolve a melhor voz instalada sem cruzar idiomas. As chaves existentes de preferências foram preservadas.
+- A lista de vozes é atualizada ao voltar ao primeiro plano e por `availableVoicesDidChangeNotification`. A tela de Ajustes passou a usar navegação para listas separadas de português e inglês, com amostra por linha e orientação para instalar vozes melhores.
+- Adicionados `rosary_prayers.json` (oito orações, textos exatos da especificação) e `rosary_mysteries.json` (quatro conjuntos, vinte mistérios, referências estruturadas e meditações originais).
+- `RosarySequenceBuilder` produz 80 passos com a Oração de Fátima ou 75 sem ela, com ids estáveis e associação às contas/elos. `MysterySchedule` segue a distribuição semanal do n.º 38 de *Rosarium Virginis Mariae*.
+- Nova aba nativa Terço entre Bíblia e Sons, com `NavigationStack` próprio e mini player, modo Manual/Guiado, desenho vetorial em SwiftUI, foco tocável de contas, navegação à Bíblia, controles fixos e suporte a Dynamic Type/VoiceOver.
+- A narração usa o mesmo `AVSpeechSynthesizer` da Bíblia. Sessões guiadas mantêm o ducking entre orações e usam geração/identificador para ignorar callbacks antigos; pausas, paradas, erros e interrupções liberam o ducking.
+- Progresso versionado salvo em `zensounds.rosary.progress.v1` pelo id do passo, com restauração tolerante à remoção da Oração de Fátima e descarte seguro de dados incompatíveis.
+- Adicionado `ROSARY_SOURCES.md` e `RosaryTests.swift`. Build-for-testing concluído; o runner automatizado reconheceu 37 testes, mas retornou `No result` para todos (0 executados), repetindo a limitação anterior do ambiente.
+
+### Decisões
+
+- `circle.hexagongrid.fill` foi usado como símbolo da aba por remeter a contas e estar disponível antes do iOS 18, evitando símbolos médicos.
+- As meditações são frases originais e curtas; Assunção e Coroação permanecem sem referência bíblica direta.
+- Comandos remotos continuam exclusivos do `AudioEngine`; o Terço não registra handlers em `MPRemoteCommandCenter`.
