@@ -14,7 +14,7 @@ struct RosaryView: View {
                     mysteryCard
                     modePicker
                     RosaryDiagram(steps: model.steps, currentIndex: model.currentIndex, onSelectBead: model.go)
-                    RosaryFocusStrip(steps: model.steps, currentIndex: model.currentIndex, onSelect: model.go)
+                    RosaryFocusStrip(steps: model.steps, currentIndex: model.currentIndex, language: language, onSelect: model.go)
                     if model.isCompleted { completionCard } else { currentPrayerCard }
                     Text("\(min(model.currentIndex + 1, model.steps.count)) of \(model.steps.count)")
                         .font(.essenceLabelLarge).foregroundStyle(palette.secondaryText)
@@ -259,38 +259,67 @@ struct RosaryView: View {
         }
     }
     private func positionTitle(_ step: RosaryStep) -> String {
-        let name: String
-        if language == .pt {
-            switch step.prayer {
-            case .signOfCross: name = "Sinal da Cruz"
-            case .creed: name = "Credo dos Apóstolos"
-            case .ourFather: name = "Pai-Nosso"
-            case .hailMary: name = "Ave-Maria"
-            case .gloryBe: name = "Glória ao Pai"
-            case .fatima: name = "Oração de Fátima"
-            case .hailHolyQueen: name = "Salve-Rainha"
-            case .finalPrayer: name = "Oração final"
-            case .announcement: name = "Meditação do mistério"
-            }
-        } else {
-            switch step.prayer {
-            case .signOfCross: name = "Sign of the Cross"
-            case .creed: name = "Apostles' Creed"
-            case .ourFather: name = "Our Father"
-            case .hailMary: name = "Hail Mary"
-            case .gloryBe: name = "Glory Be"
-            case .fatima: name = "Fatima Prayer"
-            case .hailHolyQueen: name = "Hail Holy Queen"
-            case .finalPrayer: name = "Final Prayer"
-            case .announcement: name = "Mystery meditation"
-            }
-        }
+        let name = RosaryLabels.prayerName(step.prayer, language: language)
         if let position = step.position, let total = step.positionTotal {
             return language == .pt ? "\(name) • \(position) de \(total)" : "\(name) • \(position) of \(total)"
         }
         return name
     }
-    private var progressAccessibility: String { "Progress: \(model.currentIndex + 1) of \(model.steps.count)" }
+    private var progressAccessibility: String {
+        let current = model.currentIndex + 1, total = model.steps.count
+        return language == .pt ? "Progresso: \(current) de \(total)" : "Progress: \(current) of \(total)"
+    }
+}
+
+/// Prayer names and bead accessibility text in the Rosary's content language (same pt/en source as the prayer card).
+private enum RosaryLabels {
+    static func prayerName(_ prayer: RosaryPrayerKind, language: BibleLanguage) -> String {
+        if language == .pt {
+            switch prayer {
+            case .signOfCross: return "Sinal da Cruz"
+            case .creed: return "Credo dos Apóstolos"
+            case .ourFather: return "Pai-Nosso"
+            case .hailMary: return "Ave-Maria"
+            case .gloryBe: return "Glória ao Pai"
+            case .fatima: return "Oração de Fátima"
+            case .hailHolyQueen: return "Salve-Rainha"
+            case .finalPrayer: return "Oração final"
+            case .announcement: return "Meditação do mistério"
+            }
+        }
+        switch prayer {
+        case .signOfCross: return "Sign of the Cross"
+        case .creed: return "Apostles' Creed"
+        case .ourFather: return "Our Father"
+        case .hailMary: return "Hail Mary"
+        case .gloryBe: return "Glory Be"
+        case .fatima: return "Fatima Prayer"
+        case .hailHolyQueen: return "Hail Holy Queen"
+        case .finalPrayer: return "Final Prayer"
+        case .announcement: return "Mystery meditation"
+        }
+    }
+
+    /// e.g. "Ave-Maria 4 de 10, dezena 2" / "Hail Mary 4 of 10, decade 2".
+    static func beadLabel(for step: RosaryStep?, language: BibleLanguage) -> String {
+        guard let step else { return language == .pt ? "Conta" : "Bead" }
+        var label = prayerName(step.prayer, language: language)
+        if let position = step.position, let total = step.positionTotal {
+            label += language == .pt ? " \(position) de \(total)" : " \(position) of \(total)"
+        }
+        if let decade = step.decade {
+            label += language == .pt ? ", dezena \(decade)" : ", decade \(decade)"
+        }
+        return label
+    }
+
+    static func beadStatus(_ progress: RosaryBeadProgress, language: BibleLanguage) -> String {
+        switch progress {
+        case .current: language == .pt ? "atual" : "current"
+        case .completed: language == .pt ? "concluída" : "completed"
+        case .pending: language == .pt ? "pendente" : "pending"
+        }
+    }
 }
 
 private struct RosaryDiagram: View {
@@ -301,52 +330,52 @@ private struct RosaryDiagram: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        ZStack {
-            Canvas { context, size in
-                let center = CGPoint(x: size.width / 2, y: size.height * 0.34)
-                let rx = size.width * 0.40, ry = size.height * 0.26
-                var path = Path(); path.addEllipse(in: CGRect(x: center.x-rx, y: center.y-ry, width: rx*2, height: ry*2))
-                context.stroke(path, with: .color(palette.outline), lineWidth: 2)
-                let loopBeads = RosaryVisualRules.loopBeadIDs
-                for (index, beadID) in loopBeads.enumerated() {
-                    let angle = Double(index) / Double(loopBeads.count) * Double.pi * 2 - Double.pi / 2
-                    let point = CGPoint(x: center.x + rx * cos(angle), y: center.y + ry * sin(angle))
-                    let state = beadState(beadID)
-                    let radius: CGFloat = beadID.contains("large") ? 7 : 4.5
-                    let color = state == 2 ? palette.accent : state == 1 ? palette.accent.opacity(0.42) : palette.track
-                    context.fill(Path(ellipseIn: CGRect(x: point.x-radius, y: point.y-radius, width: radius*2, height: radius*2)), with: .color(color))
-                    if state == 2 { context.stroke(Path(ellipseIn: CGRect(x: point.x-radius-4, y: point.y-radius-4, width: (radius+4)*2, height: (radius+4)*2)), with: .color(palette.accent.opacity(0.3)), lineWidth: 3) }
-                }
-                var pendant = Path()
-                pendant.move(to: CGPoint(x: center.x, y: size.height * 0.60))
-                pendant.addLine(to: CGPoint(x: center.x, y: size.height * 0.965))
-                context.stroke(pendant, with: .color(palette.outline), lineWidth: 2)
+        GeometryReader { proxy in
+            ZStack {
+                Canvas { context, size in
+                    let center = CGPoint(x: size.width / 2, y: size.height * 0.34)
+                    var path = Path(); path.addEllipse(in: RosaryVisualRules.loopFrame(in: size))
+                    context.stroke(path, with: .color(palette.outline), lineWidth: 2)
+                    let loopBeads = RosaryVisualRules.loopBeadIDs
+                    for (index, beadID) in loopBeads.enumerated() {
+                        let point = RosaryVisualRules.loopPoint(at: Double(index), in: size)
+                        let state = beadState(beadID)
+                        let radius: CGFloat = beadID.contains("large") ? 7 : 4.5
+                        let color = state == 2 ? palette.accent : state == 1 ? palette.accent.opacity(0.42) : palette.track
+                        context.fill(Path(ellipseIn: CGRect(x: point.x-radius, y: point.y-radius, width: radius*2, height: radius*2)), with: .color(color))
+                        if state == 2 { context.stroke(Path(ellipseIn: CGRect(x: point.x-radius-4, y: point.y-radius-4, width: (radius+4)*2, height: (radius+4)*2)), with: .color(palette.accent.opacity(0.3)), lineWidth: 3) }
+                    }
+                    var pendant = Path()
+                    pendant.move(to: CGPoint(x: center.x, y: size.height * 0.60))
+                    pendant.addLine(to: CGPoint(x: center.x, y: size.height * 0.965))
+                    context.stroke(pendant, with: .color(palette.outline), lineWidth: 2)
 
-                let medal = CGRect(x: center.x-11, y: size.height*0.615, width: 22, height: 28)
-                context.fill(Path(ellipseIn: medal), with: .color(color(for: "medal")))
-                for (offset,id) in [
-                    (0.72,"pendant.large.2"),
-                    (0.79,"pendant.small.3"),
-                    (0.835,"pendant.small.2"),
-                    (0.88,"pendant.small.1"),
-                    (0.935,"pendant.large.1")
-                ] {
-                    let r: CGFloat = id.contains("large") ? 7 : 4.5
-                    context.fill(Path(ellipseIn: CGRect(x:center.x-r,y:size.height*offset-r,width:r*2,height:r*2)), with:.color(color(for:id)))
+                    let medal = CGRect(x: center.x-11, y: size.height*0.615, width: 22, height: 28)
+                    context.fill(Path(ellipseIn: medal), with: .color(color(for: "medal")))
+                    for (offset,id) in [
+                        (0.72,"pendant.large.2"),
+                        (0.79,"pendant.small.3"),
+                        (0.835,"pendant.small.2"),
+                        (0.88,"pendant.small.1"),
+                        (0.935,"pendant.large.1")
+                    ] {
+                        let r: CGFloat = id.contains("large") ? 7 : 4.5
+                        context.fill(Path(ellipseIn: CGRect(x:center.x-r,y:size.height*offset-r,width:r*2,height:r*2)), with:.color(color(for:id)))
+                    }
+                    var cross = Path()
+                    cross.move(to: CGPoint(x: center.x, y: size.height * 0.965))
+                    cross.addLine(to: CGPoint(x: center.x, y: size.height * 0.995))
+                    cross.move(to: CGPoint(x: center.x - 7, y: size.height * 0.977))
+                    cross.addLine(to: CGPoint(x: center.x + 7, y: size.height * 0.977))
+                    context.stroke(cross, with: .color(color(for: "crucifix")), style: StrokeStyle(lineWidth: 5, lineCap: .round))
                 }
-                var cross = Path()
-                cross.move(to: CGPoint(x: center.x, y: size.height * 0.965))
-                cross.addLine(to: CGPoint(x: center.x, y: size.height * 0.995))
-                cross.move(to: CGPoint(x: center.x - 7, y: size.height * 0.977))
-                cross.addLine(to: CGPoint(x: center.x + 7, y: size.height * 0.977))
-                context.stroke(cross, with: .color(color(for: "crucifix")), style: StrokeStyle(lineWidth: 5, lineCap: .round))
-            }
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Rosary overview")
-            .accessibilityValue("Progress: \(currentIndex + 1) of \(steps.count), decade \(steps[currentIndex].decade ?? 0)")
-            ForEach(1...5, id: \.self) { decade in
-                Button { withAnimation(reduceMotion ? nil : .easeInOut) { onSelectBead(decade == 1 ? "pendant.large.2" : "loop.large.\(decade)") } } label: { Color.clear.frame(width: 44, height: 44) }
-                    .position(decadePosition(decade)).accessibilityLabel("Decade \(decade)")
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Rosary overview")
+                .accessibilityValue("Progress: \(currentIndex + 1) of \(steps.count), decade \(steps[currentIndex].decade ?? 0)")
+                ForEach(1...5, id: \.self) { decade in
+                    Button { withAnimation(reduceMotion ? nil : .easeInOut) { onSelectBead(decade == 1 ? "pendant.large.2" : "loop.large.\(decade)") } } label: { Color.clear.frame(width: 44, height: 44) }
+                        .position(RosaryVisualRules.decadeButtonCenter(decade: decade, in: proxy.size)).accessibilityLabel("Decade \(decade)")
+                }
             }
         }.frame(height: 320)
     }
@@ -358,14 +387,10 @@ private struct RosaryDiagram: View {
         }
     }
     private func color(for id: String) -> Color { switch beadState(id) { case 2: palette.accent; case 1: palette.accent.opacity(0.42); default: palette.track } }
-    private func decadePosition(_ decade: Int) -> CGPoint {
-        let angle = Double(decade - 1) / 5 * Double.pi * 2 - Double.pi / 2
-        return CGPoint(x: 170 + 135*cos(angle), y: 120 + 90*sin(angle))
-    }
 }
 
 private struct RosaryFocusStrip: View {
-    let steps: [RosaryStep]; let currentIndex: Int; let onSelect: (String) -> Void
+    let steps: [RosaryStep]; let currentIndex: Int; let language: BibleLanguage; let onSelect: (String) -> Void
     @Environment(\.essencePalette) private var palette
     private var beadIDs: [String] {
         let step = steps[currentIndex]
@@ -380,7 +405,9 @@ private struct RosaryFocusStrip: View {
                 ForEach(beadIDs, id: \.self) { id in
                     Button { onSelect(id) } label: {
                         Circle().fill(color(id)).frame(width: isLarge(id) ? 24 : 16, height: isLarge(id) ? 24 : 16).frame(width: 44, height: 44)
-                    }.accessibilityLabel(accessibilityLabel(id))
+                    }
+                    .accessibilityLabel(RosaryLabels.beadLabel(for: steps.first { $0.beadID == id }, language: language))
+                    .accessibilityValue(RosaryLabels.beadStatus(RosaryVisualRules.progress(for: id, in: steps, currentIndex: currentIndex), language: language))
                 }
             }.padding(.horizontal, 4)
         }.scrollIndicators(.hidden).padding(8).background(palette.surface, in: RoundedRectangle(cornerRadius: 22))
@@ -394,12 +421,14 @@ private struct RosaryFocusStrip: View {
     }
     private func color(_ id: String) -> Color { state(id)==2 ? palette.accent : state(id)==1 ? palette.accent.opacity(0.42) : palette.track }
     private func isLarge(_ id: String) -> Bool { id.contains("large") || id == "medal" || id == "crucifix" }
-    private func accessibilityLabel(_ id: String) -> String { let step=steps.first{$0.beadID==id}; let status=state(id)==2 ? "current" : state(id)==1 ? "completed" : "pending"; return "\(step?.prayer.rawValue ?? "bead"), decade \(step?.decade ?? 0), \(status)" }
 }
 
 #Preview("Rosary") { ZenSoundsTheme { NavigationStack { RosaryView() }.environmentObject(NavigationModel()) } }
 #Preview("Rosary Dark") { ZenSoundsTheme { NavigationStack { RosaryView() }.environmentObject(NavigationModel()) }.preferredColorScheme(.dark) }
 #Preview("Rosary Large Text") { ZenSoundsTheme { NavigationStack { RosaryView() }.environmentObject(NavigationModel()) }.environment(\.dynamicTypeSize, .accessibility3) }
 #Preview("Rosary 375pt", traits: .fixedLayout(width: 375, height: 667)) {
+    ZenSoundsTheme { NavigationStack { RosaryView() }.environmentObject(NavigationModel()) }
+}
+#Preview("Rosary 440pt", traits: .fixedLayout(width: 440, height: 956)) {
     ZenSoundsTheme { NavigationStack { RosaryView() }.environmentObject(NavigationModel()) }
 }

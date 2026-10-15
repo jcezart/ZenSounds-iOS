@@ -207,7 +207,7 @@ struct MixRow: View {
     }
 }
 
-private struct OrantePlusBadge: View {
+struct OrantePlusBadge: View {
     @Environment(\.essencePalette) private var palette
 
     var body: some View {

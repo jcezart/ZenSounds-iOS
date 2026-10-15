@@ -84,15 +84,7 @@ struct VerseNarrationControls: View {
 
     private func primaryAction() {
         guard isActiveVerse else {
-            SuperwallService.shared.gate(
-                .verseNarration(isDailyWord: isDailyWord),
-                parameters: [
-                    "book": verse.book,
-                    "chapter": String(verse.chapter)
-                ]
-            ) {
-                narration.speak(verse)
-            }
+            VerseNarrationStarter.start(verse, isDailyWord: isDailyWord)
             return
         }
         switch narration.state {
@@ -102,6 +94,28 @@ struct VerseNarrationControls: View {
             narration.resume()
         case .stopped:
             narration.speak(verse)
+        }
+    }
+}
+
+/// Single entry point for starting verse narration from any control (buttons and accessibility
+/// actions), so every path goes through the `bible_narration` gate unless it's the Daily Word.
+enum VerseNarrationStarter {
+    static func start(
+        _ verse: Verse,
+        isDailyWord: Bool,
+        gate: PremiumGate? = nil,
+        speak: ((Verse) -> Void)? = nil
+    ) {
+        let speak = speak ?? { BibleNarrationService.shared.speak($0) }
+        (gate ?? SuperwallService.shared.premiumGate).gate(
+            .verseNarration(isDailyWord: isDailyWord),
+            parameters: [
+                "book": verse.book,
+                "chapter": String(verse.chapter)
+            ]
+        ) {
+            speak(verse)
         }
     }
 }

@@ -77,19 +77,23 @@ final class RosaryViewModel: ObservableObject {
     let repository: RosaryRepository
     let progressStore: RosaryProgressStore
     let guided: RosaryGuidedController
+    private let entitlements: any EntitlementProviding
     private var guidedStateObservation: AnyCancellable?
 
-    init(repository: RosaryRepository? = nil, progressStore: RosaryProgressStore? = nil, guided: RosaryGuidedController? = nil, date: Date = Date(), calendar: Calendar = .current) {
+    init(repository: RosaryRepository? = nil, progressStore: RosaryProgressStore? = nil, guided: RosaryGuidedController? = nil, entitlements: (any EntitlementProviding)? = nil, date: Date = Date(), calendar: Calendar = .current) {
         let repository = repository ?? .shared
         let progressStore = progressStore ?? .shared
         let guided = guided ?? RosaryGuidedController()
+        let entitlements = entitlements ?? SuperwallService.shared
         self.repository = repository
         self.progressStore = progressStore
         self.guided = guided
+        self.entitlements = entitlements
         if let saved = progressStore.progress {
             mysterySetID = saved.mysterySet
             includeFatimaPrayer = saved.includeFatimaPrayer
-            mode = saved.mode
+            // A guided session saved while subscribed reopens in Manual mode (same position) without Orante+.
+            mode = saved.mode == .guided && !Self.canUseGuided(entitlements) ? .manual : saved.mode
         } else {
             mysterySetID = MysterySchedule.suggestedSet(for: date, calendar: calendar)
             includeFatimaPrayer = true
@@ -131,13 +135,13 @@ final class RosaryViewModel: ObservableObject {
     func previous() {
         guard let previous = RosaryNavigationRules.previousIndex(current: currentIndex) else { return }
         guided.invalidateSpeech(); currentIndex = previous; isCompleted = false; persist()
-        if mode == .guided { speakCurrent() }
+        speakCurrentIfGuidedAllowed()
     }
     func next() {
         guided.invalidateSpeech()
         guard let next = RosaryNavigationRules.nextIndex(current: currentIndex, count: steps.count) else { complete(); return }
         currentIndex = next; persist()
-        if mode == .guided { speakCurrent() }
+        speakCurrentIfGuidedAllowed()
     }
     func go(toBead beadID: String) {
         guard let index = RosaryNavigationRules.firstIndex(for: beadID, in: steps) else { return }
@@ -158,6 +162,18 @@ final class RosaryViewModel: ObservableObject {
             return announcement(for: mystery, set: mysterySetID, language: language) + " " + mystery.meditation.text(for: language)
         }
         return repository.prayer(step.prayer)?.text(for: language) ?? ""
+    }
+
+    /// Manual Previous/Next in Guided mode only narrate with Orante+; otherwise the Rosary
+    /// falls back to Manual mode at the new position instead of speaking.
+    private func speakCurrentIfGuidedAllowed() {
+        guard mode == .guided else { return }
+        guard Self.canUseGuided(entitlements) else { mode = .manual; persist(); return }
+        speakCurrent()
+    }
+
+    private static func canUseGuided(_ entitlements: any EntitlementProviding) -> Bool {
+        !PremiumAccessRules.requiresPlus(for: .guidedRosary) || entitlements.hasPlus
     }
 
     private func speakCurrent(language: BibleLanguage? = nil) {

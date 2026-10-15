@@ -1,3 +1,4 @@
+import CoreGraphics
 import Foundation
 
 nonisolated enum RosaryMysterySetID: String, Codable, CaseIterable, Identifiable, Sendable {
@@ -134,6 +135,28 @@ nonisolated enum RosaryVisualRules {
             result.append(contentsOf: (1...10).map { "loop.\(decade).small.\($0)" })
         }
         return result
+    }
+
+    private static let loopBeadCount = loopBeadIDs.count
+
+    /// Ellipse that carries the loop beads, proportional to the diagram's size so it adapts to every iPhone width.
+    static func loopFrame(in size: CGSize) -> CGRect {
+        let radiusX = size.width * 0.40, radiusY = size.height * 0.26
+        let center = CGPoint(x: size.width / 2, y: size.height * 0.34)
+        return CGRect(x: center.x - radiusX, y: center.y - radiusY, width: radiusX * 2, height: radiusY * 2)
+    }
+
+    /// Point on the loop for a (possibly fractional) bead index, starting at the top and going clockwise.
+    static func loopPoint(at index: Double, in size: CGSize) -> CGPoint {
+        let frame = loopFrame(in: size)
+        let angle = index / Double(loopBeadCount) * Double.pi * 2 - Double.pi / 2
+        return CGPoint(x: frame.midX + frame.width / 2 * cos(angle), y: frame.midY + frame.height / 2 * sin(angle))
+    }
+
+    /// Center of a decade's tap target: the middle of its ten small beads on the loop.
+    static func decadeButtonCenter(decade: Int, in size: CGSize) -> CGPoint {
+        let firstSmallBead = (decade - 1) * 11
+        return loopPoint(at: Double(firstSmallBead) + 4.5, in: size)
     }
 
     static func progress(for beadID: String, in steps: [RosaryStep], currentIndex: Int) -> RosaryBeadProgress {

@@ -119,7 +119,7 @@ final class BibleNarrationService: NSObject, ObservableObject {
             try? await Task.sleep(for: .milliseconds(180))
             guard requests.isCurrent(generation) else { return }
             isPreparing = false
-            if !synthesizer.continueSpeaking() { failCurrentRequest("Narration could not be resumed.") }
+            if !synthesizer.continueSpeaking() { failCurrentRequest(String(localized: "Narration could not be resumed.")) }
         }
     }
 
@@ -154,7 +154,7 @@ final class BibleNarrationService: NSObject, ObservableObject {
             guard requests.isCurrent(generation) else { return }
             guard ready else { failCurrentRequest(String(localized: "Narration is unavailable right now.")); return }
             guard let voice = preferences.resolvedVoice(for: language, preferredIdentifier: preferredVoiceIdentifier) else {
-                failCurrentRequest("No compatible voice is installed for this language."); return
+                failCurrentRequest(String(localized: "No compatible voice is installed for this language.")); return
             }
             sessionPrepared = true
             audioCoordinator.setNarrationDucking(true)

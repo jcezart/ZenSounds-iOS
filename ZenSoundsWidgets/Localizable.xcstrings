@@ -148,17 +148,6 @@
         }
       }
     },
-    "Today's verse from ZenSounds, with a quick way to read the full chapter." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "O versículo de hoje do ZenSounds, com uma forma rápida de ler o capítulo completo."
-          }
-        }
-      }
-    },
     "Word of the Day" : {
       "localizations" : {
         "pt-BR" : {
@@ -175,17 +164,6 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "PALAVRA DO DIA"
-          }
-        }
-      }
-    },
-    "ZENSOUNDS" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "ZENSOUNDS"
           }
         }
       }

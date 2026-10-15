@@ -2,6 +2,7 @@ import SwiftUI
 
 struct VerseDetailView: View {
     let verse: Verse
+    var isDailyWord = false
 
     @ObservedObject private var preferences = UserPreferencesStore.shared
     @Environment(\.essencePalette) private var palette
@@ -28,14 +29,14 @@ struct VerseDetailView: View {
 
                     ViewThatFits(in: .horizontal) {
                         HStack(spacing: 14) {
-                            VerseNarrationControls(verse: verse, style: .labeled)
+                            VerseNarrationControls(verse: verse, isDailyWord: isDailyWord, style: .labeled)
                             shareButton
                             Spacer()
                             favoriteButton
                         }
 
                         VStack(alignment: .leading, spacing: 12) {
-                            VerseNarrationControls(verse: verse, style: .labeled)
+                            VerseNarrationControls(verse: verse, isDailyWord: isDailyWord, style: .labeled)
                             HStack(spacing: 14) {
                                 shareButton
                                 favoriteButton
@@ -52,7 +53,7 @@ struct VerseDetailView: View {
         .navigationTitle(reference)
         .navigationBarTitleDisplayMode(.inline)
         .accessibilityAction(named: "Listen to verse") {
-            BibleNarrationService.shared.speak(verse)
+            VerseNarrationStarter.start(verse, isDailyWord: isDailyWord)
         }
     }
 

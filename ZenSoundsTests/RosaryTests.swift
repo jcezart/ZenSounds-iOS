@@ -1,4 +1,5 @@
 import AVFoundation
+import CoreGraphics
 import Foundation
 import Testing
 @testable import ZenSounds
@@ -68,6 +69,32 @@ struct RosarySequenceTests {
         #expect(ids.filter { $0.contains(".large.") }.count == 4)
         #expect(ids.first == "loop.1.small.1")
         #expect(ids.last == "loop.5.small.10")
+    }
+
+    @Test(arguments: [CGSize(width: 335, height: 320), CGSize(width: 400, height: 320)])
+    func decadeButtonsSitOnTheirOwnBeadsAndScaleWithWidth(size: CGSize) {
+        let frame = RosaryVisualRules.loopFrame(in: size)
+        #expect(abs(frame.midX - size.width / 2) < 0.001)
+        for decade in 1...5 {
+            let center = RosaryVisualRules.decadeButtonCenter(decade: decade, in: size)
+            #expect(center.x >= 0 && center.x <= size.width)
+            #expect(center.y >= 0 && center.y <= size.height)
+            // The tap target lies between the decade's first and last small bead on the loop.
+            let first = RosaryVisualRules.loopPoint(at: Double((decade - 1) * 11), in: size)
+            let last = RosaryVisualRules.loopPoint(at: Double((decade - 1) * 11 + 9), in: size)
+            #expect(hypot(center.x - first.x, center.y - first.y) < hypot(last.x - first.x, last.y - first.y))
+        }
+        let ids = RosaryVisualRules.loopBeadIDs
+        #expect(ids[(1 - 1) * 11] == "loop.1.small.1")
+        #expect(ids[(3 - 1) * 11] == "loop.3.small.1")
+        #expect(ids[(5 - 1) * 11 + 9] == "loop.5.small.10")
+    }
+
+    @Test func diagramGeometryIsProportionalToTheAvailableWidth() {
+        let small = RosaryVisualRules.decadeButtonCenter(decade: 2, in: CGSize(width: 335, height: 320))
+        let large = RosaryVisualRules.decadeButtonCenter(decade: 2, in: CGSize(width: 400, height: 320))
+        #expect(abs(large.x / 400 - small.x / 335) < 0.0001)
+        #expect(abs(large.y - small.y) < 0.0001)
     }
 
     @Test func reusedCrucifixStaysCompletedUntilClosingPrayer() throws {
@@ -176,6 +203,90 @@ private final class MockRosaryNarration: RosaryNarrating {
     func stop() { stopCount += 1; state = .stopped; cancelHandler?() }
     func finish(_ id: String) { state = .stopped; finishHandler?(id) }
     func cancel() { state = .stopped; cancelHandler?() }
+}
+
+@MainActor
+private final class MutableEntitlements: EntitlementProviding {
+    var hasPlus: Bool
+    var entitlementState: EntitlementState
+    init(hasPlus: Bool) {
+        self.hasPlus = hasPlus
+        entitlementState = hasPlus ? .active : .inactive
+    }
+}
+
+@MainActor
+struct RosaryGuidedPremiumTests {
+    private func makeStore() -> (RosaryProgressStore, UserDefaults, String) {
+        let suite = "zensounds.rosary.premium.tests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        return (RosaryProgressStore(defaults: defaults), defaults, suite)
+    }
+
+    private func makeModel(store: RosaryProgressStore, narration: MockRosaryNarration, entitlements: MutableEntitlements) -> RosaryViewModel {
+        RosaryViewModel(
+            progressStore: store,
+            guided: RosaryGuidedController(narration: narration),
+            entitlements: entitlements
+        )
+    }
+
+    @Test func savedGuidedProgressReopensInManualWithoutPlusKeepingPosition() {
+        let (store, defaults, suite) = makeStore()
+        defer { defaults.removePersistentDomain(forName: suite) }
+        store.save(set: .joyful, stepID: "decade.2.hailMary.4", mode: .guided, includeFatima: true)
+
+        let model = makeModel(store: store, narration: MockRosaryNarration(), entitlements: MutableEntitlements(hasPlus: false))
+
+        #expect(model.mode == .manual)
+        #expect(model.currentStep?.id == "decade.2.hailMary.4")
+    }
+
+    @Test func savedGuidedProgressStaysGuidedWithPlus() {
+        let (store, defaults, suite) = makeStore()
+        defer { defaults.removePersistentDomain(forName: suite) }
+        store.save(set: .joyful, stepID: "decade.2.hailMary.4", mode: .guided, includeFatima: true)
+
+        let model = makeModel(store: store, narration: MockRosaryNarration(), entitlements: MutableEntitlements(hasPlus: true))
+
+        #expect(model.mode == .guided)
+        #expect(model.currentStep?.id == "decade.2.hailMary.4")
+    }
+
+    @Test func nextAndPreviousInGuidedModeWithoutPlusFallBackToManualWithoutSpeaking() {
+        let (store, defaults, suite) = makeStore()
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let narration = MockRosaryNarration()
+        let entitlements = MutableEntitlements(hasPlus: true)
+        let model = makeModel(store: store, narration: narration, entitlements: entitlements)
+        model.setMode(.guided)
+        entitlements.hasPlus = false
+
+        model.next()
+        #expect(model.currentIndex == 1)
+        #expect(model.mode == .manual)
+        #expect(narration.spokenIDs.isEmpty)
+
+        model.setMode(.guided)
+        model.previous()
+        #expect(model.currentIndex == 0)
+        #expect(model.mode == .manual)
+        #expect(narration.spokenIDs.isEmpty)
+    }
+
+    @Test func nextAndPreviousInGuidedModeWithPlusNarrate() {
+        let (store, defaults, suite) = makeStore()
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let narration = MockRosaryNarration()
+        let model = makeModel(store: store, narration: narration, entitlements: MutableEntitlements(hasPlus: true))
+        model.setMode(.guided)
+
+        model.next()
+        model.previous()
+
+        #expect(model.mode == .guided)
+        #expect(narration.spokenIDs == ["rosary:opening.creed", "rosary:opening.signOfCross"])
+    }
 }
 
 @MainActor

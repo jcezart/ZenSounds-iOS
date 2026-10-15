@@ -31,7 +31,7 @@ Ferramentas: `/Applications/Xcode.app` usa SDK iOS 27, atendendo ao requisito de
 | Adicionar/remover camada reinicia tudo | Confirmada: ambos recompõem e chamam `play` | recomendação; mudança de áudio considerada arriscada |
 | Compartilhamento mostra `PSA` | Confirmada | passa a usar nome localizado do livro |
 | Strings inglesas | Confirmada | erros de áudio/narração e 9 strings do widget traduzidos; catálogos pt-BR têm 0 pendentes |
-| Recursos mortos | Confirmada por busca | removidos TVStatic, CarEngine, JSON duplicado e ícones PNG legados/Info.plist |
+| Recursos mortos | Confirmada por busca | removidos TVStatic, CarEngine e JSON duplicado. Correção em 2026-10-14: os ícones PNG legados (`Resources/AppIcon-*.png` + `CFBundleIconFiles`) **continuam** no projeto; desde 2026-10-14 o ícone vem do asset catalog (`AppIcon`) e os legados são redundantes |
 | PNGs pesados | Confirmada | Rain/Storm/Forest convertidos visualmente para JPEG: ~6,8 MB para ~0,95 MB |
 | Comentários obsoletos | Confirmada | três comentários corrigidos |
 
@@ -76,12 +76,12 @@ No simulador foram efetivamente abertas Início e Bíblia; não houve crash e a 
 | --- | --- |
 | Xcode/SDK 26+ | OK: SDK iOS 27 |
 | Archive Release + Validate App | Pendente no Organizer |
-| Ícone 1024×1024 | Corrigido: sem alpha e sem cantos pré-arredondados |
+| Ícone 1024×1024 | OK: `ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon`; o Info.plist compilado traz `CFBundleIcons > CFBundlePrimaryIcon > CFBundleIconName = AppIcon` e o ícone aparece certo na Tela de Início do simulador (2026-10-14). Os PNGs legados (`Resources/AppIcon-*.png`, com alpha) e `CFBundleIconFiles` continuam no projeto por decisão do proprietário; remoção pendente |
 | Ícone próprio do widget | Não exigido para a extensão embutida; asset vazio não gera aviso |
 | Versão/build app e extensão | OK: 1.0 (1) |
 | Bundle IDs | OK e não alterados |
 | Export compliance | Corrigido: `ITSAppUsesNonExemptEncryption = NO` |
-| iPad/orientações | Configurado para família 1,2 e quatro orientações; UI multitarefa ainda pendente |
+| Dispositivos/orientações | Lançamento **só iPhone**: `TARGETED_DEVICE_FAMILY = 1` no app e no widget; iPhone **só em retrato** (`INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait`, alterado no Xcode em 2026-10-14) |
 | Privacy manifests | Criados para app e widget; copiados uma vez por target no build |
 | UserDefaults | CA92.1 (app) e 1C8F.1 (App Group) |
 | System uptime | 35F9.1 no app, para timer por tempo decorrido |
@@ -97,7 +97,7 @@ O relatório de privacidade gerado pelo Archive ainda precisa ser conferido no O
 - **2.3 Metadados — baixo:** recursos reais são sons/combinações, timer, reprodução em segundo plano, Bíblia offline em dois idiomas, palavra diária, favoritos, narração, Terço guiado/manual e widgets. Screenshots/descrição devem prometer somente isso.
 - **2.5.4 Áudio — médio:** a sessão silenciosa foi corrigida estaticamente, mas background, lock screen e consumo noturno exigem iPhone. Ação: teste Energy/Now Playing físico.
 - **4.2/4.3 — baixo:** conteúdo offline, mixes, Bíblia, Terço, timer, narração e widgets oferecem diferenciação suficiente.
-- **5.1.1 Privacidade — médio:** falta URL de Política de Privacidade no App Store Connect e link dentro do app. Texto sugerido: “O ZenSounds não coleta dados pessoais. Preferências e progresso permanecem no aparelho e no App Group usado pelo widget.” Adicionar a URL em Ajustes quando existir.
+- **5.1.1 Privacidade — médio:** o app já abre `https://jcapps.dev.br/orante/privacidade` e `https://jcapps.dev.br/orante/suporte` em Ajustes > Orante+; falta publicar as páginas e informá-las no App Store Connect. Com o Superwall, a política deve citar os dados descritos em `SUPERWALL_INTEGRATION.md` (não usar “não coleta dados”).
 - **Licenças — médio:** a tela Sobre lista traduções e links do manifesto e a licença da fonte. Confirmar que os nomes exibidos deixam explícitos Bíblia Livre e KJV; adicionar créditos de artes/sons já documentados seria útil.
 - **Acessibilidade — médio:** Dynamic Type incompleto e auditoria física pendente.
 - **Widget — médio:** fallback com App Group vazio existe no código, mas fixação, snapshot e virada da meia-noite não foram executados.
@@ -106,11 +106,11 @@ O relatório de privacidade gerado pelo Archive ainda precisa ser conferido no O
 
 - Classificação etária: preencher como sem violência, sexualidade, drogas, apostas ou conteúdo gerado por usuários; tema religioso.
 - Privacidade: revisar após a integração do Superwall; o manifesto do SDK declara histórico de compras, não vinculado e usado para funcionalidade. Não selecionar automaticamente “Dados não coletados”.
-- Screenshots: iPhone 6,9”/6,5” e iPad 13” enquanto `TARGETED_DEVICE_FAMILY = 1,2`.
+- Screenshots: somente iPhone 6,9”/6,5” (app só para iPhone, `TARGETED_DEVICE_FAMILY = 1`).
 - Categoria: **Estilo de Vida** principal (uso cotidiano para oração/relaxamento) e **Referência** secundária; Saúde e Fitness só é preferível se o marketing priorizar relaxamento.
 - Exportação: respondida por `ITSAppUsesNonExemptEncryption = NO`.
 - Notas ao revisor: explicar como iniciar um som, abrir timer, confirmar controles da tela bloqueada e adicionar o widget; informar que Bíblia/Terço funcionam offline.
-- Antes do envio: TestFlight em iPhone físico e iPad.
+- Antes do envio: TestFlight em iPhone físico.
 
 ## Recomendações de código
 
@@ -135,7 +135,7 @@ O relatório de privacidade gerado pelo Archive ainda precisa ser conferido no O
 5. Widget na tela inicial/bloqueada, App Group vazio e virada da meia-noite.
 6. VoiceOver real e Dynamic Type máximo, claro/escuro e Increase Contrast.
 7. Narração com vozes Premium.
-8. iPad retrato/paisagem, Split View e Slide Over.
+8. iPhone girado: o app deve permanecer em retrato.
 9. Primeiro lançamento sem dados, modo avião e idioma do sistema inglês.
 10. Archive, Validate App e Generate Privacy Report.
 
@@ -149,7 +149,7 @@ Checklist App Store Connect pendente do proprietário:
 2. Configurar teste introdutório gratuito de sete dias apenas no anual e ativar Compartilhamento Familiar nos dois.
 3. Anexar produtos ao Superwall, criar entitlement `plus`, configurar campanhas Gated/Non Gated e publicar o paywall com preço, período, renovação, restauração, Termos e Privacidade.
 4. Informar Purchase History para Analytics + App Functionality, sem tracking; revisar o relatório agregado de privacidade no Archive.
-5. Publicar `https://jc.app.dev/orante/privacidade`, fornecer screenshot de revisão do paywall e testar tudo no sandbox/TestFlight.
+5. Publicar `https://jcapps.dev.br/orante/privacidade` (Política de Privacidade) e `https://jcapps.dev.br/orante/suporte` (Suporte; também é a Support URL da ficha no App Store Connect), fornecer screenshot de revisão do paywall e testar tudo no sandbox/TestFlight. Ambos os links estão em Ajustes > Orante+; os Termos usam a EULA padrão da Apple.
 
 Validação local desta sessão: build-for-testing aprovado; novos testes cobrem matriz, placement, acesso grátis em `.unknown`, segurança de áudio, rebaixamento, onboarding e data do lembrete. Compras reais, campanhas remotas, restauração em outro aparelho, Family Sharing, expiração e abertura offline assinada dependem de sandbox/TestFlight.
 

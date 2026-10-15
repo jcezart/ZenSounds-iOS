@@ -14,8 +14,10 @@ struct SettingsView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var restoreMessage: LocalizedStringResource?
     @State private var isRestoring = false
+    @State private var isWidgetThemeHelpPresented = false
 
-    private static let privacyPolicyURL = URL(string: "https://jc.app.dev/orante/privacidade")!
+    private static let privacyPolicyURL = URL(string: "https://jcapps.dev.br/orante/privacidade")!
+    private static let supportURL = URL(string: "https://jcapps.dev.br/orante/suporte")!
     private static let termsURL = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
 
     var body: some View {
@@ -64,7 +66,13 @@ struct SettingsView: View {
                     }
 
                     Button {
-                        superwall.gate(.widgetTheme(id: "premium")) {}
+                        // Themes are picked in the widget's own configuration, so subscribers get instructions;
+                        // non-subscribers keep hitting the (non-gated) `widget_theme` placement.
+                        if superwall.hasPlus {
+                            isWidgetThemeHelpPresented = true
+                        } else {
+                            superwall.gate(.widgetTheme(id: "premium")) {}
+                        }
                     } label: {
                         HStack {
                             Text("Widget themes")
@@ -79,6 +87,7 @@ struct SettingsView: View {
 
                     Link("Terms of Use", destination: Self.termsURL)
                     Link("Privacy Policy", destination: Self.privacyPolicyURL)
+                    Link("Support", destination: Self.supportURL)
                 }
                 BibleNarrationSettingsSection()
                 Section("About") {
@@ -125,6 +134,11 @@ struct SettingsView: View {
                 Button("OK", role: .cancel) { restoreMessage = nil }
             } message: {
                 if let restoreMessage { Text(restoreMessage) }
+            }
+            .alert("Widget themes", isPresented: $isWidgetThemeHelpPresented) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("To change the theme, touch and hold the Orante widget on your Home Screen, tap Edit Widget, and choose Background color.")
             }
         }
         .id(languageStore.selection)

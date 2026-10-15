@@ -141,6 +141,16 @@
         }
       }
     },
+    "%llds" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llds"
+          }
+        }
+      }
+    },
     "%lldº · %@" : {
       "localizations" : {
         "en" : {
@@ -625,6 +635,16 @@
         }
       }
     },
+    "Enter a value between %lld and %lld minutes." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informe um valor entre %1$lld e %2$lld minutos."
+          }
+        }
+      }
+    },
     "Explore" : {
       "comment" : "Fallback label when no daily reading is available yet",
       "localizations" : {
@@ -839,17 +859,6 @@
         }
       }
     },
-    "Loading ZenSounds" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Carregando ZenSounds"
-          }
-        }
-      }
-    },
     "Manage subscription" : {
       "localizations" : {
         "pt-BR" : {
@@ -922,6 +931,16 @@
         }
       }
     },
+    "Narration could not be resumed." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível retomar a narração."
+          }
+        }
+      }
+    },
     "Narration is unavailable right now." : {
       "localizations" : {
         "pt-BR" : {
@@ -979,6 +998,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Nenhuma assinatura ativa foi encontrada."
+          }
+        }
+      }
+    },
+    "No compatible voice is installed for this language." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhuma voz compatível está instalada para este idioma."
           }
         }
       }
@@ -1969,6 +1998,16 @@
         }
       }
     },
+    "Support" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suporte"
+          }
+        }
+      }
+    },
     "System" : {
       "localizations" : {
         "pt-BR" : {
@@ -2036,6 +2075,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Tema"
+          }
+        }
+      }
+    },
+    "To change the theme, touch and hold the Orante widget on your Home Screen, tap Edit Widget, and choose Background color." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para trocar o tema, toque e segure o widget do Orante na Tela de Início, toque em Editar Widget e escolha Cor de Fundo."
           }
         }
       }
@@ -2139,28 +2188,6 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Seu teste grátis do Orante+ termina em 2 dias"
-          }
-        }
-      }
-    },
-    "Zen" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Zen"
-          }
-        }
-      }
-    },
-    "ZenSounds" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "ZenSounds"
           }
         }
       }

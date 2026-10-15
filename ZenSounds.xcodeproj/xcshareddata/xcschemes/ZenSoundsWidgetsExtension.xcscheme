@@ -30,6 +30,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "000000000000000100000000"
                BuildableName = "ZenSounds.app"
+               BlueprintName = "ZenSounds"
                ReferencedContainer = "container:ZenSounds.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -61,6 +62,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "000000000000000100000000"
             BuildableName = "ZenSounds.app"
+            BlueprintName = "ZenSounds"
             ReferencedContainer = "container:ZenSounds.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -96,6 +98,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "000000000000000100000000"
             BuildableName = "ZenSounds.app"
+            BlueprintName = "ZenSounds"
             ReferencedContainer = "container:ZenSounds.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

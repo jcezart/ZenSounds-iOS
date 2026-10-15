@@ -226,6 +226,50 @@ struct PremiumAccessRulesTests {
     }
 }
 
+@MainActor
+struct VerseNarrationStarterTests {
+    private let verse = Verse(book: "PSA", chapter: 23, number: 1, text: "Test", language: .en)
+
+    @Test func nonSubscriberVerseNarrationRegistersBibleNarrationAndDoesNotSpeak() {
+        var placements: [PremiumPlacement] = []
+        var spoken: [Verse] = []
+        let gate = PremiumGate(entitlements: EntitlementMock(state: .inactive, hasPlus: false)) { placement, _ in
+            placements.append(placement)
+        }
+
+        VerseNarrationStarter.start(verse, isDailyWord: false, gate: gate) { spoken.append($0) }
+
+        #expect(placements == [PremiumPlacement(name: "bible_narration", parameters: ["book": "PSA", "chapter": "23"])])
+        #expect(spoken.isEmpty)
+    }
+
+    @Test func dailyWordNarrationSpeaksWithoutPlacement() {
+        var placements: [PremiumPlacement] = []
+        var spoken: [Verse] = []
+        let gate = PremiumGate(entitlements: EntitlementMock(state: .inactive, hasPlus: false)) { placement, _ in
+            placements.append(placement)
+        }
+
+        VerseNarrationStarter.start(verse, isDailyWord: true, gate: gate) { spoken.append($0) }
+
+        #expect(placements.isEmpty)
+        #expect(spoken == [verse])
+    }
+
+    @Test func subscriberVerseNarrationSpeaksWithoutPlacement() {
+        var placementCount = 0
+        var spoken: [Verse] = []
+        let gate = PremiumGate(entitlements: EntitlementMock(state: .active, hasPlus: true)) { _, _ in
+            placementCount += 1
+        }
+
+        VerseNarrationStarter.start(verse, isDailyWord: false, gate: gate) { spoken.append($0) }
+
+        #expect(placementCount == 0)
+        #expect(spoken == [verse])
+    }
+}
+
 struct PlacementCase: Sendable {
     let feature: PremiumFeature
     let parameters: [String: String]

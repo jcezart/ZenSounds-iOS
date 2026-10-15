@@ -250,3 +250,44 @@ Build final completo (iOS simulator), testes unitários (BibleRepository/DailyWo
 - Criado `Orante.storekit` com anual/mensal, grupo, Family Sharing e teste anual de sete dias. Associação manual ao scheme Debug ainda é necessária.
 - Atributo `app_name` removido do Superwall para minimizar dados. Novos textos localizados em en/pt-BR, com zero chaves pt-BR pendentes.
 - Baseline: 48/48. Após as fases intermediárias: 52/52 e 54/54; validação final registrada no relatório de prontidão.
+
+## Sessão 2026-10-14 — Claude Code assume o projeto: correções 1–7
+
+Antes: build OK, 0 avisos, 94/94. Depois: build OK, 0 avisos, **104/104** (10 testes novos). Build e testes rodaram
+ao fim de cada tarefa. Guia para futuras sessões: `CLAUDE.md`.
+
+1. URLs: Privacidade passou para `https://jcapps.dev.br/orante/privacidade`; link "Suporte"/"Support"
+   (`https://jcapps.dev.br/orante/suporte`) adicionado em Ajustes > Orante+. Auditoria e `SUPERWALL_INTEGRATION.md`
+   atualizados.
+2. Acessos sem paywall fechados: `VerseNarrationStarter` é o único caminho para narrar um versículo (botão e
+   ação de VoiceOver de `VerseDetailView`, que ganhou `isDailyWord`). No Terço Guiado sem Plus, Próximo/Anterior
+   caem para o modo Manual sem narrar, e o progresso salvo como Guiado reabre em Manual na mesma posição. Testes:
+   `VerseNarrationStarterTests` (3) e `RosaryGuidedPremiumTests` (4).
+3. Timer: sem Plus, o fade aparece como prévia bloqueada (selo "+", valor padrão de 10 s), e um toque registra
+   `custom_timer` uma vez. Com Plus, o slider liga direto no valor. Minutos fora de 1–1440 mostram erro e não fecham a tela.
+4. Strings: dois erros de narração passaram a usar `String(localized:)` com pt-BR; removidas as chaves sem uso
+   `Loading ZenSounds`, `ZenSounds`, `Zen` (app), `Today's verse from ZenSounds…` e `ZENSOUNDS` (widget), conferidas
+   por busca. As chaves stale usadas em runtime foram mantidas. **Não feito:** `CFBundleName` en = "Orante". O
+   Info.plist gerado sempre usa `PRODUCT_NAME` ("ZenSounds"), e a chave no `Info.plist` e o valor en do catálogo
+   não têm efeito (verificado no Info.plist compilado). As duas tentativas foram revertidas.
+5. Só iPhone: widget em `TARGETED_DEVICE_FAMILY = 1` (o app já estava em 1); auditoria corrigida. **Não feito:**
+   remover `CFBundleIconFiles` e `Resources/AppIcon-*.png`. O Info.plist compilado mostrou que
+   `ASSETCATALOG_COMPILER_APPICON_NAME` não está definido, ou seja, esses PNGs são o **único** ícone do app. A
+   ferramenta de build settings recusa esse setting. Falta definir App Icon = `AppIcon` no Xcode; só depois os
+   legados podem sair.
+6. Ajustes > Temas do widget: assinantes veem um alerta explicando como trocar (tocar e segurar > Editar Widget >
+   Cor de Fundo); não assinantes continuam em `widget_theme`.
+7. Terço: a geometria do laço foi para `RosaryVisualRules.loopFrame/loopPoint/decadeButtonCenter`, usada pelo
+   Canvas e pelos botões de década (centrados nas 10 contas de cada dezena, proporcionais à largura). Previews de
+   375 pt e 440 pt renderizados. As contas têm rótulos traduzidos (ex.: "Ave-Maria 4 de 10, dezena 2") e status
+   como valor de acessibilidade; o rótulo de progresso também foi traduzido. Testes de geometria: 3.
+
+Pendente em aparelho, sandbox ou App Store Connect: VoiceOver real no Terço e no versículo, paywall real dos
+placements (`custom_timer`, `bible_narration`, `guided_rosary`, `widget_theme`), alerta de temas com assinatura
+real, ícone após ligar o asset catalog, Archive/Validate.
+
+Complemento (mesma data): o usuário definiu App Icon = `AppIcon` no Xcode. O Info.plist compilado agora traz
+`CFBundleIcons > CFBundlePrimaryIcon > CFBundleIconName = AppIcon`, o actool roda com `--app-icon AppIcon` e o ícone
+aparece certo na Tela de Início do simulador. Os PNGs legados e `CFBundleIconFiles` foram mantidos por decisão do
+usuário, e o `CFBundleName` continua "ZenSounds" (não renomear o produto). Na mesma edição no Xcode, a orientação
+do iPhone passou a ser só retrato.
