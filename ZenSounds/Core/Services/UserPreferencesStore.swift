@@ -27,12 +27,15 @@ final class UserPreferencesStore: ObservableObject {
     @Published private(set) var favoriteVerses: [FavoriteVerse]
     @Published private(set) var savedMixes: [SavedMix]
     @Published private(set) var readingPosition: ReadingPosition?
+    /// Last sound, soundscape or saved mix played; shown by the idle "Ambient sound" mini-player.
+    @Published private(set) var lastAmbient: AmbientItem?
 
     private let defaults: UserDefaults
     private let soundsKey = "zensounds.favorite_sounds"
     private let versesKey = "zensounds.favorite_verses"
     private let mixesKey = "zensounds.saved_mixes"
     private let readingPositionKey = "zensounds.reading_position"
+    private let lastAmbientKey = "zensounds.ambient.lastSound"
 
     private convenience init() {
         self.init(defaults: .standard)
@@ -48,6 +51,7 @@ final class UserPreferencesStore: ObservableObject {
         let storedMixes = Self.decode([SavedMix].self, defaults.data(forKey: mixesKey)) ?? []
         savedMixes = Self.removingUnavailableSounds(from: storedMixes)
         readingPosition = Self.decode(ReadingPosition.self, defaults.data(forKey: readingPositionKey))
+        lastAmbient = Self.decode(AmbientItem.self, defaults.data(forKey: lastAmbientKey))
 
         if favoriteSoundIds != storedFavoriteSoundIDs {
             defaults.set(Array(favoriteSoundIds), forKey: soundsKey)
@@ -131,6 +135,19 @@ final class UserPreferencesStore: ObservableObject {
         guard position != readingPosition else { return }
         readingPosition = position
         defaults.set(Self.encode(position), forKey: readingPositionKey)
+    }
+
+    func recordAmbient(_ item: AmbientItem) {
+        guard item != lastAmbient else { return }
+        lastAmbient = item
+        defaults.set(Self.encode(item), forKey: lastAmbientKey)
+    }
+
+    /// The idle mini-player's item: the last one played if it still exists, otherwise Rain.
+    var resolvedLastAmbient: AmbientItem {
+        guard let lastAmbient else { return .fallback }
+        if case .mix(let id) = lastAmbient, !savedMixes.contains(where: { $0.id == id }) { return .fallback }
+        return lastAmbient
     }
 
     private static func encode<T: Encodable>(_ value: T) -> Data? { try? JSONEncoder().encode(value) }

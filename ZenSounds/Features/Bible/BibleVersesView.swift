@@ -55,6 +55,7 @@ struct BibleVersesView: View {
         }
         .navigationTitle(navigationTitle)
         .background(palette.background)
+        .ambientMiniPlayer(.always)
         .navigationDestination(for: Verse.self) { verse in
             VerseDetailView(verse: verse)
         }

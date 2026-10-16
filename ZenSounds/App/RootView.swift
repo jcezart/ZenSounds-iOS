@@ -15,7 +15,6 @@ struct RootView: View {
                     HomeView()
                         .soundsDestinations()
                 }
-                .withCompactPlayer()
             }
 
             Tab("Bible", systemImage: AppTab.bible.systemImage, value: AppTab.bible) {
@@ -23,7 +22,6 @@ struct RootView: View {
                     BibleBooksView()
                         .soundsDestinations()
                 }
-                .withCompactPlayer()
             }
 
             Tab("Rosary", systemImage: AppTab.rosary.systemImage, value: AppTab.rosary) {
@@ -31,7 +29,6 @@ struct RootView: View {
                     RosaryView()
                         .soundsDestinations()
                 }
-                .withCompactPlayer()
             }
 
             // Search role: pinned at the trailing edge, and on iOS 26 shown as the separate glass search tab.
@@ -40,10 +37,15 @@ struct RootView: View {
                     SearchView()
                         .soundsDestinations()
                 }
-                .withCompactPlayer()
             }
         }
         .tint(palette.accent)
+        .sheet(
+            isPresented: $playerPresentation.isAmbientSheetPresented,
+            onDismiss: { playerPresentation.runAfterAmbientSheetDismiss() }
+        ) {
+            AmbientSoundSheet()
+        }
         .fullScreenCover(isPresented: $playerPresentation.isFullPlayerPresented) {
             PlayerView()
         }
@@ -78,30 +80,6 @@ struct RootView: View {
         } message: {
             Text("We'll notify you 2 days before your Orante+ trial ends.")
         }
-    }
-}
-
-/// Reserves space for the compact mini player above each tab's own content via
-/// `safeAreaInset`, applied per-tab rather than on the `TabView` itself. Attaching it to the
-/// `TabView` directly renders the mini player in front of the native tab bar chrome and steals
-/// its touches — every tab button becomes unreachable while something is playing. Per-tab
-/// placement keeps the system tab bar as the topmost hit-testable element in that strip.
-private struct CompactPlayerInset: ViewModifier {
-    @ObservedObject var audio = AudioEngine.shared
-    @ObservedObject var playerPresentation = PlayerPresentation.shared
-
-    func body(content: Content) -> some View {
-        content.safeAreaInset(edge: .bottom) {
-            if audio.isActive && !playerPresentation.isFullPlayerPresented {
-                CompactPlayerView { playerPresentation.isFullPlayerPresented = true }
-            }
-        }
-    }
-}
-
-private extension View {
-    func withCompactPlayer() -> some View {
-        modifier(CompactPlayerInset())
     }
 }
 

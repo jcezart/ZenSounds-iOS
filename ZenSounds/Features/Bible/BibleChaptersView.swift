@@ -33,5 +33,6 @@ struct BibleChaptersView: View {
             }
         }
         .background(palette.background)
+        .ambientMiniPlayer(.whenActive)
     }
 }

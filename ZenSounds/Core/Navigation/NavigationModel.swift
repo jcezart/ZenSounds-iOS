@@ -64,4 +64,20 @@ final class NavigationModel: ObservableObject {
 final class PlayerPresentation: ObservableObject {
     static let shared = PlayerPresentation()
     @Published var isFullPlayerPresented = false
+    /// The "Ambient sound" sheet, presented from the root so every tab can open it.
+    @Published var isAmbientSheetPresented = false
+    /// Navigation requested from inside the ambient sheet, run once the sheet has finished dismissing.
+    var afterAmbientSheetDismiss: (() -> Void)?
+
+    /// Closes the ambient sheet and then performs `action` (open the player, the library, the mix editor).
+    func dismissAmbientSheet(then action: @escaping () -> Void) {
+        afterAmbientSheetDismiss = action
+        isAmbientSheetPresented = false
+    }
+
+    func runAfterAmbientSheetDismiss() {
+        let action = afterAmbientSheetDismiss
+        afterAmbientSheetDismiss = nil
+        action?()
+    }
 }

@@ -198,8 +198,9 @@ struct MixRow: View {
     }
 }
 
-private struct SoundArtwork: View {
+struct SoundArtwork: View {
     let soundID: String
+    var size: CGFloat = 62
 
     var body: some View {
         Group {
@@ -220,10 +221,10 @@ private struct SoundArtwork: View {
                 }
             }
         }
-            .frame(width: 62, height: 62)
-            .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+            .frame(width: size, height: size)
+            .clipShape(RoundedRectangle(cornerRadius: size * 0.24, style: .continuous))
             .overlay {
-                RoundedRectangle(cornerRadius: 15, style: .continuous)
+                RoundedRectangle(cornerRadius: size * 0.24, style: .continuous)
                     .stroke(.white.opacity(0.16), lineWidth: 0.5)
             }
             .shadow(color: .black.opacity(0.10), radius: 4, y: 2)

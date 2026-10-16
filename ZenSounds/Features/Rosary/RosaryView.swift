@@ -28,6 +28,7 @@ struct RosaryView: View {
         }
         .toolbar(.hidden, for: .navigationBar)
         .safeAreaInset(edge: .bottom) { controls }
+        .ambientMiniPlayer(.always)
         .sheet(isPresented: $model.isChoosingSet) { mysteryPicker }
         .alert("Start a new Rosary?", isPresented: $model.showsRestartConfirmation) {
             Button("Cancel", role: .cancel) { model.pendingSet = nil }

@@ -52,6 +52,7 @@ struct VerseDetailView: View {
         }
         .navigationTitle(reference)
         .navigationBarTitleDisplayMode(.inline)
+        .ambientMiniPlayer(.whenActive)
         .accessibilityAction(named: "Listen to verse") {
             VerseNarrationStarter.start(verse, isDailyWord: isDailyWord)
         }

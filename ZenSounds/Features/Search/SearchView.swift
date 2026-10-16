@@ -26,5 +26,6 @@ struct SearchView: View {
         }
         .scrollContentBackground(.hidden)
         .background(palette.background)
+        .ambientMiniPlayer(.whenActive)
     }
 }

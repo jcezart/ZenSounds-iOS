@@ -96,6 +96,7 @@ struct SoundsLibraryView: View {
             .scrollIndicators(.hidden)
         }
         .navigationTitle(AppLanguage.localized("Sounds", defaultValue: "Sounds"))
+        .ambientMiniPlayer(.whenActive)
         .navigationBarTitleDisplayMode(.inline)
     }
 }

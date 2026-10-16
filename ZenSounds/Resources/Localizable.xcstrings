@@ -289,6 +289,26 @@
         }
       }
     },
+    "Ambient sound" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Som ambiente"
+          }
+        }
+      }
+    },
+    "Ambient sound options" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opções de som ambiente"
+          }
+        }
+      }
+    },
     "Appearance" : {
       "localizations" : {
         "pt-BR" : {
@@ -742,6 +762,26 @@
         }
       }
     },
+    "For your reading or prayer." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para acompanhar sua leitura ou oração."
+          }
+        }
+      }
+    },
+    "Full sound library" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biblioteca de sons"
+          }
+        }
+      }
+    },
     "Guided" : {
       "localizations" : {
         "pt-BR" : {
@@ -1117,12 +1157,43 @@
         }
       }
     },
+    "Open player" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir player"
+          }
+        }
+      }
+    },
     "Open player: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Abrir player: %@"
+          }
+        }
+      }
+    },
+    "Opens ambient sound options" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre as opções de som ambiente"
+          }
+        }
+      }
+    },
+    "Opens the player" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre o player"
           }
         }
       }
@@ -1188,6 +1259,26 @@
         }
       }
     },
+    "Pause or resume" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausar ou retomar"
+          }
+        }
+      }
+    },
+    "Paused" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausado"
+          }
+        }
+      }
+    },
     "Play" : {
       "localizations" : {
         "pt-BR" : {
@@ -1214,6 +1305,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Reproduzir som"
+          }
+        }
+      }
+    },
+    "Playing" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tocando"
           }
         }
       }
@@ -2173,6 +2274,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Versículos"
+          }
+        }
+      }
+    },
+    "Volume" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volume"
           }
         }
       }

@@ -20,6 +20,7 @@ struct BibleBooksView: View {
             BibleRouteDestination(route: route, language: language)
         }
         .background(palette.background)
+        .ambientMiniPlayer(.whenActive)
     }
 }
 

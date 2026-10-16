@@ -58,6 +58,7 @@ struct FavoritesView: View {
             }
         }
         .navigationTitle(AppLanguage.localized("Favorites", defaultValue: "Favorites"))
+        .ambientMiniPlayer(.whenActive)
         .navigationDestination(for: Verse.self) { verse in
             VerseDetailView(verse: verse)
         }

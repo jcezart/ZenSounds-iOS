@@ -51,6 +51,7 @@ struct HomeView: View {
         }
         .scrollIndicators(.hidden)
         .background(palette.background)
+        .ambientMiniPlayer(.always)
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $isSettingsPresented) {
             SettingsView()

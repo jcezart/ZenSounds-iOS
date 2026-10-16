@@ -186,6 +186,15 @@ final class AudioEngine: ObservableObject {
         }
         transitionTransport(.startSucceeded)
         updateNowPlaying()
+        // Remembered for the idle "Ambient sound" mini-player (ad-hoc mixes are not recorded).
+        let preferences = UserPreferencesStore.shared
+        if let item = AmbientItem.from(
+            singleSoundID: singleSoundId,
+            mixID: mix?.id,
+            savedMixIDs: Set(preferences.savedMixes.map(\.id))
+        ) {
+            preferences.recordAmbient(item)
+        }
     }
 
     // MARK: - Transport
