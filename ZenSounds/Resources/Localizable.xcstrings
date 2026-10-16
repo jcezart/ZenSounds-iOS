@@ -47,6 +47,46 @@
         }
       }
     },
+    "%lld chapters" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld chapter"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld chapters"
+                }
+              }
+            }
+          }
+        },
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld capítulo"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld capítulos"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld min" : {
       "localizations" : {
         "pt-BR" : {
@@ -487,6 +527,16 @@
         }
       }
     },
+    "Chapters" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Capítulos"
+          }
+        }
+      }
+    },
     "Choose a sound to accompany your reading, prayer, or rest." : {
       "localizations" : {
         "pt-BR" : {
@@ -533,6 +583,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Continuar"
+          }
+        }
+      }
+    },
+    "Continue reading" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar leitura"
           }
         }
       }
@@ -752,6 +812,26 @@
         }
       }
     },
+    "Favorite" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favoritar"
+          }
+        }
+      }
+    },
+    "Favorited" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favoritado"
+          }
+        }
+      }
+    },
     "Favorites" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -803,6 +883,16 @@
         }
       }
     },
+    "Hides verse actions" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oculta as ações do versículo"
+          }
+        }
+      }
+    },
     "Holy Rosary" : {
       "localizations" : {
         "pt-BR" : {
@@ -850,6 +940,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Idioma"
+          }
+        }
+      }
+    },
+    "Larger text" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aumentar texto"
           }
         }
       }
@@ -974,6 +1074,16 @@
         }
       }
     },
+    "More" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mais"
+          }
+        }
+      }
+    },
     "My mix" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1038,12 +1148,32 @@
         }
       }
     },
+    "New Testament" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novo Testamento"
+          }
+        }
+      }
+    },
     "Next bead" : {
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Próxima conta"
+          }
+        }
+      }
+    },
+    "Next chapter" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Próximo capítulo"
           }
         }
       }
@@ -1144,6 +1274,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "OK"
+          }
+        }
+      }
+    },
+    "Old Testament" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antigo Testamento"
           }
         }
       }
@@ -1452,6 +1592,16 @@
         }
       }
     },
+    "Previous chapter" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Capítulo anterior"
+          }
+        }
+      }
+    },
     "Previous sound" : {
       "localizations" : {
         "pt-BR" : {
@@ -1755,6 +1905,16 @@
         }
       }
     },
+    "Share chapter" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartilhar capítulo"
+          }
+        }
+      }
+    },
     "Share verse" : {
       "localizations" : {
         "pt-BR" : {
@@ -1771,6 +1931,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Mostrar outro versículo"
+          }
+        }
+      }
+    },
+    "Shows verse actions" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra as ações do versículo"
           }
         }
       }
@@ -1811,6 +1981,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Lenta"
+          }
+        }
+      }
+    },
+    "Smaller text" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diminuir texto"
           }
         }
       }
@@ -2227,6 +2407,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Termos de Uso"
+          }
+        }
+      }
+    },
+    "Text size" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamanho do texto"
           }
         }
       }

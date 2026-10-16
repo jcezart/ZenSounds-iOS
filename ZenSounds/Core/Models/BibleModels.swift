@@ -198,16 +198,21 @@ nonisolated struct BibleRawVerseItem: Decodable {
 
 nonisolated enum BibleRawContentItem: Decodable {
     case verse(BibleRawVerseItem)
+    /// Psalm superscription ("A Psalm of David…"): real source text, shown above verse 1.
+    case subtitle([BibleContentPiece])
     case other
 
-    private enum CodingKeys: String, CodingKey { case type }
+    private enum CodingKeys: String, CodingKey { case type, content }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let type = try container.decodeIfPresent(String.self, forKey: .type)
-        if type == "verse" {
+        switch type {
+        case "verse":
             self = .verse(try BibleRawVerseItem(from: decoder))
-        } else {
+        case "hebrew_subtitle":
+            self = .subtitle(try container.decodeIfPresent([BibleContentPiece].self, forKey: .content) ?? [])
+        default:
             self = .other
         }
     }

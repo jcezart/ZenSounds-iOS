@@ -12,20 +12,13 @@ struct BibleChaptersView: View {
         Group {
             if let book {
                 ScrollView {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 56))], spacing: 12) {
-                        ForEach(1...book.chapters, id: \.self) { chapter in
-                            NavigationLink(value: BibleRoute.verses(bookCode: bookCode, chapter: chapter, focusVerse: nil)) {
-                                Text("\(chapter)")
-                                    .font(.essenceBodyLarge)
-                                    .foregroundStyle(palette.text)
-                                    .frame(width: 56, height: 56)
-                                    .background(palette.lilac)
-                                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                            }
-                            .accessibilityLabel("Chapter \(chapter)")
+                    ChapterGrid(chapters: book.chapters) { chapter in
+                        NavigationLink(value: BibleRoute.verses(bookCode: bookCode, chapter: chapter, focusVerse: nil)) {
+                            ChapterCell(chapter: chapter, isCurrent: false)
                         }
+                        .buttonStyle(.plain)
                     }
-                    .padding()
+                    .padding(Spacing.screen)
                 }
                 .navigationTitle(book.name(for: language))
             } else {
@@ -34,5 +27,38 @@ struct BibleChaptersView: View {
         }
         .background(palette.background)
         .ambientMiniPlayer(.whenActive)
+    }
+}
+
+/// Adaptive grid of chapter numbers (chapter list and the reader's "Chapters" sheet).
+struct ChapterGrid<Cell: View>: View {
+    let chapters: Int
+    @ViewBuilder let cell: (Int) -> Cell
+    @ScaledMetric(relativeTo: .body) private var cellSize: CGFloat = 56
+
+    var body: some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: cellSize), spacing: Spacing.sm)], spacing: Spacing.sm) {
+            ForEach(1...max(chapters, 1), id: \.self) { chapter in
+                cell(chapter)
+            }
+        }
+    }
+}
+
+struct ChapterCell: View {
+    let chapter: Int
+    let isCurrent: Bool
+    @Environment(\.essencePalette) private var palette
+    @ScaledMetric(relativeTo: .body) private var cellSize: CGFloat = 56
+
+    var body: some View {
+        Text("\(chapter)")
+            .font(.essenceBodyLarge.monospacedDigit())
+            .foregroundStyle(isCurrent ? palette.onAccent : palette.text)
+            .frame(minWidth: cellSize, minHeight: cellSize)
+            .background(isCurrent ? palette.accent : palette.surface,
+                        in: RoundedRectangle(cornerRadius: Radius.sm, style: .continuous))
+            .accessibilityLabel(Text("Chapter \(chapter)"))
+            .accessibilityAddTraits(isCurrent ? .isSelected : [])
     }
 }
