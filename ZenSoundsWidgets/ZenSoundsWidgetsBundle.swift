@@ -12,5 +12,6 @@ import SwiftUI
 struct ZenSoundsWidgetsBundle: WidgetBundle {
     var body: some Widget {
         ZenSoundsWidgets()
+        ZenSoundsLargeTextLockWidget()
     }
 }

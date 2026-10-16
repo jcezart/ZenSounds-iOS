@@ -198,6 +198,16 @@
         }
       }
     },
+    "Today's verse in larger letters. Long verses are shortened; tap to read the chapter." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O versículo do dia em letras maiores. Versículos longos aparecem resumidos; toque para ler o capítulo."
+          }
+        }
+      }
+    },
     "Word of the Day" : {
       "localizations" : {
         "pt-BR" : {
@@ -214,6 +224,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "PALAVRA DO DIA"
+          }
+        }
+      }
+    },
+    "Word of the Day · Large text" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palavra do Dia · Letra grande"
           }
         }
       }
