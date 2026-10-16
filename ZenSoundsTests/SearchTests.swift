@@ -144,3 +144,55 @@ struct LanguageFollowUpTests {
         #expect(store.favoriteVerses.isEmpty)
     }
 }
+
+@MainActor
+struct InAppLanguageTitleTests {
+    /// Runs `body` with the in-app language forced to `language`, restoring the previous choice.
+    private func withLanguage(_ language: AppLanguage, _ body: () -> Void) {
+        let defaults = AppLanguage.sharedDefaults
+        let saved = defaults.string(forKey: AppLanguage.storageKey)
+        defaults.set(language.rawValue, forKey: AppLanguage.storageKey)
+        defer { defaults.set(saved, forKey: AppLanguage.storageKey) }
+        body()
+    }
+
+    @Test func playingSoundscapeTitleFollowsTheCurrentLanguage() throws {
+        let scape = try #require(BiblicalSoundscapeCatalog.all.first { $0.id == "peace-in-galilee" })
+        var mix: SavedMix?
+        withLanguage(.pt) {
+            // The mix name is frozen in the language it started in…
+            mix = scape.playableMix
+            #expect(AudioEngine.title(forMix: scape.playableMix) == "Paz na Galileia")
+        }
+        let started = try #require(mix)
+        withLanguage(.en) {
+            // …but the title shown follows the language chosen afterwards.
+            #expect(AudioEngine.title(forMix: started) == "Peace in Galilee")
+            #expect(AudioEngine.title(forMix: SavedMix(id: "mine", name: "Noite", layers: [MixLayer(soundId: "Rain")])) == "Noite")
+        }
+    }
+
+    @Test func everySoundHasARealTitleInBothLanguages() {
+        for sound in SoundCatalog.all {
+            withLanguage(.en) {
+                #expect(!sound.localizedTitle.contains("_"))
+                #expect(sound.localizedTitle.contains(" ") || sound.localizedTitle == sound.id)
+            }
+            withLanguage(.pt) {
+                #expect(sound.localizedTitle != sound.titleKey)
+            }
+        }
+        withLanguage(.en) { #expect(SoundCatalog.sound(id: "GalileeWaves")?.localizedTitle == "Galilee Waves") }
+        withLanguage(.pt) { #expect(SoundCatalog.sound(id: "GalileeWaves")?.localizedTitle == "Ondas da Galileia") }
+    }
+
+    @Test func codeStyleKeysHaveEnglishText() throws {
+        let path = try #require(Bundle.main.path(forResource: "en", ofType: "lproj"))
+        let english = try #require(Bundle(path: path))
+        let keys = SoundCatalog.all.map(\.titleKey)
+            + BiblicalSoundscapeCatalog.all.flatMap { [$0.titleKey, $0.referenceKey] }
+        for key in keys {
+            #expect(english.localizedString(forKey: key, value: nil, table: nil) != key, "\(key) has no English text")
+        }
+    }
+}

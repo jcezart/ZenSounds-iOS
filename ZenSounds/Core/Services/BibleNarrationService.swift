@@ -113,13 +113,13 @@ final class BibleNarrationService: NSObject, ObservableObject {
             guard let self else { return }
             let ready = await audioCoordinator.prepareAudioSessionForNarration()
             guard requests.isCurrent(generation) else { return }
-            guard ready else { failCurrentRequest(String(localized: "Narration is unavailable right now.")); return }
+            guard ready else { failCurrentRequest(AppLanguage.localized("Narration is unavailable right now.", defaultValue: "Narration is unavailable right now.")); return }
             sessionPrepared = true
             audioCoordinator.setNarrationDucking(true)
             try? await Task.sleep(for: .milliseconds(180))
             guard requests.isCurrent(generation) else { return }
             isPreparing = false
-            if !synthesizer.continueSpeaking() { failCurrentRequest(String(localized: "Narration could not be resumed.")) }
+            if !synthesizer.continueSpeaking() { failCurrentRequest(AppLanguage.localized("Narration could not be resumed.", defaultValue: "Narration could not be resumed.")) }
         }
     }
 
@@ -152,9 +152,9 @@ final class BibleNarrationService: NSObject, ObservableObject {
             let ready: Bool
             if canReuseSession { ready = true } else { ready = await audioCoordinator.prepareAudioSessionForNarration() }
             guard requests.isCurrent(generation) else { return }
-            guard ready else { failCurrentRequest(String(localized: "Narration is unavailable right now.")); return }
+            guard ready else { failCurrentRequest(AppLanguage.localized("Narration is unavailable right now.", defaultValue: "Narration is unavailable right now.")); return }
             guard let voice = preferences.resolvedVoice(for: language, preferredIdentifier: preferredVoiceIdentifier) else {
-                failCurrentRequest(String(localized: "No compatible voice is installed for this language.")); return
+                failCurrentRequest(AppLanguage.localized("No compatible voice is installed for this language.", defaultValue: "No compatible voice is installed for this language.")); return
             }
             sessionPrepared = true
             audioCoordinator.setNarrationDucking(true)

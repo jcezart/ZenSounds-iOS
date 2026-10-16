@@ -43,14 +43,27 @@ final class AudioEngine: ObservableObject {
     var isActive: Bool { activeSoundId != nil || activeMix != nil }
 
     var displayTitle: String {
-        if let mix = activeMix { return mix.name }
+        if let mix = activeMix { return Self.title(forMix: mix) }
         if let soundId = activeSoundId, let sound = SoundCatalog.sound(id: soundId) {
-            return AppLanguage.localized(sound.titleKey, defaultValue: soundId)
+            return sound.localizedTitle
         }
         return "Orante"
     }
 
     private init() {}
+
+    /// Official soundscapes are played as a mix whose name was frozen in the language of the moment;
+    /// resolve their title again so it follows the current language. User mixes keep their own name.
+    static func title(forMix mix: SavedMix) -> String {
+        BiblicalSoundscapeCatalog.all.first { $0.officialMixID == mix.id }?.localizedTitle ?? mix.name
+    }
+
+    /// Refreshes the Lock Screen / Control Center title after the in-app language changes.
+    func languageDidChange() {
+        guard isActive else { return }
+        objectWillChange.send()
+        updateNowPlaying()
+    }
 
     // MARK: - Single sound
 
@@ -418,7 +431,7 @@ final class AudioEngine: ObservableObject {
 
     private func makePlayer(soundId: String) -> LoopingPlayer? {
         guard let url = Bundle.main.url(forResource: soundId, withExtension: "mp3") else {
-            playbackError = String(localized: "The audio file for this sound is unavailable.")
+            playbackError = AppLanguage.localized("The audio file for this sound is unavailable.", defaultValue: "The audio file for this sound is unavailable.")
             return nil
         }
         do {

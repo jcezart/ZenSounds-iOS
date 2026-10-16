@@ -2,6 +2,8 @@ import SwiftUI
 import UIKit
 
 struct BiblicalSoundscapeCard: View {
+    /// Re-renders titles resolved with `AppLanguage.localized` when the in-app language changes.
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     let soundscape: BiblicalSoundscape
     let onPlay: () -> Void
     let onOpenPassage: () -> Void
@@ -69,6 +71,8 @@ struct BiblicalSoundscapeCard: View {
 }
 
 struct SoundRow: View {
+    /// Re-renders titles resolved with `AppLanguage.localized` when the in-app language changes.
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     let sound: SoundItem
     let onTap: () -> Void
 
@@ -76,7 +80,7 @@ struct SoundRow: View {
     @Environment(\.essencePalette) private var palette
 
     private var title: String {
-        AppLanguage.localized(sound.titleKey, defaultValue: sound.id)
+        sound.localizedTitle
     }
 
     private var isFavorite: Bool {
@@ -132,6 +136,8 @@ struct SoundRow: View {
 }
 
 struct MixRow: View {
+    /// Re-renders titles resolved with `AppLanguage.localized` when the in-app language changes.
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     let mix: SavedMix
     let onTap: () -> Void
     let onDelete: () -> Void
@@ -191,7 +197,7 @@ struct MixRow: View {
     private var layerSummary: String {
         mix.layers.compactMap { layer in
             SoundCatalog.sound(id: layer.soundId).map {
-                AppLanguage.localized($0.titleKey, defaultValue: $0.id)
+                $0.localizedTitle
             }
         }
         .joined(separator: " · ")

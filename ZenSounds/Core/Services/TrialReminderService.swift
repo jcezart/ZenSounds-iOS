@@ -32,8 +32,8 @@ final class TrialReminderService: NSObject, ObservableObject {
             let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
             guard granted else { return }
             let content = UNMutableNotificationContent()
-            content.title = String(localized: "Your Orante+ trial ends in 2 days")
-            content.body = String(localized: "If you don't want to continue, cancel in iPhone Settings.")
+            content.title = AppLanguage.localized("Your Orante+ trial ends in 2 days", defaultValue: "Your Orante+ trial ends in 2 days")
+            content.body = AppLanguage.localized("If you don't want to continue, cancel in iPhone Settings.", defaultValue: "If you don't want to continue, cancel in iPhone Settings.")
             content.sound = .default
             let interval = max(reminderDate.timeIntervalSinceNow, 1)
             let request = UNNotificationRequest(

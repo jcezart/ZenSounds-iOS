@@ -110,7 +110,7 @@ private struct FavoriteSoundRow: View {
                 .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                 .accessibilityHidden(true)
 
-            Text(LocalizedStringKey(sound.titleKey))
+            Text(sound.localizedTitle)
                 .font(.essenceTitleMedium)
                 .foregroundStyle(palette.text)
 

@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct SoundsLibraryView: View {
+    /// Re-renders titles resolved with `AppLanguage.localized` when the in-app language changes.
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     @EnvironmentObject private var navigation: NavigationModel
     @ObservedObject private var audio = AudioEngine.shared
     @ObservedObject private var prefs = UserPreferencesStore.shared

@@ -45,6 +45,23 @@ struct SoundItem: Identifiable, Hashable, Codable {
         default: return id
         }
     }
+
+    /// English title (the source language); `titleKey` holds the translations.
+    var defaultTitle: String {
+        switch id {
+        case "GalileeWaves": return "Galilee Waves"
+        case "MeadowSheep": return "Meadow Sheep"
+        case "OliveGrove": return "Olive Grove"
+        case "MorningBirds": return "Morning Birds"
+        case "NightCrickets": return "Night Crickets"
+        default: return id
+        }
+    }
+
+    /// Title in the current in-app language. Use this everywhere a sound name is shown.
+    var localizedTitle: String {
+        AppLanguage.localized(titleKey, defaultValue: defaultTitle)
+    }
 }
 
 /// The bundled relaxation sounds available throughout the app.

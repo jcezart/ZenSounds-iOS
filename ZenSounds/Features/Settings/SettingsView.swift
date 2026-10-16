@@ -181,6 +181,8 @@ struct SettingsView: View {
 }
 
 private struct BibleNarrationSettingsSection: View {
+    /// Re-renders titles resolved with `AppLanguage.localized` when the in-app language changes.
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     @ObservedObject private var preferences = BibleNarrationPreferences.shared
     @ObservedObject private var narration = BibleNarrationService.shared
 

@@ -22,6 +22,7 @@ struct ZenSoundsApp: App {
             }
             .onChange(of: languageStore.selection) {
                 superwall.updateUserProperties(language: languageStore.selection)
+                AudioEngine.shared.languageDidChange()
             }
         }
     }

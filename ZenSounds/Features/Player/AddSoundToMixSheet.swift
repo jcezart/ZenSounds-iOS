@@ -14,7 +14,7 @@ struct AddSoundToMixSheet: View {
                 Button {
                     onSelect(sound.id)
                 } label: {
-                    Text(LocalizedStringKey(sound.titleKey))
+                    Text(sound.localizedTitle)
                         .foregroundStyle(palette.text)
                 }
             }

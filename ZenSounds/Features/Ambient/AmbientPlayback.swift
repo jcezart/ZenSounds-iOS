@@ -38,7 +38,7 @@ enum AmbientPlayback {
         switch item {
         case .sound(let id):
             guard let sound = SoundCatalog.sound(id: id) else { return id }
-            return AppLanguage.localized(sound.titleKey, defaultValue: id)
+            return sound.localizedTitle
         case .soundscape(let id):
             return BiblicalSoundscapeCatalog.all.first { $0.id == id }?.localizedTitle ?? id
         case .mix(let id):

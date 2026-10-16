@@ -188,6 +188,8 @@ struct AmbientSoundSheet: View {
 
 /// One sound in the ambient sheet: tap to play (or pause the one playing), favorite, lock if paid.
 private struct AmbientSoundRow: View {
+    /// Re-renders titles resolved with `AppLanguage.localized` when the in-app language changes.
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     let sound: SoundItem
 
     @ObservedObject private var audio = AudioEngine.shared
@@ -195,7 +197,7 @@ private struct AmbientSoundRow: View {
     @Environment(\.essencePalette) private var palette
 
     private var isCurrent: Bool { audio.activeSoundId == sound.id && audio.layers.count == 1 }
-    private var title: String { AppLanguage.localized(sound.titleKey, defaultValue: sound.id) }
+    private var title: String { sound.localizedTitle }
 
     var body: some View {
         HStack(spacing: Spacing.sm) {

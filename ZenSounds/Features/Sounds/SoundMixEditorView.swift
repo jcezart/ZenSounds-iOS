@@ -23,7 +23,7 @@ struct SoundMixEditorView: View {
                             get: { isSelected },
                             set: { toggle(sound.id, isOn: $0) }
                         )) {
-                            Text(LocalizedStringKey(sound.titleKey))
+                            Text(sound.localizedTitle)
                         }
                         .tint(palette.accent)
 

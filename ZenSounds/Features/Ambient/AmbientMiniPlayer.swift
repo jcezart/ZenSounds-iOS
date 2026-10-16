@@ -4,6 +4,8 @@ import SwiftUI
 /// shows the last sound played (Rain the first time) ready to start. The adjust button opens the
 /// ambient sheet; tapping the title opens the full player (timer, fade, mix) when audio is active.
 struct AmbientMiniPlayer: View {
+    /// Re-renders titles resolved with `AppLanguage.localized` when the in-app language changes.
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     @ObservedObject private var audio = AudioEngine.shared
     @ObservedObject private var preferences = UserPreferencesStore.shared
     @ObservedObject private var presentation = PlayerPresentation.shared

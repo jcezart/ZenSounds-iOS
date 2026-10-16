@@ -5,6 +5,8 @@ import UIKit
 /// state directly (no separate "UI thinks it's playing" flag) — play/pause/close always match
 /// what's actually coming out of the speakers.
 struct PlayerView: View {
+    /// Re-renders titles resolved with `AppLanguage.localized` when the in-app language changes.
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     @ObservedObject private var audio = AudioEngine.shared
     @ObservedObject private var prefs = UserPreferencesStore.shared
     @ObservedObject private var playerPresentation = PlayerPresentation.shared
@@ -302,7 +304,7 @@ struct PlayerView: View {
 
     private func soundTitle(_ id: String) -> String {
         guard let sound = SoundCatalog.sound(id: id) else { return id }
-        return AppLanguage.localized(sound.titleKey, defaultValue: id)
+        return sound.localizedTitle
     }
 
     private static func formattedRemaining(_ interval: TimeInterval) -> String {

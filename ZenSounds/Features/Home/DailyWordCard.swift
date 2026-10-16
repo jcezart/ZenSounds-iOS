@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct DailyWordCard: View {
+    /// Re-renders titles resolved with `AppLanguage.localized` when the in-app language changes.
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     let state: DailyWordViewModel.State
     let isFavorite: Bool
     let onToggleFavorite: () -> Void
