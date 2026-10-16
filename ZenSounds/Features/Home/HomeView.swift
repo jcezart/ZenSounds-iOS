@@ -41,7 +41,7 @@ struct HomeView: View {
                     onPlayRain: { play(soundID: "Rain") },
                     onPlayForest: { play(soundID: "Forest") },
                     onOpenMix: openMixEditor,
-                    onSeeAll: { navigation.selectedTab = .sounds }
+                    onSeeAll: { navigation.push(SoundsRoute.library) }
                 )
             }
             .padding(.horizontal, 20)
@@ -116,9 +116,7 @@ struct HomeView: View {
 
     private func openMixEditor() {
         SuperwallService.shared.gate(.mixer, parameters: ["source": "home"]) {
-            navigation.selectedTab = .sounds
-            navigation.soundsPath = NavigationPath()
-            navigation.soundsPath.append(SoundsRoute.mixEditor(existingMixId: nil))
+            navigation.push(SoundsRoute.mixEditor(existingMixId: nil))
         }
     }
 }

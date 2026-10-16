@@ -17,7 +17,7 @@ struct SoundsLibraryView: View {
                 LazyVStack(alignment: .leading, spacing: 30) {
                     SoundsLibraryHeader {
                         SuperwallService.shared.gate(.mixer, parameters: ["source": "library"]) {
-                            navigation.soundsPath.append(SoundsRoute.mixEditor(existingMixId: nil))
+                            navigation.push(SoundsRoute.mixEditor(existingMixId: nil))
                         }
                     }
 
@@ -95,9 +95,18 @@ struct SoundsLibraryView: View {
             }
             .scrollIndicators(.hidden)
         }
-        .toolbar(.hidden, for: .navigationBar)
-        .navigationDestination(for: SoundsRoute.self) { route in
+        .navigationTitle(AppLanguage.localized("Sounds", defaultValue: "Sounds"))
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+extension View {
+    /// Registers the sound screens once per tab stack (library and mix editor are pushable from any tab).
+    func soundsDestinations() -> some View {
+        navigationDestination(for: SoundsRoute.self) { route in
             switch route {
+            case .library:
+                SoundsLibraryView()
             case .mixEditor(let existingMixId):
                 SoundMixEditorView(existingMixId: existingMixId)
             }

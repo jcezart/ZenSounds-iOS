@@ -1,21 +1,22 @@
 import Foundation
 
+/// The four tabs of the redesign. Sounds and Favorites are no longer tabs: the sound library lives in
+/// Search → Explore → Sounds (and the "Ambient sound" sheet), and Favorites inside Search.
 enum AppTab: String, CaseIterable, Identifiable, Hashable {
     case home
     case bible
     case rosary
-    case sounds
-    case favorites
+    case search
 
     var id: String { rawValue }
 
+    /// Outline variants; the tab bar fills the selected one automatically.
     var systemImage: String {
         switch self {
-        case .home: return "house.fill"
-        case .bible: return "book.fill"
-        case .rosary: return "circle.hexagongrid.fill"
-        case .sounds: return "waveform"
-        case .favorites: return "heart.fill"
+        case .home: return "house"
+        case .bible: return "book"
+        case .rosary: return "circle.hexagongrid"
+        case .search: return "magnifyingglass"
         }
     }
 }
@@ -28,6 +29,14 @@ enum BibleRoute: Hashable {
     case verses(bookCode: String, chapter: Int, focusVerse: Int?)
 }
 
+/// Sound screens, pushable from any tab (Home "My mix", Search → Explore → Sounds, the ambient sheet).
 enum SoundsRoute: Hashable {
+    /// Full library: soundscapes, saved mixes, every sound, create mix.
+    case library
     case mixEditor(existingMixId: String?)
+}
+
+/// Screens reachable from the Search tab.
+enum SearchRoute: Hashable {
+    case favorites
 }

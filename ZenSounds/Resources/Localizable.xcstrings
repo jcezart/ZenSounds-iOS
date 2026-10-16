@@ -732,6 +732,7 @@
       }
     },
     "Favorites" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -755,13 +756,14 @@
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Santo Rosário"
+            "state" : "translated",
+            "value" : "Santo Terço"
           }
         }
       }
     },
     "Home" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -1270,8 +1272,8 @@
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Reze o Rosário e acompanhe seus momentos de tranquilidade com paisagens sonoras bíblicas."
+            "state" : "translated",
+            "value" : "Reze o Terço e acompanhe seus momentos de tranquilidade com paisagens sonoras bíblicas."
           }
         }
       }
@@ -1522,8 +1524,8 @@
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Rosário"
+            "state" : "translated",
+            "value" : "Terço"
           }
         }
       }
@@ -1532,8 +1534,8 @@
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Rosário concluído"
+            "state" : "translated",
+            "value" : "Terço concluído"
           }
         }
       }
@@ -1542,8 +1544,8 @@
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Visão geral do Rosário"
+            "state" : "translated",
+            "value" : "Visão geral do Terço"
           }
         }
       }
@@ -1564,6 +1566,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Salvar mix"
+          }
+        }
+      }
+    },
+    "Search" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar"
           }
         }
       }
@@ -1926,8 +1938,8 @@
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Iniciar um novo Rosário?"
+            "state" : "translated",
+            "value" : "Iniciar um novo Terço?"
           }
         }
       }
@@ -2109,6 +2121,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Para trocar o tema, toque e segure o widget do Orante na Tela de Início, toque em Editar Widget e escolha Cor de Fundo."
+          }
+        }
+      }
+    },
+    "Today" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoje"
           }
         }
       }

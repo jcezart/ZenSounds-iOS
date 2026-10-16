@@ -10,40 +10,38 @@ struct RootView: View {
 
     var body: some View {
         TabView(selection: navigation.selectionBinding) {
-            NavigationStack(path: $navigation.homePath) {
-                HomeView()
+            Tab("Today", systemImage: AppTab.home.systemImage, value: AppTab.home) {
+                NavigationStack(path: $navigation.homePath) {
+                    HomeView()
+                        .soundsDestinations()
+                }
+                .withCompactPlayer()
             }
-            .withCompactPlayer()
-            .tabItem { Label("Home", systemImage: AppTab.home.systemImage) }
-            .tag(AppTab.home)
 
-            NavigationStack(path: $navigation.biblePath) {
-                BibleBooksView()
+            Tab("Bible", systemImage: AppTab.bible.systemImage, value: AppTab.bible) {
+                NavigationStack(path: $navigation.biblePath) {
+                    BibleBooksView()
+                        .soundsDestinations()
+                }
+                .withCompactPlayer()
             }
-            .withCompactPlayer()
-            .tabItem { Label("Bible", systemImage: AppTab.bible.systemImage) }
-            .tag(AppTab.bible)
 
-            NavigationStack(path: $navigation.rosaryPath) {
-                RosaryView()
+            Tab("Rosary", systemImage: AppTab.rosary.systemImage, value: AppTab.rosary) {
+                NavigationStack(path: $navigation.rosaryPath) {
+                    RosaryView()
+                        .soundsDestinations()
+                }
+                .withCompactPlayer()
             }
-            .withCompactPlayer()
-            .tabItem { Label("Rosary", systemImage: AppTab.rosary.systemImage) }
-            .tag(AppTab.rosary)
 
-            NavigationStack(path: $navigation.soundsPath) {
-                SoundsLibraryView()
+            // Search role: pinned at the trailing edge, and on iOS 26 shown as the separate glass search tab.
+            Tab("Search", systemImage: AppTab.search.systemImage, value: AppTab.search, role: .search) {
+                NavigationStack(path: $navigation.searchPath) {
+                    SearchView()
+                        .soundsDestinations()
+                }
+                .withCompactPlayer()
             }
-            .withCompactPlayer()
-            .tabItem { Label("Sounds", systemImage: AppTab.sounds.systemImage) }
-            .tag(AppTab.sounds)
-
-            NavigationStack(path: $navigation.favoritesPath) {
-                FavoritesView()
-            }
-            .withCompactPlayer()
-            .tabItem { Label("Favorites", systemImage: AppTab.favorites.systemImage) }
-            .tag(AppTab.favorites)
         }
         .tint(palette.accent)
         .fullScreenCover(isPresented: $playerPresentation.isFullPlayerPresented) {

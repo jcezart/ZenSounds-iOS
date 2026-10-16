@@ -3,8 +3,8 @@ import Combine
 
 /// Owns one `NavigationPath` per tab so each tab keeps its own back-stack independently.
 /// Reselecting the already-active tab resets that tab's stack to its root — e.g. opening a
-/// sound from Favorites and then tapping the Favorites tab again returns to the favorites
-/// list instead of leaving the user stuck on the detail screen.
+/// chapter from Search and then tapping the Search tab again returns to its root instead of
+/// leaving the user stuck on the detail screen.
 @MainActor
 final class NavigationModel: ObservableObject {
     static let shared = NavigationModel()
@@ -13,8 +13,7 @@ final class NavigationModel: ObservableObject {
     @Published var homePath = NavigationPath()
     @Published var biblePath = NavigationPath()
     @Published var rosaryPath = NavigationPath()
-    @Published var soundsPath = NavigationPath()
-    @Published var favoritesPath = NavigationPath()
+    @Published var searchPath = NavigationPath()
 
     var selectionBinding: Binding<AppTab> {
         Binding(
@@ -33,8 +32,17 @@ final class NavigationModel: ObservableObject {
         case .home: homePath = NavigationPath()
         case .bible: biblePath = NavigationPath()
         case .rosary: rosaryPath = NavigationPath()
-        case .sounds: soundsPath = NavigationPath()
-        case .favorites: favoritesPath = NavigationPath()
+        case .search: searchPath = NavigationPath()
+        }
+    }
+
+    /// Pushes a route onto the stack of the tab that is currently visible.
+    func push<Route: Hashable>(_ route: Route) {
+        switch selectedTab {
+        case .home: homePath.append(route)
+        case .bible: biblePath.append(route)
+        case .rosary: rosaryPath.append(route)
+        case .search: searchPath.append(route)
         }
     }
 
@@ -42,6 +50,13 @@ final class NavigationModel: ObservableObject {
         selectedTab = .bible
         biblePath = NavigationPath()
         biblePath.append(BibleRoute.verses(bookCode: bookCode, chapter: chapter, focusVerse: focusVerse))
+    }
+
+    /// Opens the full sound library inside Search (Search → Explore → Sounds).
+    func openSoundsLibrary() {
+        selectedTab = .search
+        searchPath = NavigationPath()
+        searchPath.append(SoundsRoute.library)
     }
 }
 
