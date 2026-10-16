@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import WidgetKit
 
 enum BibleLanguage: String, Codable, CaseIterable, Identifiable {
     case pt
@@ -89,6 +90,7 @@ final class AppLanguageStore: ObservableObject {
     @Published var selection: AppLanguage {
         didSet {
             AppLanguage.sharedDefaults.set(selection.rawValue, forKey: AppLanguage.storageKey)
+            refreshWidgetsIfLanguageChanged()
         }
     }
 
@@ -96,6 +98,28 @@ final class AppLanguageStore: ObservableObject {
         selection = AppLanguage.selection(
             from: AppLanguage.sharedDefaults.string(forKey: AppLanguage.storageKey) ?? AppLanguage.system.rawValue
         )
+        // Covers a system language change with "System" selected (iOS relaunches the app).
+        refreshWidgetsIfLanguageChanged()
+    }
+
+    /// The widget keeps its timeline until midnight, so it must be reloaded whenever the effective
+    /// language changes; otherwise it only switches after being removed and added again.
+    private func refreshWidgetsIfLanguageChanged() {
+        let defaults = AppLanguage.sharedDefaults
+        let effective = selection.bibleLanguage
+        let last = defaults.string(forKey: WidgetLanguageSync.storageKey).flatMap(BibleLanguage.init(rawValue:))
+        guard WidgetLanguageSync.needsReload(lastRendered: last, current: effective) else { return }
+        defaults.set(effective.rawValue, forKey: WidgetLanguageSync.storageKey)
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+}
+
+/// Tracks the language the widget was last asked to render in (`zensounds.widget.lastLanguage`).
+enum WidgetLanguageSync {
+    static let storageKey = "zensounds.widget.lastLanguage"
+
+    static func needsReload(lastRendered: BibleLanguage?, current: BibleLanguage) -> Bool {
+        lastRendered != current
     }
 }
 

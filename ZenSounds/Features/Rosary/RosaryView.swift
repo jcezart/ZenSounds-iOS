@@ -5,6 +5,8 @@ struct RosaryView: View {
     @ObservedObject private var languageStore = AppLanguageStore.shared
     @ObservedObject private var superwall = SuperwallService.shared
     @EnvironmentObject private var navigation: NavigationModel
+    /// Starts open; minimizing leaves more room for the prayers (not persisted).
+    @State private var isMysteryCardExpanded = true
     @Environment(\.essencePalette) private var palette
 
     var body: some View {
@@ -61,17 +63,30 @@ struct RosaryView: View {
                 }
                 Spacer()
                 Button("Change") { model.isChoosingSet = true }
+                Button {
+                    withAnimation(.easeInOut(duration: 0.25)) { isMysteryCardExpanded.toggle() }
+                } label: {
+                    Image(systemName: "chevron.down")
+                        .font(.body.weight(.semibold))
+                        .rotationEffect(.degrees(isMysteryCardExpanded ? 180 : 0))
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
+                }
+                .foregroundStyle(palette.secondaryText)
+                .accessibilityLabel(isMysteryCardExpanded ? Text("Hide mysteries") : Text("Show mysteries"))
             }
-            ForEach(model.mysterySet.mysteries) { mystery in
-                Text("\(mystery.number). \(mystery.name.text(for: language))")
-                    .font(.essenceBodyMedium).fixedSize(horizontal: false, vertical: true)
-            }
-            Toggle("Fatima Prayer", isOn: Binding(get: { model.includeFatimaPrayer }, set: model.toggleFatima))
-                .tint(palette.accent)
-            if model.hasProgress {
-                Button("Start new") { model.beginNew() }
-                    .font(.essenceLabelLarge)
-                    .foregroundStyle(palette.accent)
+            if isMysteryCardExpanded {
+                ForEach(model.mysterySet.mysteries) { mystery in
+                    Text("\(mystery.number). \(mystery.name.text(for: language))")
+                        .font(.essenceBodyMedium).fixedSize(horizontal: false, vertical: true)
+                }
+                Toggle("Fatima Prayer", isOn: Binding(get: { model.includeFatimaPrayer }, set: model.toggleFatima))
+                    .tint(palette.accent)
+                if model.hasProgress {
+                    Button("Start new") { model.beginNew() }
+                        .font(.essenceLabelLarge)
+                        .foregroundStyle(palette.accent)
+                }
             }
         }
         .padding(18).background(palette.surface, in: RoundedRectangle(cornerRadius: 22))

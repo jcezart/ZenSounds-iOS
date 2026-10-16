@@ -932,6 +932,16 @@
         }
       }
     },
+    "Hide mysteries" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocultar mistérios"
+          }
+        }
+      }
+    },
     "Hides verse actions" : {
       "localizations" : {
         "pt-BR" : {
@@ -2029,6 +2039,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Mostrar outro versículo"
+          }
+        }
+      }
+    },
+    "Show mysteries" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar mistérios"
           }
         }
       }

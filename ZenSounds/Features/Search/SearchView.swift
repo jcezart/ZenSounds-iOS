@@ -309,10 +309,15 @@ private struct FavoriteVerseCard: View {
     let favorite: FavoriteVerse
     let onOpen: () -> Void
     let onUnfavorite: () -> Void
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     @Environment(\.essencePalette) private var palette
+    @State private var displayed: Verse?
+
+    /// Shown in the current Bible language (saved text until it loads).
+    private var verse: Verse { displayed ?? favorite.verse }
 
     private var reference: String {
-        "\(SearchPresentation.bookName(favorite.book, language: favorite.language)) \(favorite.chapter):\(favorite.verseNumber)"
+        "\(SearchPresentation.bookName(verse.book, language: verse.language)) \(verse.chapter):\(verse.number)"
     }
 
     var body: some View {
@@ -322,7 +327,7 @@ private struct FavoriteVerseCard: View {
                     Text(reference)
                         .font(.essenceLabelMedium)
                         .foregroundStyle(palette.accent)
-                    Text(favorite.text)
+                    Text(verse.text)
                         .font(.scriptureBody)
                         .foregroundStyle(palette.text)
                         .multilineTextAlignment(.leading)
@@ -337,7 +342,7 @@ private struct FavoriteVerseCard: View {
             .accessibilityHint(Text("Opens the chapter"))
 
             HStack {
-                ShareLink(item: "\(favorite.text) — \(reference) · Orante") {
+                ShareLink(item: "\(verse.text) — \(reference) · Orante") {
                     Image(systemName: "square.and.arrow.up")
                         .frame(width: 44, height: 44)
                 }
@@ -356,6 +361,9 @@ private struct FavoriteVerseCard: View {
         }
         .padding(Spacing.md)
         .background(palette.surface, in: RoundedRectangle(cornerRadius: Radius.md, style: .continuous))
+        .task(id: languageStore.selection.bibleLanguage) {
+            displayed = await favorite.verse(in: languageStore.selection.bibleLanguage)
+        }
     }
 }
 

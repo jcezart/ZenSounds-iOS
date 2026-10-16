@@ -140,9 +140,12 @@ private struct FavoriteVerseRow: View {
     let favorite: FavoriteVerse
     let onDelete: () -> Void
 
+    @ObservedObject private var languageStore = AppLanguageStore.shared
     @Environment(\.essencePalette) private var palette
+    @State private var displayed: Verse?
 
-    private var verse: Verse { favorite.verse }
+    /// Shown in the current Bible language (saved text until it loads).
+    private var verse: Verse { displayed ?? favorite.verse }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -151,7 +154,7 @@ private struct FavoriteVerseRow: View {
                     Text(reference)
                         .font(.essenceLabelMedium)
                         .foregroundStyle(palette.accent)
-                    Text(favorite.text)
+                    Text(verse.text)
                         .font(.essenceBodyMedium)
                         .foregroundStyle(palette.text)
                         .lineLimit(3)
@@ -163,7 +166,7 @@ private struct FavoriteVerseRow: View {
             .buttonStyle(.plain)
 
             HStack {
-                ShareLink(item: "\(favorite.text) — \(reference) · Orante") {
+                ShareLink(item: "\(verse.text) — \(reference) · Orante") {
                     Image(systemName: "square.and.arrow.up")
                         .frame(width: 40, height: 40)
                 }
@@ -180,11 +183,14 @@ private struct FavoriteVerseRow: View {
         }
         .padding(16)
         .background(palette.surface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .task(id: languageStore.selection.bibleLanguage) {
+            displayed = await favorite.verse(in: languageStore.selection.bibleLanguage)
+        }
     }
 
     private var reference: String {
-        let bookName = BibleCatalog.shared.book(code: favorite.book)?.name(for: favorite.language) ?? favorite.book
-        return "\(bookName) \(favorite.chapter):\(favorite.verseNumber)"
+        let bookName = BibleCatalog.shared.book(code: verse.book)?.name(for: verse.language) ?? verse.book
+        return "\(bookName) \(verse.chapter):\(verse.number)"
     }
 }
 

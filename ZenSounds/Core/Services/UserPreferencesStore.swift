@@ -91,8 +91,8 @@ final class UserPreferencesStore: ObservableObject {
     }
 
     func toggleFavoriteVerse(_ verse: Verse) {
-        if let index = favoriteVerses.firstIndex(where: { $0.matches(verse) }) {
-            favoriteVerses.remove(at: index)
+        if favoriteVerses.contains(where: { $0.matches(verse) }) {
+            favoriteVerses.removeAll { $0.matches(verse) }
         } else {
             favoriteVerses.insert(
                 FavoriteVerse(book: verse.book, chapter: verse.chapter, verseNumber: verse.number, text: verse.text, language: verse.language),
@@ -173,13 +173,22 @@ final class UserPreferencesStore: ObservableObject {
 }
 
 extension FavoriteVerse {
+    /// The verse as saved (text in the language it was favorited in).
     var verse: Verse {
         Verse(book: book, chapter: chapter, number: verseNumber, text: text, language: language)
+    }
+
+    /// The same reference in `language`: favorites keep the text they were saved with, but are shown
+    /// in the current Bible language. Falls back to the saved text if the verse can't be loaded.
+    func verse(in language: BibleLanguage) async -> Verse {
+        guard language != self.language else { return verse }
+        return await BibleRepository.shared.verseAsync(bookCode: book, chapter: chapter, number: verseNumber, language: language) ?? verse
     }
 }
 
 private extension FavoriteVerse {
     func matches(_ verse: Verse) -> Bool {
-        book == verse.book && chapter == verse.chapter && verseNumber == verse.number && language == verse.language
+        // A favorite is a reference: it stays favorited after switching the Bible language.
+        book == verse.book && chapter == verse.chapter && verseNumber == verse.number
     }
 }

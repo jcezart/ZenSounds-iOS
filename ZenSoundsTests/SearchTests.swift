@@ -114,3 +114,33 @@ struct SearchMatchingTests {
         #expect(await VerseSearchIndex.shared.search("ab", language: .pt, bookCodes: codes, limit: 50).isEmpty)
     }
 }
+
+@MainActor
+struct LanguageFollowUpTests {
+    @Test func widgetReloadsOnlyWhenTheEffectiveLanguageChanges() {
+        #expect(WidgetLanguageSync.needsReload(lastRendered: nil, current: .pt))
+        #expect(WidgetLanguageSync.needsReload(lastRendered: .pt, current: .en))
+        #expect(!WidgetLanguageSync.needsReload(lastRendered: .en, current: .en))
+    }
+
+    @Test func favoritesFollowTheCurrentBibleLanguage() async throws {
+        let suite = "zensounds.favorites.language.tests.\(UUID().uuidString)"
+        let defaults = try #require(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+
+        let store = UserPreferencesStore(defaults: defaults)
+        let saved = try #require(BibleRepository.shared.verse(bookCode: "JHN", chapter: 3, number: 16, language: .pt))
+        store.toggleFavoriteVerse(saved)
+        let favorite = try #require(store.favoriteVerses.first)
+
+        let english = await favorite.verse(in: .en)
+        #expect(english.language == .en)
+        #expect(english.text == BibleRepository.shared.verse(bookCode: "JHN", chapter: 3, number: 16, language: .en)?.text)
+        #expect(english.text != saved.text)
+
+        // Still favorited in the other language, and unfavoriting there removes it.
+        #expect(store.isFavoriteVerse(english))
+        store.toggleFavoriteVerse(english)
+        #expect(store.favoriteVerses.isEmpty)
+    }
+}
