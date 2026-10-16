@@ -68,10 +68,7 @@ Docs de histórico: `MIGRATION_PROGRESS.md` (diário), `APP_STORE_READINESS_AUDI
   Artes vetoriais próprias no asset catalog (SVG, preserve vector data): `BibleHero`, `ExplorePsalms`,
   `DailyWordLeaf` (template).
 - Widget: `ZenSoundsWidgets.swift` (Small/Medium/Large/accessoryRectangular/accessoryInline, tema por
-  `WidgetConfigurationIntent`, fallback Terracota sem `plus_active`; segundo widget de bloqueio
-  `ZenSoundsLargeTextLockWidget`, kind `ZenSoundsDailyWordLargeText`, só accessoryRectangular, letra maior e
-  versículo resumido — o retangular é o maior tamanho que o iOS permite na tela de bloqueio; previews de
-  accessory saem em branco no Xcode), `WidgetDailyWordStore` (**espelho** de
+  `WidgetConfigurationIntent`, fallback Terracota sem `plus_active`), `WidgetDailyWordStore` (**espelho** de
   `DailyWordStore` — manter chaves em sincronia), `ShuffleDailyWordIntent`, JSONs próprios.
 
 ## Fluxo de áudio e narração

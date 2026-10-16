@@ -117,7 +117,7 @@ struct DailyWordProvider: AppIntentTimelineProvider {
         return Timeline(entries: [entry], policy: .after(nextMidnight))
     }
 
-    func currentEntry(backgroundTheme: WidgetBackgroundTheme) -> DailyWordEntry {
+    private func currentEntry(backgroundTheme: WidgetBackgroundTheme) -> DailyWordEntry {
         let source = WidgetDataSource.shared
         let store = WidgetDailyWordStore()
         let ref = store.reference(for: Date(), readings: source.readings)
@@ -291,51 +291,6 @@ struct LockScreenRectangularView: View {
     }
 }
 
-/// Lock Screen "large text" option: same rectangular slot (the largest iOS allows on the Lock Screen), with
-/// the reference on top and the verse in bigger serif letters. Long verses are shortened; a tap opens the chapter.
-struct LockScreenLargeTextView: View {
-    let entry: DailyWordEntry
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 1) {
-            Text("\(entry.bookName) \(entry.reading.chapter):\(entry.reading.verse)")
-                .font(.system(size: 11, weight: .bold))
-                .lineLimit(1)
-                .opacity(0.75)
-                .widgetAccentable()
-
-            Text(entry.text)
-                .font(.system(size: 15, weight: .semibold, design: .serif))
-                .lineLimit(3)
-                .minimumScaleFactor(0.85)
-                .layoutPriority(1)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .foregroundStyle(.white)
-        .containerBackground(for: .widget) { Color.clear }
-        .widgetURL(entry.deepLinkURL)
-    }
-}
-
-/// Timeline for the Lock Screen widget (no color option: the Lock Screen tints widgets itself).
-struct LockScreenDailyWordProvider: TimelineProvider {
-    func placeholder(in context: Context) -> DailyWordEntry {
-        DailyWordProvider().placeholder(in: context)
-    }
-
-    func getSnapshot(in context: Context, completion: @escaping (DailyWordEntry) -> Void) {
-        completion(DailyWordProvider().currentEntry(backgroundTheme: .terracotta))
-    }
-
-    func getTimeline(in context: Context, completion: @escaping (Timeline<DailyWordEntry>) -> Void) {
-        let entry = DailyWordProvider().currentEntry(backgroundTheme: .terracotta)
-        let nextMidnight = Calendar.current.nextDate(
-            after: Date(), matching: DateComponents(hour: 0, minute: 0), matchingPolicy: .nextTime
-        ) ?? Date().addingTimeInterval(3600)
-        completion(Timeline(entries: [entry], policy: .after(nextMidnight)))
-    }
-}
-
 struct LockScreenInlineView: View {
     let entry: DailyWordEntry
 
@@ -505,20 +460,6 @@ struct ZenSoundsWidgets: Widget {
     }
 }
 
-/// Second Lock Screen option with larger letters (separate kind, so it appears as its own choice in the gallery).
-struct ZenSoundsLargeTextLockWidget: Widget {
-    let kind: String = "ZenSoundsDailyWordLargeText"
-
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: LockScreenDailyWordProvider()) { entry in
-            LockScreenLargeTextView(entry: entry)
-        }
-        .configurationDisplayName("Word of the Day · Large text")
-        .description("Today's verse in larger letters. Long verses are shortened; tap to read the chapter.")
-        .supportedFamilies([.accessoryRectangular])
-    }
-}
-
 #if DEBUG
 #Preview(as: .systemSmall) {
     ZenSoundsWidgets()
@@ -548,11 +489,5 @@ struct ZenSoundsLargeTextLockWidget: Widget {
     ZenSoundsWidgets()
 } timeline: {
     DailyWordEntry(date: .now, reading: WidgetReadingRef(book: "MAT", chapter: 28, verse: 20), text: "Ensinando-lhes a guardar todas as coisas que eu vos tenho mandado.", bookName: "Mateus", backgroundTheme: .terracotta)
-}
-#Preview("Large text", as: .accessoryRectangular) {
-    ZenSoundsLargeTextLockWidget()
-} timeline: {
-    DailyWordEntry(date: .now, reading: WidgetReadingRef(book: "PSA", chapter: 23, verse: 1), text: "O SENHOR é meu pastor, nada me faltará.", bookName: "Salmos", backgroundTheme: .terracotta)
-    DailyWordEntry(date: .now, reading: WidgetReadingRef(book: "MAT", chapter: 6, verse: 26), text: "Olhai para as aves do céu, que não semeiam, nem ceifam, nem ajuntam em celeiros; e contudo vosso Pai celestial as alimenta.", bookName: "Mateus", backgroundTheme: .terracotta)
 }
 #endif
