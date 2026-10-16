@@ -209,15 +209,3 @@ private struct FavoritesEmptyState: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
-
-private extension FavoriteVerse {
-    var verse: Verse {
-        Verse(
-            book: book,
-            chapter: chapter,
-            number: verseNumber,
-            text: text,
-            language: language
-        )
-    }
-}

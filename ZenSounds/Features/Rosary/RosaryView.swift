@@ -4,6 +4,7 @@ struct RosaryView: View {
     @StateObject private var model = RosaryViewModel()
     @ObservedObject private var languageStore = AppLanguageStore.shared
     @ObservedObject private var superwall = SuperwallService.shared
+    @EnvironmentObject private var navigation: NavigationModel
     @Environment(\.essencePalette) private var palette
 
     var body: some View {
@@ -35,6 +36,13 @@ struct RosaryView: View {
             Button("Start new", role: .destructive) { model.confirmSetChange() }
         } message: { Text("Changing the mysteries restarts the current progress.") }
         .onChange(of: languageStore.selection) { model.languageDidChange() }
+        .onChange(of: navigation.pendingRosarySet, initial: true) { _, requested in
+            // Search → Recent/Mysteries: same set just opens the tab; another set asks before
+            // restarting the current progress (requestSet).
+            guard let requested else { return }
+            navigation.pendingRosarySet = nil
+            if requested != model.mysterySetID { model.requestSet(requested) }
+        }
     }
 
     private var header: some View {
@@ -281,7 +289,7 @@ struct RosaryView: View {
 }
 
 /// Prayer names and bead accessibility text in the Rosary's content language (same pt/en source as the prayer card).
-private enum RosaryLabels {
+enum RosaryLabels {
     static func prayerName(_ prayer: RosaryPrayerKind, language: BibleLanguage) -> String {
         if language == .pt {
             switch prayer {

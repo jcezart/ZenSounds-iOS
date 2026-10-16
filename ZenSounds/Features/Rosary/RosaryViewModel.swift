@@ -80,8 +80,9 @@ final class RosaryViewModel: ObservableObject {
     private let entitlements: any EntitlementProviding
     private let premiumGate: PremiumGate
     private var guidedStateObservation: AnyCancellable?
+    private let recordRecent: (RecentItem) -> Void
 
-    init(repository: RosaryRepository? = nil, progressStore: RosaryProgressStore? = nil, guided: RosaryGuidedController? = nil, entitlements: (any EntitlementProviding)? = nil, premiumGate: PremiumGate? = nil, date: Date = Date(), calendar: Calendar = .current) {
+    init(repository: RosaryRepository? = nil, progressStore: RosaryProgressStore? = nil, guided: RosaryGuidedController? = nil, entitlements: (any EntitlementProviding)? = nil, premiumGate: PremiumGate? = nil, recordRecent: ((RecentItem) -> Void)? = nil, date: Date = Date(), calendar: Calendar = .current) {
         let repository = repository ?? .shared
         let progressStore = progressStore ?? .shared
         let guided = guided ?? RosaryGuidedController()
@@ -91,6 +92,7 @@ final class RosaryViewModel: ObservableObject {
         self.guided = guided
         self.entitlements = entitlements
         self.premiumGate = premiumGate ?? SuperwallService.shared.premiumGate
+        self.recordRecent = recordRecent ?? { UserPreferencesStore.shared.recordRecent($0) }
         if let saved = progressStore.progress {
             mysterySetID = saved.mysterySet
             includeFatimaPrayer = saved.includeFatimaPrayer
@@ -141,6 +143,7 @@ final class RosaryViewModel: ObservableObject {
     }
     func next() {
         guided.invalidateSpeech()
+        recordPrayed()
         guard let next = RosaryNavigationRules.nextIndex(current: currentIndex, count: steps.count) else { complete(); return }
         currentIndex = next; persist()
         speakCurrentIfGuidedAllowed()
@@ -193,9 +196,12 @@ final class RosaryViewModel: ObservableObject {
     }
     private func guidedDidFinish(stepID: String) {
         guard currentStep?.id == stepID else { return }
+        recordPrayed()
         guard let next = RosaryNavigationRules.nextIndex(current: currentIndex, count: steps.count) else { complete(); return }
         currentIndex = next; persist(); speakCurrent()
     }
+    /// Advancing a bead puts this set of mysteries at the top of Search → Recent.
+    private func recordPrayed() { recordRecent(.mysteries(mysterySetID)) }
     private func complete() { guided.complete(); isCompleted = true; progressStore.clear() }
     private func persist() {
         guard !isCompleted, let step = currentStep else { return }

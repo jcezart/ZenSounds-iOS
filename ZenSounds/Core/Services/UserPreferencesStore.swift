@@ -29,6 +29,8 @@ final class UserPreferencesStore: ObservableObject {
     @Published private(set) var readingPosition: ReadingPosition?
     /// Last sound, soundscape or saved mix played; shown by the idle "Ambient sound" mini-player.
     @Published private(set) var lastAmbient: AmbientItem?
+    /// Search → Recent: chapters, books and mysteries opened, newest first (at most 10).
+    @Published private(set) var recents: [RecentItem]
 
     private let defaults: UserDefaults
     private let soundsKey = "zensounds.favorite_sounds"
@@ -36,6 +38,7 @@ final class UserPreferencesStore: ObservableObject {
     private let mixesKey = "zensounds.saved_mixes"
     private let readingPositionKey = "zensounds.reading_position"
     private let lastAmbientKey = "zensounds.ambient.lastSound"
+    private let recentsKey = "zensounds.recents.v1"
 
     private convenience init() {
         self.init(defaults: .standard)
@@ -52,6 +55,7 @@ final class UserPreferencesStore: ObservableObject {
         savedMixes = Self.removingUnavailableSounds(from: storedMixes)
         readingPosition = Self.decode(ReadingPosition.self, defaults.data(forKey: readingPositionKey))
         lastAmbient = Self.decode(AmbientItem.self, defaults.data(forKey: lastAmbientKey))
+        recents = Array((Self.decode([RecentItem].self, defaults.data(forKey: recentsKey)) ?? []).prefix(RecentsRules.maxStored))
 
         if favoriteSoundIds != storedFavoriteSoundIDs {
             defaults.set(Array(favoriteSoundIds), forKey: soundsKey)
@@ -143,6 +147,17 @@ final class UserPreferencesStore: ObservableObject {
         defaults.set(Self.encode(item), forKey: lastAmbientKey)
     }
 
+    func recordRecent(_ item: RecentItem) {
+        guard recents.first != item else { return }
+        recents = RecentsRules.adding(item, to: recents)
+        defaults.set(Self.encode(recents), forKey: recentsKey)
+    }
+
+    func clearRecents() {
+        recents = []
+        defaults.removeObject(forKey: recentsKey)
+    }
+
     /// The idle mini-player's item: the last one played if it still exists, otherwise Rain.
     var resolvedLastAmbient: AmbientItem {
         guard let lastAmbient else { return .fallback }
@@ -154,6 +169,12 @@ final class UserPreferencesStore: ObservableObject {
     private static func decode<T: Decodable>(_ type: T.Type, _ data: Data?) -> T? {
         guard let data else { return nil }
         return try? JSONDecoder().decode(type, from: data)
+    }
+}
+
+extension FavoriteVerse {
+    var verse: Verse {
+        Verse(book: book, chapter: chapter, number: verseNumber, text: text, language: language)
     }
 }
 

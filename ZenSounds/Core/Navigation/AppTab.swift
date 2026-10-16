@@ -39,4 +39,7 @@ enum SoundsRoute: Hashable {
 /// Screens reachable from the Search tab.
 enum SearchRoute: Hashable {
     case favorites
+    /// Rosary prayers with their full text (Search → Explore → Prayers).
+    case prayers
+    case prayer(id: String)
 }

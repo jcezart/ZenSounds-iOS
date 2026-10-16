@@ -5,6 +5,7 @@ struct BibleChaptersView: View {
     let language: BibleLanguage
 
     @Environment(\.essencePalette) private var palette
+    @State private var didRecordRecent = false
 
     private var book: BibleBook? { BibleCatalog.shared.book(code: bookCode) }
 
@@ -21,6 +22,12 @@ struct BibleChaptersView: View {
                     .padding(Spacing.screen)
                 }
                 .navigationTitle(book.name(for: language))
+                .onAppear {
+                    // Once per visit: coming back from a chapter must not push the book above it.
+                    guard !didRecordRecent else { return }
+                    didRecordRecent = true
+                    UserPreferencesStore.shared.recordRecent(.book(bookCode: book.code))
+                }
             } else {
                 ContentUnavailableView("Book not found", systemImage: "book.closed")
             }

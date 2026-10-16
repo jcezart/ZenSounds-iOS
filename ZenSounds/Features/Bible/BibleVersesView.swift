@@ -302,6 +302,7 @@ struct BibleVersesView: View {
         isLoading = false
         if !verses.isEmpty {
             prefs.saveReading(bookCode: current.bookCode, chapter: current.chapter)
+            prefs.recordRecent(.chapter(bookCode: current.bookCode, chapter: current.chapter))
         }
     }
 }

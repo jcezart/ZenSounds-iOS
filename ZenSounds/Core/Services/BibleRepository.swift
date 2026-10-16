@@ -48,6 +48,23 @@ nonisolated final class BibleRepository: @unchecked Sendable {
         }.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
+    /// Every verse of a book, decoding its file once (used to build the verse search index; not cached).
+    func bookVerses(bookCode: String, language: BibleLanguage) -> [(chapter: Int, number: Int, text: String)] {
+        guard let url = Bundle.main.url(forResource: "\(bookCode)_\(language.rawValue)", withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let file = try? JSONDecoder().decode(BibleRawFile.self, from: data) else {
+            return []
+        }
+        var result: [(chapter: Int, number: Int, text: String)] = []
+        for (key, wrapper) in file.chapters {
+            guard let chapter = Int(key) else { continue }
+            for case .verse(let rawVerse) in wrapper.chapter.content {
+                result.append((chapter, rawVerse.number, Self.joined(rawVerse.content)))
+            }
+        }
+        return result.sorted { ($0.chapter, $0.number) < ($1.chapter, $1.number) }
+    }
+
     private func load(bookCode: String, number: Int, language: BibleLanguage) -> (verses: [Verse], subtitle: String)? {
         guard let url = Bundle.main.url(forResource: "\(bookCode)_\(language.rawValue)", withExtension: "json"),
               let data = try? Data(contentsOf: url),

@@ -52,6 +52,14 @@ final class NavigationModel: ObservableObject {
         biblePath.append(BibleRoute.verses(bookCode: bookCode, chapter: chapter, focusVerse: focusVerse))
     }
 
+    /// Set of mysteries requested from outside the Rosary tab (Search); `RosaryView` consumes it.
+    @Published var pendingRosarySet: RosaryMysterySetID?
+
+    func openRosary(set: RosaryMysterySetID? = nil) {
+        pendingRosarySet = set
+        selectedTab = .rosary
+    }
+
     /// Opens the full sound library inside Search (Search → Explore → Sounds).
     func openSoundsLibrary() {
         selectedTab = .search

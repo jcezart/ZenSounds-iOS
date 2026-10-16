@@ -422,6 +422,26 @@
         }
       }
     },
+    "Books" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Livros"
+          }
+        }
+      }
+    },
+    "Books, passages and prayers" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Livros, passagens e orações"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "localizations" : {
         "pt-BR" : {
@@ -553,6 +573,36 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Escolha os mistérios"
+          }
+        }
+      }
+    },
+    "Clear" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limpar"
+          }
+        }
+      }
+    },
+    "Clear recent items?" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limpar os recentes?"
+          }
+        }
+      }
+    },
+    "Clear text" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limpar texto"
           }
         }
       }
@@ -833,7 +883,6 @@
       }
     },
     "Favorites" : {
-      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -1107,6 +1156,16 @@
         }
       }
     },
+    "Mysteries" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mistérios"
+          }
+        }
+      }
+    },
     "Narration could not be resumed." : {
       "localizations" : {
         "pt-BR" : {
@@ -1350,6 +1409,16 @@
         }
       }
     },
+    "Opens the chapter" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre o capítulo"
+          }
+        }
+      }
+    },
     "Opens the player" : {
       "localizations" : {
         "pt-BR" : {
@@ -1408,6 +1477,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Outros sons"
+          }
+        }
+      }
+    },
+    "Passages" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passagens"
           }
         }
       }
@@ -1572,6 +1651,16 @@
         }
       }
     },
+    "Prayers" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orações"
+          }
+        }
+      }
+    },
     "Premium" : {
       "localizations" : {
         "pt-BR" : {
@@ -1676,6 +1765,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Velocidade de Leitura"
+          }
+        }
+      }
+    },
+    "Recent" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recentes"
           }
         }
       }
@@ -1865,7 +1964,6 @@
       }
     },
     "See all" : {
-      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -2401,6 +2499,16 @@
         }
       }
     },
+    "Tap the heart on a verse to save it here." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toque no coração de um versículo para guardá-lo aqui."
+          }
+        }
+      }
+    },
     "Terms of Use" : {
       "localizations" : {
         "pt-BR" : {
@@ -2447,6 +2555,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Tema"
+          }
+        }
+      }
+    },
+    "This removes the books, chapters and mysteries you opened recently." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isso apaga os livros, capítulos e mistérios abertos recentemente."
           }
         }
       }
@@ -2503,7 +2621,6 @@
       }
     },
     "Verses" : {
-      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {

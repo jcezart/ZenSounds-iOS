@@ -243,7 +243,8 @@ struct RosaryGuidedPremiumTests {
             progressStore: store,
             guided: RosaryGuidedController(narration: narration),
             entitlements: entitlements,
-            premiumGate: gate
+            premiumGate: gate,
+            recordRecent: { _ in }
         )
     }
 
