@@ -166,6 +166,7 @@
       }
     },
     "%lld. %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -182,6 +183,7 @@
       }
     },
     "%lldº · %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1612,6 +1614,7 @@
       }
     },
     "Pray at your pace or follow the guided reading." : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {

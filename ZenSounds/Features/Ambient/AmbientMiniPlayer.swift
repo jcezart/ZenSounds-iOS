@@ -35,6 +35,7 @@ struct AmbientMiniPlayer: View {
                         Text("Ambient sound")
                             .font(.essenceLabelMedium)
                             .foregroundStyle(palette.secondaryText)
+                            .lineLimit(1)
                         Text(title)
                             .font(.essenceBodyMedium)
                             .foregroundStyle(palette.text)
