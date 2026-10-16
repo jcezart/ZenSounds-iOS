@@ -29,7 +29,9 @@ struct ZenSoundsApp: App {
     private func handleIncomingURL(_ url: URL) {
         OnboardingState.shared.suppressForCurrentLaunch()
         NotificationCenter.default.post(name: .oranteDeepLinkReceived, object: nil)
-        if BibleDeepLink.parse(url) != nil {
+        if PlusDeepLink.matches(url) {
+            superwall.gate(.widgetTheme(id: "widget"), parameters: ["source": "widget"]) {}
+        } else if BibleDeepLink.parse(url) != nil {
             DeepLinkHandler.handle(url)
         } else if !superwall.handleDeepLink(url) {
             DeepLinkHandler.handle(url)

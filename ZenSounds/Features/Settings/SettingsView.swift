@@ -48,9 +48,8 @@ struct SettingsView: View {
 
                     if !superwall.hasPlus {
                         Button("Discover Orante+") {
-                            superwall.registerNonGated(
-                                placement: SuperwallService.Placement.settingsUpgrade
-                            )
+                            // Same gate as every paid entry: paywall if configured, otherwise the native notice.
+                            superwall.gate(.upgrade) {}
                         }
                     }
 
@@ -77,11 +76,7 @@ struct SettingsView: View {
                         HStack {
                             Text("Widget themes")
                             Spacer()
-                            if !superwall.hasPlus {
-                                Text("+")
-                                    .font(.headline)
-                                    .accessibilityLabel("Requires Orante+")
-                            }
+                            PremiumLockBadge(feature: .widgetTheme(id: "premium"))
                         }
                     }
 
@@ -90,6 +85,22 @@ struct SettingsView: View {
                     Link("Support", destination: Self.supportURL)
                 }
                 BibleNarrationSettingsSection()
+                #if DEBUG
+                // Debug builds only: verbatim labels keep these strings out of the shipped catalog.
+                Section {
+                    Picker(selection: $superwall.debugPlusOverride) {
+                        Text(verbatim: "Automático").tag(DebugPlusOverride.automatic)
+                        Text(verbatim: "Assinante").tag(DebugPlusOverride.subscriber)
+                        Text(verbatim: "Não assinante").tag(DebugPlusOverride.nonSubscriber)
+                    } label: {
+                        Text(verbatim: "Simular Orante+")
+                    }
+                } header: {
+                    Text(verbatim: "Debug")
+                } footer: {
+                    Text(verbatim: "Sobrescreve hasPlus apenas em builds Debug. Não existe em Release.")
+                }
+                #endif
                 Section("About") {
                     if let manifest = BibleCatalog.shared.manifest {
                         ForEach(manifest.translations) { translation in
@@ -147,14 +158,15 @@ struct SettingsView: View {
     private func restore() {
         isRestoring = true
         Task {
-            let outcome = await superwall.restorePurchases()
-            switch outcome {
+            // Failures and "nothing found" are announced by Superwall's own (localized) alert; the app only
+            // speaks when the SDK stayed silent, so there is always exactly one alert.
+            switch await superwall.restorePurchases() {
             case .restored:
                 restoreMessage = "Your Orante+ subscription was restored."
             case .nothingFound:
                 restoreMessage = "No active subscription was found."
-            case .failed:
-                restoreMessage = "Purchases couldn't be restored. Please try again."
+            case nil:
+                break
             }
             isRestoring = false
         }

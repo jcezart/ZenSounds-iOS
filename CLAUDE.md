@@ -73,11 +73,26 @@ Docs de histórico: `MIGRATION_PROGRESS.md` (diário), `APP_STORE_READINESS_AUDI
   `good-shepherd`, timer 5/15/30/60 com fade padrão (10 s), widget Terracota. Todo o resto é Plus.
 - **Fonte única da verdade: `PremiumAccessRules` + `PremiumGate`.** Toda entrada paga passa por `gate(...)`.
   Estado `.unknown` não mostra badges e usa o cache do último Plus confirmado.
+  **Nunca confiar no `feature` do Superwall:** ele roda quando o placement não é encontrado, sem audiência ou em
+  holdout (`.skipped`), e não roda em erro. O registrar usa `PaywallPresentationHandler` e entrega um
+  `PaywallOutcome`; o gate re-checa `hasPlus`. Depois de compra/restore, espera até 3 s
+  (`waitForPlusAfterPurchase`). Sem Plus e sem paywall exibido, mostra `PremiumLockedNotice` (UIAlertController
+  no topo, funciona sobre sheets).
+  Debug: Ajustes > "Simular Orante+" (`DebugPlusOverride`, chave `orante.debug.plusOverride`), todo em `#if DEBUG`
+  (conferido no binário Release). O `plus_active` do widget usa o valor efetivo (com o override); o cache
+  `orante.plus.lastConfirmedActive` guarda sempre o valor real.
   Narração de versículo: sempre via `VerseNarrationStarter.start` (botões e ação de VoiceOver). Terço Guiado sem
   Plus: Próximo/Anterior caem para Manual sem narrar; progresso salvo como Guiado reabre em Manual
-  (`RosaryViewModel`, `EntitlementProviding` injetável). Selo "+" reutilizável: `OrantePlusBadge`.
+  (`RosaryViewModel`, `EntitlementProviding` injetável) e chamam o gate (aviso/paywall). Cadeado único:
+  `PremiumLockBadge` (`Core/Theme`), visível só para não assinante confirmado (nunca em `.unknown`).
+  Restaurar: o alerta do SDK (`SuperwallOptions.paywalls.restoreFailed`) é localizado e o app só mostra o seu
+  quando o SDK não mostrou (`RestoreAlertRules`) — um único alerta.
 - Placements: `premium_sound`, `premium_soundscape`, `create_mix`, `bible_narration`, `guided_rosary`,
-  `custom_timer`, `widget_theme` (gated/feature) e `onboarding_end`, `settings_upgrade` (non-gated).
+  `custom_timer`, `widget_theme`, `settings_upgrade` ("Conhecer Orante+", via gate `.upgrade`) e `onboarding_end`
+  (único non-gated sem aviso: não é recurso pago).
+- Widget: uma cor paga sem Plus vira Terracota com o selo "Cor do Orante+". Na Tela de Início, o toque abre
+  `zensounds://plus` (`PlusDeepLink`), que chama `widget_theme` com `source=widget`. A lista de cores usa
+  `WidgetBackgroundThemeOptionsProvider` (IntentItem): "(Orante+)" para quem não assina; o parâmetro continua AppEnum.
 - URLs: Privacidade https://jcapps.dev.br/orante/privacidade · Suporte https://jcapps.dev.br/orante/suporte ·
   Termos = EULA padrão da Apple.
 
@@ -117,8 +132,11 @@ esquema `zensounds://` (rotas bíblicas + Superwall), chaves de UserDefaults exi
 - Xcode MCP: `BuildProject` (scheme `ZenSounds` já compila o widget; use `buildForTesting: true`),
   `RunAllTests`, `XcodeRefreshCodeIssuesInFile` para checagem rápida. `RunCodeSnippet` historicamente falha aqui.
 - Se o runner devolver "No result", recompilar e rodar de novo antes de concluir algo.
-- Baseline 2026-10-14 (fim da sessão 2): build OK, 0 avisos; **104/104 testes aprovados** (casos parametrizados
-  contam separadamente; eram 94 no início do dia).
+- Baseline 2026-10-15 (sessão 3): build Debug OK, 0 avisos; **127/127 testes aprovados** (casos parametrizados
+  contam separadamente). Build Release funciona via CLI:
+  `xcodebuild -project ZenSounds.xcodeproj -scheme ZenSounds -configuration Release -destination
+  'generic/platform=iOS Simulator' -derivedDataPath /tmp/OranteRelease CODE_SIGNING_ALLOWED=NO build`.
+- `PlacementCase` tem `testDescription` estável (antes a ordem do dicionário causava "No result").
 
 ## Pendências (atualizado em 2026-10-14, fim da sessão 2)
 Resolvidas na sessão 2: URLs jcapps.dev.br + link Suporte; acessos sem paywall (ação VoiceOver do versículo,
@@ -136,4 +154,10 @@ Em aberto:
    pt/en no código. Os rótulos de catálogo do diagrama ("Decade %lld" etc.) seguem o locale da interface. Os dois
    só divergem com Idioma = Sistema em um iPhone que não está em pt nem en.
 4. Os docs citam `accessoryCircular` no widget, mas o código não tem.
+6. Achados no simulador em 2026-10-15 (não corrigidos):
+   - Cartão da Palavra do Dia: "Abrir capítulo" quebra em várias linhas (pior durante a narração, com
+     pausa/parar ocupando espaço).
+   - Texto de Salmos 34:18 (pt) com "sava" (provável "salva") no JSON da Bíblia.
+   - Segmento "Guiado" do Terço sem selo "+".
+   - Diagrama do Terço muito claro, e a faixa de contas fica atrás da tab bar sem rolar.
 5. Tarefa 8: Dynamic Type (`.system(size:)` em widget e componentes) e a lista de testes físicos, sandbox e Archive.

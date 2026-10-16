@@ -223,11 +223,27 @@ struct RosaryGuidedPremiumTests {
         return (RosaryProgressStore(defaults: defaults), defaults, suite)
     }
 
-    private func makeModel(store: RosaryProgressStore, narration: MockRosaryNarration, entitlements: MutableEntitlements) -> RosaryViewModel {
-        RosaryViewModel(
+    /// Records the gate's answer (paywall not found → native notice) for guided taps without Plus.
+    private final class LockedRecorder {
+        var locked: [PremiumFeature] = []
+    }
+
+    private func makeModel(
+        store: RosaryProgressStore,
+        narration: MockRosaryNarration,
+        entitlements: MutableEntitlements,
+        recorder: LockedRecorder = LockedRecorder()
+    ) -> RosaryViewModel {
+        let gate = PremiumGate(
+            entitlements: entitlements,
+            registrar: { _, onOutcome in onOutcome(.notPresented) },
+            onLocked: { recorder.locked.append($0) }
+        )
+        return RosaryViewModel(
             progressStore: store,
             guided: RosaryGuidedController(narration: narration),
-            entitlements: entitlements
+            entitlements: entitlements,
+            premiumGate: gate
         )
     }
 
@@ -258,7 +274,8 @@ struct RosaryGuidedPremiumTests {
         defer { defaults.removePersistentDomain(forName: suite) }
         let narration = MockRosaryNarration()
         let entitlements = MutableEntitlements(hasPlus: true)
-        let model = makeModel(store: store, narration: narration, entitlements: entitlements)
+        let recorder = LockedRecorder()
+        let model = makeModel(store: store, narration: narration, entitlements: entitlements, recorder: recorder)
         model.setMode(.guided)
         entitlements.hasPlus = false
 
@@ -266,12 +283,15 @@ struct RosaryGuidedPremiumTests {
         #expect(model.currentIndex == 1)
         #expect(model.mode == .manual)
         #expect(narration.spokenIDs.isEmpty)
+        #expect(recorder.locked == [.guidedRosary])
 
         model.setMode(.guided)
         model.previous()
         #expect(model.currentIndex == 0)
         #expect(model.mode == .manual)
         #expect(narration.spokenIDs.isEmpty)
+        // Every guided tap without Plus gets a visible answer (here: the native notice).
+        #expect(recorder.locked == [.guidedRosary, .guidedRosary])
     }
 
     @Test func nextAndPreviousInGuidedModeWithPlusNarrate() {

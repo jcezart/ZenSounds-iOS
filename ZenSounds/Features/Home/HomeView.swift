@@ -330,6 +330,10 @@ private struct HomeMixCircle: View {
                             .font(.system(size: 28, weight: .medium))
                             .foregroundStyle(palette.secondaryText)
                     }
+                    .overlay(alignment: .topTrailing) {
+                        PremiumLockBadge(feature: .mixer)
+                            .padding(6)
+                    }
                 Text("My mix")
                     .font(.essenceBodySmall)
                     .foregroundStyle(palette.text)

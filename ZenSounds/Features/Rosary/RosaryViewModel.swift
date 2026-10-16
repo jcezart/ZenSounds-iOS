@@ -78,9 +78,10 @@ final class RosaryViewModel: ObservableObject {
     let progressStore: RosaryProgressStore
     let guided: RosaryGuidedController
     private let entitlements: any EntitlementProviding
+    private let premiumGate: PremiumGate
     private var guidedStateObservation: AnyCancellable?
 
-    init(repository: RosaryRepository? = nil, progressStore: RosaryProgressStore? = nil, guided: RosaryGuidedController? = nil, entitlements: (any EntitlementProviding)? = nil, date: Date = Date(), calendar: Calendar = .current) {
+    init(repository: RosaryRepository? = nil, progressStore: RosaryProgressStore? = nil, guided: RosaryGuidedController? = nil, entitlements: (any EntitlementProviding)? = nil, premiumGate: PremiumGate? = nil, date: Date = Date(), calendar: Calendar = .current) {
         let repository = repository ?? .shared
         let progressStore = progressStore ?? .shared
         let guided = guided ?? RosaryGuidedController()
@@ -89,6 +90,7 @@ final class RosaryViewModel: ObservableObject {
         self.progressStore = progressStore
         self.guided = guided
         self.entitlements = entitlements
+        self.premiumGate = premiumGate ?? SuperwallService.shared.premiumGate
         if let saved = progressStore.progress {
             mysterySetID = saved.mysterySet
             includeFatimaPrayer = saved.includeFatimaPrayer
@@ -168,7 +170,15 @@ final class RosaryViewModel: ObservableObject {
     /// falls back to Manual mode at the new position instead of speaking.
     private func speakCurrentIfGuidedAllowed() {
         guard mode == .guided else { return }
-        guard Self.canUseGuided(entitlements) else { mode = .manual; persist(); return }
+        guard Self.canUseGuided(entitlements) else {
+            // Visible answer for the tap: paywall or the Orante+ notice. A purchase resumes guided mode here.
+            mode = .manual; persist()
+            premiumGate.gate(.guidedRosary) { [weak self] in
+                self?.setMode(.guided)
+                self?.speakCurrent()
+            }
+            return
+        }
         speakCurrent()
     }
 

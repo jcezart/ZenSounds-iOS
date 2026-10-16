@@ -291,3 +291,28 @@ Complemento (mesma data): o usuário definiu App Icon = `AppIcon` no Xcode. O In
 aparece certo na Tela de Início do simulador. Os PNGs legados e `CFBundleIconFiles` foram mantidos por decisão do
 usuário, e o `CFBundleName` continua "ZenSounds" (não renomear o produto). Na mesma edição no Xcode, a orientação
 do iPhone passou a ser só retrato.
+
+## Sessão 2026-10-15 — Correções de monetização a partir do teste real
+
+Antes: 104/104. Depois: **127/127**, 0 avisos (Debug). Release compilado via `xcodebuild`, sem avisos.
+
+1. **Terço Guiado e narração liberados para não assinantes.** Causa confirmada no SDK 4.17
+   (`internallyRegister`): o `feature` roda em `.skipped` (placement não encontrado, sem audiência, holdout), na
+   compra/restore e no fechamento de paywall Non Gated; não roda em `.presentationError`. Correção central, que vale
+   para todos os recursos pagos: o registrar usa `PaywallPresentationHandler` e reporta um `PaywallOutcome`
+   (paywall exibido? compra?). O `PremiumGate` re-checa `hasPlus` antes de executar e, depois de uma compra, espera
+   até 3 s pelo status ativo. Sem Plus e sem paywall exibido, mostra o aviso nativo "Recurso do Orante+"
+   (`PremiumLockedNotice`). Removido `SuperwallService.register(placement:parameters:feature:)` (público, sem uso,
+   contornava o gate). O caso `.stopped` de `VerseNarrationControls` passou pelo `VerseNarrationStarter`.
+   **Conferido no simulador:** "Ouvir" na Bíblia e "Guiado" no Terço mostram o aviso e não iniciam; a Palavra do
+   Dia continua livre; o Superwall registrou `event_not_found`.
+2. **Widget.** Cor paga sem Plus vira Terracota com o selo "Cor do Orante+"; o toque na Tela de Início abre
+   `zensounds://plus` → `widget_theme`. As rotas `zensounds://chapter/...` continuam valendo. A lista de cores ganhou um
+   `DynamicOptionsProvider` com `IntentItem`: "Floresta (Orante+)" etc. para quem não assina, sem mudar o tipo
+   AppEnum do parâmetro. Previews renderizados; a lista de configuração real depende de teste no iPhone.
+3. **Modo de teste (só DEBUG).** Ajustes > Debug > "Simular Orante+" (Automático/Assinante/Não assinante),
+   `DebugPlusOverride`. Os textos são `verbatim` (fora do catálogo). Conferido no build Release: nenhum símbolo ou
+   string do override no binário, e não há `.debug.dylib`.
+4. Testes novos (23): matriz de todos os recursos pagos (sem campanha e sem Plus → não executa + aviso; com Plus →
+   executa sem placement), paywall fechado sem compra, compra com atraso do entitlement, compra que não ativa,
+   Palavra do Dia livre, `VerseNarrationStarter` com placement ausente, `PlusDeepLink`, override de debug.

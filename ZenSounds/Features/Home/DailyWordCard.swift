@@ -79,17 +79,23 @@ struct DailyWordCard: View {
                     Spacer()
 
                     Button(action: onExplore) {
-                        HStack(spacing: 9) {
-                            Text("Open chapter")
-                                .font(.essenceLabelMedium)
-                            Image(systemName: "arrow.right")
-                                .font(.system(size: 14, weight: .semibold))
-                                .frame(width: 34, height: 34)
-                                .background(palette.onVerse, in: Circle())
-                                .foregroundStyle(palette.verseBackground)
+                        // The narration controls (play/pause + stop) must never squeeze this label: show the
+                        // text only when it fits on one line, otherwise just the arrow.
+                        ViewThatFits(in: .horizontal) {
+                            HStack(spacing: 9) {
+                                Text("Open chapter")
+                                    .font(.essenceLabelMedium)
+                                    .lineLimit(1)
+                                    .fixedSize()
+                                openChapterArrow
+                            }
+                            openChapterArrow
                         }
+                        .frame(minWidth: 44, minHeight: 44, alignment: .trailing)
                     }
                     .disabled(state.verse == nil)
+                    .accessibilityLabel("Open chapter")
+                    .layoutPriority(1)
                 }
                 .font(.system(size: 18, weight: .medium))
                 .foregroundStyle(palette.onVerse)
@@ -99,6 +105,14 @@ struct DailyWordCard: View {
         }
         .background(palette.verseBackground)
         .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+    }
+
+    private var openChapterArrow: some View {
+        Image(systemName: "arrow.right")
+            .font(.system(size: 14, weight: .semibold))
+            .frame(width: 34, height: 34)
+            .background(palette.onVerse, in: Circle())
+            .foregroundStyle(palette.verseBackground)
     }
 
     private var header: String {
@@ -113,3 +127,31 @@ struct DailyWordCard: View {
         return "\(bookName) \(verse.chapter):\(verse.number)"
     }
 }
+
+#if DEBUG
+private let previewState = DailyWordViewModel.State(
+    reading: DailyReadingRef(book: "PSA", chapter: 34, verse: 18),
+    verse: Verse(book: "PSA", chapter: 34, number: 18, text: "O SENHOR está perto daqueles que estão com o coração partido.", language: .pt),
+    isLoading: false
+)
+
+private struct DailyWordCardPreview: View {
+    let width: CGFloat
+
+    var body: some View {
+        DailyWordCard(state: previewState, isFavorite: false, onToggleFavorite: {}, onShuffle: {}, onExplore: {})
+            .frame(width: width)
+            .padding()
+    }
+}
+
+// Card widths: iPhone SE 335 pt, Pro Max 400 pt. The narration pause + stop controls take ~52 pt more,
+// so 283 pt reproduces the SE row while narration is active.
+#Preview("SE") { ZenSoundsTheme { DailyWordCardPreview(width: 335) } }
+#Preview("SE narrating") { ZenSoundsTheme { DailyWordCardPreview(width: 283) } }
+#Preview("Pro Max") { ZenSoundsTheme { DailyWordCardPreview(width: 400) } }
+#Preview("SE AX3") {
+    ZenSoundsTheme { DailyWordCardPreview(width: 335) }
+        .environment(\.dynamicTypeSize, .accessibility3)
+}
+#endif

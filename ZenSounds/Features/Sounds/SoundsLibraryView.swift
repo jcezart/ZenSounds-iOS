@@ -138,7 +138,10 @@ private struct SoundsLibraryHeader: View {
                 .padding(.top, 10)
 
             Button(action: onCreateMix) {
-                Label("Create mix", systemImage: "slider.horizontal.3")
+                HStack(spacing: 8) {
+                    Label("Create mix", systemImage: "slider.horizontal.3")
+                    PremiumLockBadge(feature: .mixer)
+                }
                     .font(.essenceLabelLarge)
                     .foregroundStyle(palette.accent)
                     .padding(.vertical, 12)

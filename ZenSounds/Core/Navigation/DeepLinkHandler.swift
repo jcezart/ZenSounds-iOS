@@ -13,6 +13,16 @@ enum DeepLinkHandler {
     }
 }
 
+/// `zensounds://plus` — opened by the widget when it shows a paid color the user can't use yet;
+/// the app answers by registering the `widget_theme` placement.
+enum PlusDeepLink {
+    static let url = URL(string: "zensounds://plus")!
+
+    static func matches(_ url: URL) -> Bool {
+        url.scheme == "zensounds" && url.host == "plus"
+    }
+}
+
 struct BibleDeepLink: Equatable {
     let book: String
     let chapter: Int

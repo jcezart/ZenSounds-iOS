@@ -102,18 +102,21 @@ struct PremiumAccessRulesTests {
     func paidFeatureRegistersExactPlacement(testCase: PlacementCase) {
         let entitlement = EntitlementMock(state: .inactive, hasPlus: false)
         var captured: PremiumPlacement?
-        var deferredFeature: (() -> Void)?
+        var deliverOutcome: ((PaywallOutcome) -> Void)?
         var performed = false
-        let gate = PremiumGate(entitlements: entitlement) { placement, feature in
+        let gate = PremiumGate(entitlements: entitlement) { placement, onOutcome in
             captured = placement
-            deferredFeature = feature
+            deliverOutcome = onOutcome
         }
 
         gate.gate(testCase.feature, parameters: testCase.parameters) { performed = true }
 
         #expect(captured == testCase.expected)
         #expect(!performed)
-        deferredFeature?()
+        // Purchase completed on the paywall and the entitlement is already active.
+        entitlement.hasPlus = true
+        entitlement.entitlementState = .active
+        deliverOutcome?(PaywallOutcome(paywallPresented: true, purchasedOrRestored: true))
         #expect(performed)
     }
 
@@ -270,16 +273,197 @@ struct VerseNarrationStarterTests {
     }
 }
 
+/// Every paid feature, re-checked by the gate after Superwall answers (Superwall releases the
+/// feature when the placement isn't found, so it must never be trusted on its own).
+@MainActor
+struct PremiumGateOutcomeTests {
+    nonisolated static let paidFeatures: [PremiumFeature] = [
+        .sound(id: "Storm"),
+        .soundscape(id: "peace-in-galilee"),
+        .mixer,
+        .savedMix,
+        .customTimer,
+        .verseNarration(isDailyWord: false),
+        .guidedRosary,
+        .widgetTheme(id: "forest"),
+        .upgrade,
+    ]
+
+    /// Placement each paid feature registers (one per Superwall placement used by the app).
+    nonisolated static let expectedPlacements: [String] = [
+        "premium_sound", "premium_soundscape", "create_mix", "create_mix", "custom_timer",
+        "bible_narration", "guided_rosary", "widget_theme", "settings_upgrade",
+    ]
+
+    private final class Recorder {
+        var placements: [PremiumPlacement] = []
+        var locked: [PremiumFeature] = []
+        var performed = 0
+    }
+
+    private func makeGate(
+        _ entitlement: EntitlementMock,
+        recorder: Recorder,
+        outcome: PaywallOutcome?,
+        waitForEntitlement: @escaping () async -> Void = {}
+    ) -> PremiumGate {
+        PremiumGate(
+            entitlements: entitlement,
+            registrar: { placement, onOutcome in
+                recorder.placements.append(placement)
+                if let outcome { onOutcome(outcome) }
+            },
+            waitForEntitlement: waitForEntitlement,
+            onLocked: { recorder.locked.append($0) }
+        )
+    }
+
+    @Test(arguments: paidFeatures)
+    func placementNotFoundWithoutPlusDoesNotRunAndShowsNotice(feature: PremiumFeature) {
+        let recorder = Recorder()
+        let gate = makeGate(EntitlementMock(state: .inactive, hasPlus: false), recorder: recorder, outcome: .notPresented)
+
+        gate.gate(feature) { recorder.performed += 1 }
+
+        #expect(recorder.placements.count == 1)
+        #expect(recorder.performed == 0)
+        #expect(recorder.locked == [feature])
+    }
+
+    @Test func everyPaidFeatureMapsToItsPlacement() {
+        #expect(Self.paidFeatures.map { PremiumPlacement.request(for: $0).name } == Self.expectedPlacements)
+        #expect(Self.paidFeatures.allSatisfy(PremiumAccessRules.requiresPlus(for:)))
+    }
+
+    @Test func restoreShowsExactlyOneAlert() {
+        // SDK alert covers failures and "no active entitlement"; the app only speaks when the SDK stayed silent.
+        #expect(RestoreAlertRules.appMessage(restored: false, sdkHasActiveEntitlement: false, hasPlus: false) == nil)
+        #expect(RestoreAlertRules.appMessage(restored: true, sdkHasActiveEntitlement: false, hasPlus: false) == nil)
+        #expect(RestoreAlertRules.appMessage(restored: false, sdkHasActiveEntitlement: true, hasPlus: true) == nil)
+        #expect(RestoreAlertRules.appMessage(restored: true, sdkHasActiveEntitlement: true, hasPlus: true) == .restored)
+        #expect(RestoreAlertRules.appMessage(restored: true, sdkHasActiveEntitlement: true, hasPlus: false) == .nothingFound)
+    }
+
+    @Test(arguments: paidFeatures)
+    func subscriberRunsWithoutPlacementOrNotice(feature: PremiumFeature) {
+        let recorder = Recorder()
+        let gate = makeGate(EntitlementMock(state: .active, hasPlus: true), recorder: recorder, outcome: .notPresented)
+
+        gate.gate(feature) { recorder.performed += 1 }
+
+        #expect(recorder.placements.isEmpty)
+        #expect(recorder.performed == 1)
+        #expect(recorder.locked.isEmpty)
+    }
+
+    @Test func paywallClosedWithoutPurchaseNeitherRunsNorShowsNotice() {
+        // Non Gated paywalls release the feature on dismissal; without Plus it must stay closed,
+        // and the user already saw a paywall, so no extra notice.
+        let recorder = Recorder()
+        let outcome = PaywallOutcome(paywallPresented: true, purchasedOrRestored: false)
+        let gate = makeGate(EntitlementMock(state: .inactive, hasPlus: false), recorder: recorder, outcome: outcome)
+
+        gate.gate(.guidedRosary) { recorder.performed += 1 }
+
+        #expect(recorder.performed == 0)
+        #expect(recorder.locked.isEmpty)
+    }
+
+    @Test func purchaseRunsFeatureOnceTheEntitlementPropagates() async {
+        let recorder = Recorder()
+        let entitlement = EntitlementMock(state: .inactive, hasPlus: false)
+        let gate = makeGate(entitlement, recorder: recorder, outcome: nil) {
+            entitlement.hasPlus = true
+            entitlement.entitlementState = .active
+        }
+
+        await gate.resolve(
+            .verseNarration(isDailyWord: false),
+            outcome: PaywallOutcome(paywallPresented: true, purchasedOrRestored: true)
+        ) { recorder.performed += 1 }
+
+        #expect(recorder.performed == 1)
+        #expect(recorder.locked.isEmpty)
+    }
+
+    @Test func purchaseThatNeverActivatesDoesNotRun() async {
+        let recorder = Recorder()
+        let gate = makeGate(EntitlementMock(state: .inactive, hasPlus: false), recorder: recorder, outcome: nil)
+
+        await gate.resolve(
+            .customTimer,
+            outcome: PaywallOutcome(paywallPresented: true, purchasedOrRestored: true)
+        ) { recorder.performed += 1 }
+
+        #expect(recorder.performed == 0)
+        #expect(recorder.locked.isEmpty)
+    }
+
+    @Test func dailyWordNarrationStaysFreeWithoutPlacement() {
+        let recorder = Recorder()
+        let gate = makeGate(EntitlementMock(state: .inactive, hasPlus: false), recorder: recorder, outcome: .notPresented)
+
+        gate.gate(.verseNarration(isDailyWord: true)) { recorder.performed += 1 }
+
+        #expect(recorder.performed == 1)
+        #expect(recorder.placements.isEmpty)
+        #expect(recorder.locked.isEmpty)
+    }
+
+    @Test func verseNarrationStarterHonorsTheGateWhenPlacementIsMissing() {
+        let recorder = Recorder()
+        let gate = makeGate(EntitlementMock(state: .inactive, hasPlus: false), recorder: recorder, outcome: .notPresented)
+        var spoken = 0
+
+        VerseNarrationStarter.start(
+            Verse(book: "JHN", chapter: 3, number: 16, text: "Test", language: .pt),
+            isDailyWord: false,
+            gate: gate
+        ) { _ in spoken += 1 }
+
+        #expect(spoken == 0)
+        #expect(recorder.locked == [.verseNarration(isDailyWord: false)])
+    }
+
+    @Test func plusDeepLinkIsRecognizedWithoutBreakingBibleRoutes() {
+        #expect(PlusDeepLink.matches(PlusDeepLink.url))
+        #expect(PlusDeepLink.matches(URL(string: "zensounds://plus")!))
+        #expect(!PlusDeepLink.matches(URL(string: "zensounds://chapter/PSA/23/1")!))
+        #expect(!PlusDeepLink.matches(URL(string: "https://plus")!))
+        #expect(BibleDeepLink.parse(PlusDeepLink.url) == nil)
+    }
+
+    #if DEBUG
+    @Test func debugOverrideForcesOrPassesThroughTheEntitlement() {
+        let automatic = DebugPlusOverride.automatic.resolve(state: .unknown, hasPlus: true)
+        #expect(automatic.state == .unknown)
+        #expect(automatic.hasPlus)
+        let subscriber = DebugPlusOverride.subscriber.resolve(state: .inactive, hasPlus: false)
+        #expect(subscriber.state == .active)
+        #expect(subscriber.hasPlus)
+        let nonSubscriber = DebugPlusOverride.nonSubscriber.resolve(state: .active, hasPlus: true)
+        #expect(nonSubscriber.state == .inactive)
+        #expect(!nonSubscriber.hasPlus)
+    }
+    #endif
+}
+
 struct PlacementCase: Sendable {
     let feature: PremiumFeature
     let parameters: [String: String]
     let expected: PremiumPlacement
 }
 
+/// Stable case name: the default description prints dictionaries in random order, which made the
+/// runner occasionally report "No result" for the `bible_narration` case.
+extension PlacementCase: CustomTestStringConvertible {
+    var testDescription: String { expected.name + " " + parameters.keys.sorted().joined(separator: ",") }
+}
+
 @MainActor
 private final class EntitlementMock: EntitlementProviding {
-    let entitlementState: EntitlementState
-    let hasPlus: Bool
+    var entitlementState: EntitlementState
+    var hasPlus: Bool
 
     init(state: EntitlementState, hasPlus: Bool) {
         entitlementState = state

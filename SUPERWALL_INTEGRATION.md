@@ -72,7 +72,9 @@ The app now uses entitlement `plus` and a single `PremiumGate`. Free sounds (`Ra
 | `onboarding_end` | Non Gated | none |
 | `settings_upgrade` | Non Gated | none |
 
-Remove or leave `play_sound` without a campaign; the app no longer registers it. Recommended audience for gated placements: users whose `plus` entitlement is inactive. `onboarding_end` targets first-run users; `settings_upgrade` and `widget_theme` target non-subscribers.
+Remove or leave `play_sound` without a campaign; the app no longer registers it.
+
+**Access is decided by the app, not by the campaign (2026-10-15).** Superwall runs the `feature` closure when a placement is skipped (no campaign/audience, holdout) and does not run it on presentation errors. `PremiumGate` therefore registers each placement with a `PaywallPresentationHandler` and re-checks the `plus` entitlement before running the feature. After a purchase or restore it waits up to 3 s for the status to turn active. Without Plus and without a presented paywall (not found, no audience, error, offline), it shows the native "Orante+ feature" alert. `widget_theme` is also registered when the widget opens `zensounds://plus`, with `source=widget`. Recommended audience for gated placements: users whose `plus` entitlement is inactive. `onboarding_end` targets first-run users; `settings_upgrade` and `widget_theme` target non-subscribers.
 
 Create one subscription group named **Orante+** and map both products to entitlement `plus`:
 

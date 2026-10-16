@@ -115,6 +115,8 @@ private struct FavoriteSoundRow: View {
 
             Spacer()
 
+            PremiumLockBadge(feature: .sound(id: sound.id))
+
             Button(action: onPlay) {
                 Image(systemName: "play.fill")
                     .frame(width: 40, height: 44)

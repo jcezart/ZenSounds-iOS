@@ -62,8 +62,11 @@ struct PlayerView: View {
         .sheet(isPresented: $isTimerSheetPresented) { TimerSheetView() }
         .sheet(isPresented: $isAddSoundSheetPresented) {
             AddSoundToMixSheet(excluding: Set(audio.layers.map(\.soundId))) { soundId in
-                audio.addLayer(soundId: soundId)
                 isAddSoundSheetPresented = false
+                // Re-checked here too: the engine alone would refuse silently.
+                SuperwallService.shared.gate(.mixer, parameters: ["source": "player"]) {
+                    audio.addLayer(soundId: soundId)
+                }
             }
         }
         .alert("Save mix", isPresented: $isSaveMixAlertPresented) {
@@ -262,6 +265,7 @@ struct PlayerView: View {
                                 }
                                 .frame(width: 72, height: 72)
                                 .clipShape(Circle())
+                                .premiumLockOverlay(for: .sound(id: sound.id), padding: 0)
 
                                 Text(soundTitle(sound.id))
                                     .font(.essenceBodySmall)
@@ -284,7 +288,10 @@ struct PlayerView: View {
                         isAddSoundSheetPresented = true
                     }
                 } label: {
-                    Label("Add another sound", systemImage: "plus.circle")
+                    HStack(spacing: 8) {
+                        Label("Add another sound", systemImage: "plus.circle")
+                        PremiumLockBadge(feature: .mixer)
+                    }
                         .font(.essenceLabelLarge)
                 }
                 .foregroundStyle(palette.accent)

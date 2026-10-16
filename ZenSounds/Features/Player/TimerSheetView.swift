@@ -45,6 +45,7 @@ struct TimerSheetView: View {
                             }
                         }
                         .disabled(Int(customMinutesText) == nil)
+                        PremiumLockBadge(feature: .customTimer)
                     }
                     .onChange(of: customMinutesText) { isCustomMinutesInvalid = false }
                     if isCustomMinutesInvalid {
@@ -64,7 +65,7 @@ struct TimerSheetView: View {
                             HStack {
                                 fadeSlider(value: .constant(TimerRules.defaultFadeSeconds))
                                     .allowsHitTesting(false)
-                                OrantePlusBadge()
+                                PremiumLockBadge(feature: .customTimer)
                             }
                         }
                         .buttonStyle(.plain)

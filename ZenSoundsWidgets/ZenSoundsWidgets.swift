@@ -21,13 +21,55 @@ enum WidgetBackgroundTheme: String, AppEnum, Sendable {
     static func resolved(_ selected: Self, hasPlus: Bool) -> Self {
         hasPlus ? selected : .terracotta
     }
+
+    /// A paid color picked without Orante+: the widget falls back to Terracotta and says why.
+    static func isLocked(_ selected: Self, hasPlus: Bool) -> Bool {
+        selected != .terracotta && !hasPlus
+    }
+
+    /// Picker titles: non-subscribers see which colors belong to Orante+.
+    func optionTitle(hasPlus: Bool) -> LocalizedStringResource {
+        switch (self, hasPlus) {
+        case (.terracotta, _): "Terracotta"
+        case (.forest, true): "Forest"
+        case (.forest, false): "Forest (Orante+)"
+        case (.midnight, true): "Midnight"
+        case (.midnight, false): "Midnight (Orante+)"
+        case (.plum, true): "Plum"
+        case (.plum, false): "Plum (Orante+)"
+        case (.ocean, true): "Ocean"
+        case (.ocean, false): "Ocean (Orante+)"
+        }
+    }
+}
+
+/// Mirror of the app's `plus_active` flag in the shared App Group (written by `SuperwallService`).
+enum WidgetPlusStatus {
+    static var isActive: Bool {
+        UserDefaults(suiteName: WidgetDailyWordStore.appGroupID)?.bool(forKey: "plus_active") ?? false
+    }
+}
+
+/// Keeps the parameter an `AppEnum` (existing configurations stay valid) while labelling paid colors.
+struct WidgetBackgroundThemeOptionsProvider: DynamicOptionsProvider {
+    func results() async throws -> IntentItemCollection<WidgetBackgroundTheme> {
+        let hasPlus = WidgetPlusStatus.isActive
+        let items = WidgetBackgroundTheme.allCases.map { theme in
+            IntentItem(theme, title: theme.optionTitle(hasPlus: hasPlus))
+        }
+        return IntentItemCollection(sections: [IntentItemSection(items: items)])
+    }
+
+    func defaultResult() async -> WidgetBackgroundTheme? {
+        .terracotta
+    }
 }
 
 struct ZenSoundsWidgetConfigurationIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource = "Customize Widget"
     static var description = IntentDescription("Choose the widget background color.")
 
-    @Parameter(title: "Background color", default: .terracotta)
+    @Parameter(title: "Background color", default: .terracotta, optionsProvider: WidgetBackgroundThemeOptionsProvider())
     var backgroundTheme: WidgetBackgroundTheme
 }
 
@@ -37,9 +79,16 @@ struct DailyWordEntry: TimelineEntry {
     let text: String
     let bookName: String
     let backgroundTheme: WidgetBackgroundTheme
+    /// The user picked a paid color without Orante+ (shown as Terracotta with a badge).
+    var isLockedColor = false
 
     var deepLinkURL: URL? {
         URL(string: "zensounds://chapter/\(reading.book)/\(reading.chapter)/\(reading.verse)")
+    }
+
+    /// Home Screen tap target: a locked color opens the Orante+ offer instead of the chapter.
+    var homeScreenURL: URL? {
+        isLockedColor ? URL(string: "zensounds://plus") : deepLinkURL
     }
 }
 
@@ -76,14 +125,14 @@ struct DailyWordProvider: AppIntentTimelineProvider {
         let reading = source.readings.first { $0.book == ref.book && $0.chapter == ref.chapter && $0.verse == ref.verse }
         let text = reading.map { source.text(for: $0, language: language) } ?? ""
         let bookName = source.book(code: ref.book).map { language == .pt ? $0.name_pt : $0.name_en } ?? ref.book
-        let hasPlus = UserDefaults(suiteName: "group.com.juliocezar.zensounds")?
-            .bool(forKey: "plus_active") ?? false
+        let hasPlus = WidgetPlusStatus.isActive
         return DailyWordEntry(
             date: Date(),
             reading: ref,
             text: text,
             bookName: bookName,
-            backgroundTheme: .resolved(backgroundTheme, hasPlus: hasPlus)
+            backgroundTheme: .resolved(backgroundTheme, hasPlus: hasPlus),
+            isLockedColor: WidgetBackgroundTheme.isLocked(backgroundTheme, hasPlus: hasPlus)
         )
     }
 }
@@ -144,9 +193,12 @@ struct SmallDailyWordView: View {
                 .font(.system(size: 11, weight: .semibold))
                 .foregroundStyle(.white.opacity(0.85))
                 .lineLimit(1)
+            if entry.isLockedColor {
+                PlusColorBadge()
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .widgetURL(entry.deepLinkURL)
+        .widgetURL(entry.homeScreenURL)
     }
 }
 
@@ -162,6 +214,9 @@ struct MediumDailyWordView: View {
                     .tracking(1)
                     .foregroundStyle(.white.opacity(0.82))
                 Spacer()
+                if entry.isLockedColor {
+                    PlusColorBadge()
+                }
                 Button(intent: ShuffleDailyWordIntent()) {
                     Image(systemName: "shuffle")
                         .foregroundStyle(.white)
@@ -181,7 +236,20 @@ struct MediumDailyWordView: View {
                 .foregroundStyle(.white.opacity(0.85))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .widgetURL(entry.deepLinkURL)
+        .widgetURL(entry.homeScreenURL)
+    }
+}
+
+/// Discreet note that the chosen color needs Orante+; the widget then shows Terracotta.
+private struct PlusColorBadge: View {
+    var body: some View {
+        Label("Orante+ color", systemImage: "lock.fill")
+            .font(.system(size: 9, weight: .semibold))
+            .foregroundStyle(.white.opacity(0.92))
+            .lineLimit(1)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(.white.opacity(0.18), in: Capsule())
     }
 }
 
@@ -403,6 +471,18 @@ struct ZenSoundsWidgets: Widget {
     ZenSoundsWidgets()
 } timeline: {
     DailyWordEntry(date: .now, reading: WidgetReadingRef(book: "MAT", chapter: 6, verse: 26), text: "Olhai para as aves do céu, que não semeiam, nem ceifam, nem ajuntam em celeiros; e contudo vosso Pai celestial as alimenta.", bookName: "Mateus", backgroundTheme: .terracotta)
+}
+
+#Preview("Locked color", as: .systemMedium) {
+    ZenSoundsWidgets()
+} timeline: {
+    DailyWordEntry(date: .now, reading: WidgetReadingRef(book: "PSA", chapter: 23, verse: 1), text: "O SENHOR é meu pastor, nada me faltará.", bookName: "Salmos", backgroundTheme: .terracotta, isLockedColor: true)
+}
+
+#Preview("Locked color small", as: .systemSmall) {
+    ZenSoundsWidgets()
+} timeline: {
+    DailyWordEntry(date: .now, reading: WidgetReadingRef(book: "PSA", chapter: 23, verse: 1), text: "O SENHOR é meu pastor, nada me faltará.", bookName: "Salmos", backgroundTheme: .terracotta, isLockedColor: true)
 }
 
 #Preview(as: .accessoryRectangular) {

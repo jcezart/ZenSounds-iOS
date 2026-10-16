@@ -46,8 +46,11 @@ struct SoundMixEditorView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Play") {
-                    audio.playAdHocMix(layers: layers)
-                    PlayerPresentation.shared.isFullPlayerPresented = true
+                    // Gated like every mixer entry; without Plus the engine would otherwise ignore the tap.
+                    SuperwallService.shared.gate(.mixer, parameters: ["source": "library"]) {
+                        audio.playAdHocMix(layers: layers)
+                        PlayerPresentation.shared.isFullPlayerPresented = true
+                    }
                 }
                 .disabled(layers.isEmpty)
             }

@@ -68,12 +68,32 @@
         }
       }
     },
+    "Forest (Orante+)" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Floresta (Orante+)"
+          }
+        }
+      }
+    },
     "Midnight" : {
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Meia-noite"
+          }
+        }
+      }
+    },
+    "Midnight (Orante+)" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meia-noite (Orante+)"
           }
         }
       }
@@ -88,6 +108,16 @@
         }
       }
     },
+    "Ocean (Orante+)" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oceano (Orante+)"
+          }
+        }
+      }
+    },
     "ORANTE" : {
       "localizations" : {
         "pt-BR" : {
@@ -98,12 +128,32 @@
         }
       }
     },
+    "Orante+ color" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cor do Orante+"
+          }
+        }
+      }
+    },
     "Plum" : {
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Ameixa"
+          }
+        }
+      }
+    },
+    "Plum (Orante+)" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ameixa (Orante+)"
           }
         }
       }

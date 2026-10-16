@@ -141,16 +141,6 @@
         }
       }
     },
-    "%llds" : {
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%llds"
-          }
-        }
-      }
-    },
     "%lldº · %@" : {
       "localizations" : {
         "en" : {
@@ -167,6 +157,16 @@
         }
       }
     },
+    "%llds" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llds"
+          }
+        }
+      }
+    },
     "%llds volume fade before stopping" : {
       "localizations" : {
         "pt-BR" : {
@@ -178,6 +178,7 @@
       }
     },
     "+" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -304,6 +305,17 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Áudio indisponível"
+          }
+        }
+      }
+    },
+    "Available with an Orante+ subscription." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disponível com a assinatura Orante+."
           }
         }
       }
@@ -1143,6 +1155,17 @@
         }
       }
     },
+    "Orante+ feature" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recurso do Orante+"
+          }
+        }
+      }
+    },
     "Other sounds" : {
       "localizations" : {
         "pt-BR" : {
@@ -1330,6 +1353,7 @@
       }
     },
     "Purchases couldn't be restored. Please try again." : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {

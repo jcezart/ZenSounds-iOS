@@ -3,6 +3,7 @@ import SwiftUI
 struct RosaryView: View {
     @StateObject private var model = RosaryViewModel()
     @ObservedObject private var languageStore = AppLanguageStore.shared
+    @ObservedObject private var superwall = SuperwallService.shared
     @Environment(\.essencePalette) private var palette
 
     var body: some View {
@@ -71,7 +72,14 @@ struct RosaryView: View {
         Picker("Prayer mode", selection: Binding(get: { model.mode }, set: setMode)) {
             Text("Manual").tag(RosaryMode.manual)
             Text("Guided").tag(RosaryMode.guided)
-        }.pickerStyle(.segmented)
+        }
+        .pickerStyle(.segmented)
+        // Segmented pickers can't host custom views, so the lock sits over the trailing ("Guided") segment.
+        .overlay(alignment: .trailing) {
+            PremiumLockBadge(feature: .guidedRosary)
+                .padding(.trailing, 8)
+        }
+        .accessibilityHint(superwall.premiumGate.shouldShowBadge(for: .guidedRosary) ? Text("Requires Orante+") : Text(verbatim: ""))
     }
 
     private func setMode(_ mode: RosaryMode) {

@@ -7,7 +7,6 @@ struct BiblicalSoundscapeCard: View {
     let onOpenPassage: () -> Void
 
     @Environment(\.essencePalette) private var palette
-    @ObservedObject private var superwall = SuperwallService.shared
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
@@ -26,9 +25,6 @@ struct BiblicalSoundscapeCard: View {
             .frame(height: 190)
 
             VStack(alignment: .leading, spacing: 6) {
-                if superwall.premiumGate.shouldShowBadge(for: .soundscape(id: soundscape.id)) {
-                    OrantePlusBadge()
-                }
                 Text(soundscape.localizedTitle)
                     .font(.essenceTitleLarge)
                     .foregroundStyle(.white)
@@ -60,6 +56,7 @@ struct BiblicalSoundscapeCard: View {
             .padding(16)
         }
         .frame(height: 190)
+        .premiumLockOverlay(for: .soundscape(id: soundscape.id), padding: 12)
         .clipped()
         .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
         .overlay {
@@ -76,7 +73,6 @@ struct SoundRow: View {
     let onTap: () -> Void
 
     @ObservedObject private var prefs = UserPreferencesStore.shared
-    @ObservedObject private var superwall = SuperwallService.shared
     @Environment(\.essencePalette) private var palette
 
     private var title: String {
@@ -100,9 +96,7 @@ struct SoundRow: View {
                         .multilineTextAlignment(.leading)
 
                     Spacer(minLength: 8)
-                    if superwall.premiumGate.shouldShowBadge(for: .sound(id: sound.id)) {
-                        OrantePlusBadge()
-                    }
+                    PremiumLockBadge(feature: .sound(id: sound.id))
                 }
                 .contentShape(Rectangle())
             }
@@ -143,7 +137,6 @@ struct MixRow: View {
     let onDelete: () -> Void
 
     @Environment(\.essencePalette) private var palette
-    @ObservedObject private var superwall = SuperwallService.shared
 
     var body: some View {
         HStack(spacing: 8) {
@@ -166,9 +159,7 @@ struct MixRow: View {
                     }
 
                     Spacer(minLength: 8)
-                    if superwall.shouldShowPremiumBadges {
-                        OrantePlusBadge()
-                    }
+                    PremiumLockBadge(feature: .savedMix)
                 }
                 .contentShape(Rectangle())
             }
@@ -204,20 +195,6 @@ struct MixRow: View {
             }
         }
         .joined(separator: " · ")
-    }
-}
-
-struct OrantePlusBadge: View {
-    @Environment(\.essencePalette) private var palette
-
-    var body: some View {
-        Text("+")
-            .font(.essenceLabelLarge)
-            .foregroundStyle(palette.accent)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(palette.accent.opacity(0.12), in: Capsule())
-            .accessibilityLabel("Requires Orante+")
     }
 }
 

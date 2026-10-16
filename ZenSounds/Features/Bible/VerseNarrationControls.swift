@@ -12,6 +12,7 @@ struct VerseNarrationControls: View {
     var tint: Color? = nil
 
     @ObservedObject private var narration = BibleNarrationService.shared
+    @ObservedObject private var superwall = SuperwallService.shared
     @Environment(\.essencePalette) private var palette
 
     var body: some View {
@@ -21,14 +22,25 @@ struct VerseNarrationControls: View {
                     ProgressView()
                         .controlSize(.small)
                 } else if style == .labeled {
-                    Label(primaryTitle, systemImage: primaryIcon)
+                    HStack(spacing: 6) {
+                        Label(primaryTitle, systemImage: primaryIcon)
+                        if !isActiveVerse { PremiumLockBadge(feature: narrationFeature) }
+                    }
                 } else {
                     Image(systemName: primaryIcon)
                         .frame(width: 44, height: 44)
+                        .overlay(alignment: .topTrailing) {
+                            if !isActiveVerse {
+                                PremiumLockBadge(feature: narrationFeature)
+                                    .scaleEffect(0.8)
+                                    .offset(x: 4, y: -2)
+                            }
+                        }
                 }
             }
             .disabled(isPreparing)
             .accessibilityLabel(primaryTitle)
+            .accessibilityHint(lockHint)
             .accessibilityAddTraits(primaryAccessibilityTraits)
 
             if isActiveVerse {
@@ -44,6 +56,15 @@ struct VerseNarrationControls: View {
             }
         }
         .foregroundStyle(tint ?? palette.accent)
+    }
+
+    private var narrationFeature: PremiumFeature { .verseNarration(isDailyWord: isDailyWord) }
+
+    /// The lock is drawn inside a button that has its own label, so VoiceOver gets it as a hint.
+    private var lockHint: Text {
+        superwall.premiumGate.shouldShowBadge(for: narrationFeature) && !isActiveVerse
+            ? Text("Requires Orante+")
+            : Text(verbatim: "")
     }
 
     private var isActiveVerse: Bool {
@@ -93,7 +114,7 @@ struct VerseNarrationControls: View {
         case .paused:
             narration.resume()
         case .stopped:
-            narration.speak(verse)
+            VerseNarrationStarter.start(verse, isDailyWord: isDailyWord)
         }
     }
 }
