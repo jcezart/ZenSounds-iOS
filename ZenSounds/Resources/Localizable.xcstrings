@@ -189,6 +189,7 @@
       }
     },
     "A pause with sound" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -762,6 +763,16 @@
         }
       }
     },
+    "Find comfort in every word." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encontre consolo em cada palavra."
+          }
+        }
+      }
+    },
     "For your reading or prayer." : {
       "localizations" : {
         "pt-BR" : {
@@ -964,6 +975,7 @@
       }
     },
     "My mix" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -1188,6 +1200,16 @@
         }
       }
     },
+    "Opens the book" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre o livro"
+          }
+        }
+      }
+    },
     "Opens the player" : {
       "localizations" : {
         "pt-BR" : {
@@ -1199,6 +1221,7 @@
       }
     },
     "Orante" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -1365,6 +1388,16 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Reze no seu ritmo ou acompanhe a leitura guiada."
+          }
+        }
+      }
+    },
+    "Pray the Rosary" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rezar o terço"
           }
         }
       }
@@ -1682,6 +1715,7 @@
       }
     },
     "See all" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
@@ -2055,7 +2089,18 @@
         }
       }
     },
+    "Start reading" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Começar a ler"
+          }
+        }
+      }
+    },
     "Start the Bible" : {
+      "extractionState" : "stale",
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {

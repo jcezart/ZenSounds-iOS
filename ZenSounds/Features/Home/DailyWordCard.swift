@@ -10,27 +10,25 @@ struct DailyWordCard: View {
     @Environment(\.essencePalette) private var palette
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            Circle()
-                .fill(palette.onVerse.opacity(0.07))
-                .frame(width: 210, height: 210)
-                .offset(x: 78, y: 65)
+        ZStack(alignment: .topTrailing) {
+            Image("DailyWordLeaf")
+                .resizable()
+                .renderingMode(.template)
+                .scaledToFit()
+                .foregroundStyle(palette.onVerse.opacity(0.13))
+                .frame(width: 132, height: 212)
+                .offset(x: 18, y: 18)
                 .accessibilityHidden(true)
 
-            BotanicalArtwork(color: Color.black.opacity(0.22))
-                .frame(width: 104, height: 230)
-                .offset(x: 14, y: 16)
-
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: Spacing.md) {
                 Text(header)
-                    .font(.essenceLabelMedium)
-                    .tracking(1.2)
+                    .font(.essenceLabelLarge)
                     .foregroundStyle(palette.onVerse.opacity(0.88))
 
                 Group {
                     if let verse = state.verse {
                         Text(verse.text)
-                            .font(.custom(EssenceFont.regular, size: 24, relativeTo: .title2))
+                            .font(.scriptureHeadline)
                             .foregroundStyle(palette.onVerse)
                             .fixedSize(horizontal: false, vertical: true)
                     } else if state.isLoading {
@@ -101,10 +99,10 @@ struct DailyWordCard: View {
                 .foregroundStyle(palette.onVerse)
                 .buttonStyle(.plain)
             }
-            .padding(20)
+            .padding(Spacing.lg)
         }
         .background(palette.verseBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
     }
 
     private var openChapterArrow: some View {
@@ -119,7 +117,7 @@ struct DailyWordCard: View {
         guard let verse = state.verse else {
             return AppLanguage.localized("WORD OF THE DAY", defaultValue: "WORD OF THE DAY")
         }
-        return AppLanguage.localized("TODAY", defaultValue: "TODAY") + " · " + reference(verse)
+        return reference(verse)
     }
 
     private func reference(_ verse: Verse) -> String {
