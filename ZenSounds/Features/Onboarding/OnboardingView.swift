@@ -60,12 +60,13 @@ private struct OnboardingPage: View {
     let message: LocalizedStringResource
 
     @Environment(\.essencePalette) private var palette
+    @ScaledMetric(relativeTo: .largeTitle) private var symbolSize: CGFloat = 64
 
     var body: some View {
         VStack(spacing: 24) {
             Spacer()
             Image(systemName: symbol)
-                .font(.system(size: 64))
+                .font(.system(size: symbolSize))
                 .foregroundStyle(palette.accent)
                 .accessibilityHidden(true)
             Text(title)

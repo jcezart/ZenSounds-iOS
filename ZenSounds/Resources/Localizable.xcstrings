@@ -165,40 +165,6 @@
         }
       }
     },
-    "%lld. %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld. %2$@"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "%1$lld. %2$@"
-          }
-        }
-      }
-    },
-    "%lldº · %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lldº · %2$@"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "%1$lldº · %2$@"
-          }
-        }
-      }
-    },
     "%llds" : {
       "localizations" : {
         "pt-BR" : {
@@ -226,17 +192,6 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "+"
-          }
-        }
-      }
-    },
-    "A pause with sound" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Uma pausa com som"
           }
         }
       }
@@ -964,17 +919,6 @@
         }
       }
     },
-    "Home" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Início"
-          }
-        }
-      }
-    },
     "If you don't want to continue, cancel in iPhone Settings." : {
       "localizations" : {
         "pt-BR" : {
@@ -1390,17 +1334,6 @@
         }
       }
     },
-    "Open player: %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Abrir player: %@"
-          }
-        }
-      }
-    },
     "Opens ambient sound options" : {
       "localizations" : {
         "pt-BR" : {
@@ -1609,17 +1542,6 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Rezar novamente"
-          }
-        }
-      }
-    },
-    "Pray at your pace or follow the guided reading." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Reze no seu ritmo ou acompanhe a leitura guiada."
           }
         }
       }
@@ -2400,17 +2322,6 @@
         }
       }
     },
-    "Start the Bible" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Começar a Bíblia"
-          }
-        }
-      }
-    },
     "Status" : {
       "localizations" : {
         "pt-BR" : {
@@ -2608,17 +2519,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hoje"
-          }
-        }
-      }
-    },
-    "TODAY" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "HOJE"
           }
         }
       }

@@ -316,3 +316,26 @@ Antes: 104/104. Depois: **127/127**, 0 avisos (Debug). Release compilado via `xc
 4. Testes novos (23): matriz de todos os recursos pagos (sem campanha e sem Plus → não executa + aviso; com Plus →
    executa sem placement), paywall fechado sem compra, compra com atraso do entitlement, compra que não ativa,
    Palavra do Dia livre, `VerseNarrationStarter` com placement ausente, `PlusDeepLink`, override de debug.
+
+## Sessão 2026-10-16 — Repaginação visual (branch `redesign/orante`)
+
+Fases commitadas uma a uma (build sem avisos e todos os testes aprovados em cada uma):
+1. Tokens (`DesignTokens`: paleta quente light/dark, SF Pro + New York serif, `Spacing`/`Radius`) e 4 abas
+   (Hoje, Bíblia, Terço, Buscar). Sons e Favoritos saíram da tab bar.
+2. Som ambiente: mini-player com o último som, sheet com paisagens/sons/volume/timer/criar mix
+   (`create_mix` com `source=player`), biblioteca completa em Buscar → Explorar → Sons.
+3. Hoje: Palavra do Dia com folha vetorial, Continuar (Bíblia/Terço), Explorar com arte vetorial.
+4. Bíblia + Leitura: hero Sl 119:105 (arte `BibleHero`), Continuar leitura, AT/NT, leitor serif com seleção de
+   versículo (Ouvir/Favoritar/Compartilhar), "Aa" (`zensounds.reading.fontScale`), menu "…", sobrescrito dos Salmos.
+5. Terço: cabeçalho com Ajustes, card de mistérios recolhível, contas com mais contraste, mistério atual,
+   oração em serif, som ambiente acima de Anterior/Próxima conta.
+6. Buscar: recentes (`zensounds.recents.v1`), favoritos em cards, Explorar (Bíblia, Terço, Sons, Orações),
+   resultados por Livros/Passagens/Versículos/Orações/Mistérios, índice de versículos offline.
+7. Acabamento: `@ScaledMetric` nos tamanhos fixos, cards com arte crescendo com o texto, versículo favorito em
+   serif, chaves órfãs do redesign removidas do catálogo, CLAUDE.md atualizado.
+
+Correções durante o redesign: widget recarrega ao trocar o idioma; favoritos aparecem no idioma atual e casam
+por referência; card de mistérios pode ser minimizado.
+
+Validação: testes (153/153), previews (claro/escuro, en, AX2/AX3, 375 pt no Terço) e build Release. A passada
+manual no simulador/iPhone ainda não foi feita.

@@ -23,7 +23,8 @@ struct VerseDetailView: View {
                         .foregroundStyle(palette.accent)
 
                     Text(verse.text)
-                        .font(.custom(EssenceFont.regular, size: 25, relativeTo: .title2))
+                        .font(.scriptureHeadline)
+                        .lineSpacing(4)
                         .foregroundStyle(palette.text)
                         .fixedSize(horizontal: false, vertical: true)
 

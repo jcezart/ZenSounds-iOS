@@ -17,16 +17,23 @@ Docs de histórico: `MIGRATION_PROGRESS.md` (diário), `APP_STORE_READINESS_AUDI
 
 ## Mapa de pastas (`ZenSounds/`)
 - `App/` — `ZenSoundsApp` (configura Superwall, roteia URLs: rota bíblica → `DeepLinkHandler`; senão
-  `Superwall.handleDeepLink`; senão fallback), `AppLaunchView` (splash + onboarding), `RootView` (TabView de 5 abas:
-  Home, Bíblia, Terço, Sons, Favoritos; cada aba com `NavigationStack` próprio + `.withCompactPlayer()`; alerts globais
-  de áudio/narração/lembrete de trial).
+  `Superwall.handleDeepLink`; senão fallback), `AppLaunchView` (splash + onboarding), `RootView` (TabView de 4 abas
+  desde o redesign de 2026-10: Hoje, Bíblia, Terço, Buscar (`role: .search`); cada aba com `NavigationStack` próprio
+  + `.soundsDestinations()`; sheet `AmbientSoundSheet`, `PlayerView` em fullScreenCover; alerts globais de
+  áudio/narração/lembrete de trial). Sons e Favoritos deixaram de ser abas: ficam em Buscar → Explorar/Ver todos.
 - `Core/Models/` — regras puras: `PremiumAccessRules` (matriz grátis × Plus, `PremiumGate`, `AudioPremiumSafety`,
   `EntitlementCacheRules`, `PremiumPlacement`), `SoundModels` (11 sons + 4 paisagens), `MixModels` (`MixRules`: até 8
   camadas, ganho proporcional), `TimerModels` (deadline em `systemUptime`, fade linear 0–60 s), `RosaryModels`
   (sequência de 80/75 passos, `MysterySchedule`, regras visuais), `BibleModels` (`BibleLanguage`, `AppLanguage` +
-  `AppLanguageStore`, schema HelloAO), `OnboardingRules` (`OnboardingState`, `TrialReminderRules`).
-- `Core/Navigation/` — `AppTab`, rotas (`BibleRoute`, `SoundsRoute`), `NavigationModel.shared` (um path por aba,
-  reselecionar aba volta à raiz, `openBible`), `PlayerPresentation.shared`, `DeepLinkHandler`/`BibleDeepLink`.
+  `AppLanguageStore` — recarrega widgets quando o idioma efetivo muda, `WidgetLanguageSync`), schema HelloAO
+  com `hebrew_subtitle`), `OnboardingRules` (`OnboardingState`, `TrialReminderRules`), `AmbientModels`
+  (`AmbientItem`, visibilidade do mini-player), `ReadingModels` (`BibleTestament`, `ChapterNavigation`,
+  `ReadingFontScale`, `ChapterShareText`), `SearchModels` (`RecentItem`/`RecentsRules`, `SearchText`,
+  `BookAbbreviations` pt/en, `BookMatcher`, `ReferenceParser`, `RosarySearch`, `VerseSearchRules`).
+- `Core/Navigation/` — `AppTab`, rotas (`BibleRoute`, `SoundsRoute` {library, mixEditor}, `SearchRoute`
+  {favorites, prayers, prayer}), `NavigationModel.shared` (um path por aba, reselecionar aba volta à raiz,
+  `push` na aba atual, `openBible`, `openSoundsLibrary`, `openRosary(set:)` via `pendingRosarySet`),
+  `PlayerPresentation.shared` (player cheio + sheet de som ambiente), `DeepLinkHandler`/`BibleDeepLink`.
 - `Core/Services/`
   - `AudioEngine.shared` — `AVAudioEngine` com um `LoopingPlayer` por camada → `mainMixerNode`; som único, mix,
     transporte (máquina `AudioTransportRules`), timer com fade, sessão `.playback` ativada/desativada numa fila serial,
@@ -37,19 +44,29 @@ Docs de histórico: `MIGRATION_PROGRESS.md` (diário), `APP_STORE_READINESS_AUDI
     (`OperationGeneration`) para ignorar callbacks velhos; injetável (protocolos `SpeechSynthesizing`,
     `NarrationAudioCoordinating`, `RosaryNarrating`).
   - `BibleNarrationPreferences.shared` — vozes por idioma (sem Novelty/Personal), velocidade 0.35–0.60.
-  - `BibleCatalog` (books/daily_readings/manifest), `BibleRepository` (`{CODE}_{pt|en}.json` + `NSCache`),
+  - `BibleCatalog` (books/daily_readings/manifest), `BibleRepository` (`{CODE}_{pt|en}.json` + `NSCache`;
+    `subtitle` = sobrescrito dos Salmos; `bookVerses` para o índice), `VerseSearchIndex` (actor: índice em memória
+    por idioma, montado na 1ª busca, varredura cancelável, até 50 resultados),
     `DailyWordStore` (App Group, `floorMod(epochDay)`, shuffle até virar o dia).
-  - `UserPreferencesStore.shared` — favoritos (sons/versículos), mixes salvos, posição de leitura.
+  - `UserPreferencesStore.shared` — favoritos (sons/versículos; versículo casa por referência, sem idioma, e é
+    exibido no idioma atual via `FavoriteVerse.verse(in:)`), mixes salvos, posição de leitura, último som
+    (`zensounds.ambient.lastSound`), recentes (`zensounds.recents.v1`, máx. 10).
   - `RosaryRepository` / `RosaryProgressStore` (`zensounds.rosary.progress.v1`, versionado).
   - `SuperwallService.shared` — configure, delegate, `entitlementState`/`hasPlus` (entitlement `plus`), cache
     `orante.plus.lastConfirmedActive`, espelha `plus_active` no App Group + recarrega widgets, `gate(...)`,
     `registerNonGated`, restore, evento `freeTrialStart` → `TrialReminderService` (lembrete local no dia 5).
-- `Core/Theme/` — `EssencePalette` (light/dark), `EssenceTypography` (Plus Jakarta Sans com `relativeTo`),
-  `ThemeManager`, wrapper `ZenSoundsTheme`.
-- `Features/` — Home (cartão Palavra do Dia, atalhos, sons), Bible, Rosary (`RosaryViewModel` +
-  `RosaryGuidedController`), Sounds (biblioteca, paisagens, editor de mix), Player (cheio, compacto, timer, adicionar
-  som), Favorites, Settings (tema, idioma, Orante+, vozes, sobre), Onboarding (3 páginas).
+- `Core/Theme/` — `DesignTokens` (`EssencePalette` quente light/dark, fontes: SF Pro na UI via estilos
+  `.essence*`, New York serif em escritura/orações via `.scripture*`; `Spacing`, `Radius`), `PremiumLockBadge`,
+  `ThemeMode`, wrapper `ZenSoundsTheme`. Plus Jakarta Sans continua no bundle/Info.plist para voltar rápido.
+- `Features/` — Home (Hoje: Palavra do Dia, Continuar, Explorar, mini-player inline; `SectionTitle`,
+  `SettingsButton`, `ShortcutRow` compartilhados), Bible (hero Sl 119:105, AT/NT, leitor serif com seleção de
+  versículo, "Aa", menu "…"), Rosary (`RosaryViewModel` + `RosaryGuidedController`; card de mistérios recolhível),
+  Search (busca, recentes, favoritos, explorar, `PrayersView`), Ambient (mini-player, sheet, `AmbientPlayback`),
+  Sounds (biblioteca, paisagens, editor de mix), Player (cheio, timer, adicionar som), Favorites (lista completa +
+  `VerseDetailView`), Settings, Onboarding (3 páginas).
 - `Resources/` — Audio/*.mp3, Bible/*.json, Rosary/*.json, Fonts, catálogos `.xcstrings`, LaunchScreen.
+  Artes vetoriais próprias no asset catalog (SVG, preserve vector data): `BibleHero`, `ExplorePsalms`,
+  `DailyWordLeaf` (template).
 - Widget: `ZenSoundsWidgets.swift` (Small/Medium/Large/accessoryRectangular/accessoryInline, tema por
   `WidgetConfigurationIntent`, fallback Terracota sem `plus_active`), `WidgetDailyWordStore` (**espelho** de
   `DailyWordStore` — manter chaves em sincronia), `ShuffleDailyWordIntent`, JSONs próprios.
@@ -87,6 +104,7 @@ Docs de histórico: `MIGRATION_PROGRESS.md` (diário), `APP_STORE_READINESS_AUDI
   `PremiumLockBadge` (`Core/Theme`), visível só para não assinante confirmado (nunca em `.unknown`).
   Restaurar: o alerta do SDK (`SuperwallOptions.paywalls.restoreFailed`) é localizado e o app só mostra o seu
   quando o SDK não mostrou (`RestoreAlertRules`) — um único alerta.
+- `create_mix` usa `source` `library`, `home`, `player` (inclusive o botão do sheet de som ambiente) e `saved_mix`.
 - Placements: `premium_sound`, `premium_soundscape`, `create_mix`, `bible_narration`, `guided_rosary`,
   `custom_timer`, `widget_theme`, `settings_upgrade` ("Conhecer Orante+", via gate `.upgrade`) e `onboarding_end`
   (único non-gated sem aviso: não é recurso pago).
@@ -107,13 +125,20 @@ esquema `zensounds://` (rotas bíblicas + Superwall), chaves de UserDefaults exi
 - Recursos vão para a raiz do bundle: nomes precisam ser únicos (ex.: `GEN_pt.json`, não `pt/GEN.json`).
 - Todo texto novo vai em `Localizable.xcstrings` com en + pt-BR (widget tem catálogo próprio).
   Chaves usadas só em runtime via `AppLanguage.localized(...)` (ex.: `sound_*`, `soundscape_*`, `reference_*`,
-  `TODAY`, `Chapter`) aparecem como **stale** no catálogo, mas estão em uso — **não "remover stale" em massa**.
+  `Chapter`) aparecem como **stale** no catálogo, mas estão em uso — **não "remover stale" em massa**.
 - O idioma é override interno (`AppLanguage`), por isso muitas views usam `AppLanguage.localized` em vez de
   `LocalizedStringKey`.
 - Singletons `.shared` observados nas views (`@ObservedObject`); regras de negócio em enums/structs puros testáveis.
 - Fontes em `Resources/Fonts` têm PostScript names corrigidos — não substituir pelos originais do Android.
 - Com `ENABLE_DEBUG_DYLIB`, o código real fica em `ZenSounds.debug.dylib`, não no executável.
-- Botões no topo de `fullScreenCover` devem ser `ToolbarItem` (hit-testing); mini player via `safeAreaInset` por aba.
+- Botões no topo de `fullScreenCover` devem ser `ToolbarItem` (hit-testing). Mini-player "Som ambiente" via
+  `.ambientMiniPlayer(.always/.whenActive)` por tela (safeAreaInset); não usar `tabViewBottomAccessory` (é global).
+  Sem som tocando, mostra o último som (Chuva na 1ª vez). No Terço, aplicar `.ambientMiniPlayer` **antes** do
+  `safeAreaInset` dos botões (ordem dos insets).
+- Hoje e Buscar escondem a navigation bar e desenham título grande próprio (Buscar tem campo de busca próprio:
+  `.searchable` não mostra título grande e campo fixo juntos).
+- Tamanhos fixos que precisam crescer com Dynamic Type usam `@ScaledMetric` (ícones das linhas, cadeado, botões
+  grandes); cards com arte usam a arte em `.background` para a altura seguir o texto.
 - `SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES`: usar `CGRect`/`CGSize` exige `import CoreGraphics`.
 - Argumentos padrão são avaliados fora do MainActor: para defaults como `SuperwallService.shared`, use parâmetro
   opcional e resolva dentro da função/init.
@@ -132,13 +157,13 @@ esquema `zensounds://` (rotas bíblicas + Superwall), chaves de UserDefaults exi
 - Xcode MCP: `BuildProject` (scheme `ZenSounds` já compila o widget; use `buildForTesting: true`),
   `RunAllTests`, `XcodeRefreshCodeIssuesInFile` para checagem rápida. `RunCodeSnippet` historicamente falha aqui.
 - Se o runner devolver "No result", recompilar e rodar de novo antes de concluir algo.
-- Baseline 2026-10-15 (sessão 3): build Debug OK, 0 avisos; **127/127 testes aprovados** (casos parametrizados
-  contam separadamente). Build Release funciona via CLI:
+- Baseline 2026-10-16 (redesign, branch `redesign/orante`): build Debug OK, 0 avisos; **153/153 testes aprovados**
+  (casos parametrizados contam separadamente); Release OK e sem `orante.debug.plusOverride` no binário. Build Release funciona via CLI:
   `xcodebuild -project ZenSounds.xcodeproj -scheme ZenSounds -configuration Release -destination
   'generic/platform=iOS Simulator' -derivedDataPath /tmp/OranteRelease CODE_SIGNING_ALLOWED=NO build`.
 - `PlacementCase` tem `testDescription` estável (antes a ordem do dicionário causava "No result").
 
-## Pendências (atualizado em 2026-10-14, fim da sessão 2)
+## Pendências (atualizado em 2026-10-16, fim do redesign)
 Resolvidas na sessão 2: URLs jcapps.dev.br + link Suporte; acessos sem paywall (ação VoiceOver do versículo,
 Próximo/Anterior do Terço Guiado, progresso Guiado restaurado); fade do timer com selo "+" e validação de 1–1440;
 erros de narração traduzidos; chaves mortas removidas; widget só iPhone; explicação de temas do widget;
@@ -154,10 +179,9 @@ Em aberto:
    pt/en no código. Os rótulos de catálogo do diagrama ("Decade %lld" etc.) seguem o locale da interface. Os dois
    só divergem com Idioma = Sistema em um iPhone que não está em pt nem en.
 4. Os docs citam `accessoryCircular` no widget, mas o código não tem.
-6. Achados no simulador em 2026-10-15 (não corrigidos):
-   - Cartão da Palavra do Dia: "Abrir capítulo" quebra em várias linhas (pior durante a narração, com
-     pausa/parar ocupando espaço).
-   - Texto de Salmos 34:18 (pt) com "sava" (provável "salva") no JSON da Bíblia.
-   - Segmento "Guiado" do Terço sem selo "+".
-   - Diagrama do Terço muito claro, e a faixa de contas fica atrás da tab bar sem rolar.
-5. Tarefa 8: Dynamic Type (`.system(size:)` em widget e componentes) e a lista de testes físicos, sandbox e Archive.
+5. Salmos 34:18 (pt) "sava" é erro do upstream (HelloAO/Bíblia Livre); não alterar o texto bíblico. Salmos 119:105
+   tem "Nun :" (letra do acróstico) no texto; só o hero da aba Bíblia remove para exibição.
+6. Widget: fontes com `.system(size:)` mantidas (padrão de widget). Redesign validado só por previews e testes;
+   falta a passada manual no simulador/iPhone (paywalls, cadeados, deep links, widget, áudio em segundo plano).
+7. Chaves stale anteriores ao redesign (ex.: "System default", "Bible translation", "Read in the Bible") não
+   foram removidas: conferir uma a uma antes.

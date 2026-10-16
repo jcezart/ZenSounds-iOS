@@ -290,13 +290,15 @@ struct RowCard<Item: Hashable, Row: View>: View {
     let items: [Item]
     @ViewBuilder let row: (Item) -> Row
     @Environment(\.essencePalette) private var palette
+    /// Icon tile of list rows; grows with Dynamic Type (separators start after it).
+    @ScaledMetric(relativeTo: .title3) private var iconTile: CGFloat = 40
 
     var body: some View {
         VStack(spacing: 0) {
             ForEach(Array(items.enumerated()), id: \.element) { index, item in
                 row(item)
                 if index < items.count - 1 {
-                    Divider().padding(.leading, 64)
+                    Divider().padding(.leading, iconTile + 24)
                 }
             }
         }
@@ -376,6 +378,8 @@ private struct SearchResultsView: View {
     @Environment(\.essencePalette) private var palette
 
     private var results: SearchViewModel.Results { model.results }
+    /// Icon tile of list rows; grows with Dynamic Type (separators start after it).
+    @ScaledMetric(relativeTo: .title3) private var iconTile: CGFloat = 40
 
     var body: some View {
         if results.isEmpty && !model.isSearchingVerses {
@@ -473,12 +477,12 @@ private struct SearchResultsView: View {
                                 .accessibilityHidden(true)
                         }
                         .padding(Spacing.sm)
-                        .padding(.leading, 52)
+                        .padding(.leading, iconTile + 12)
                         .overlay(alignment: .topLeading) {
                             Image(systemName: "text.quote")
                                 .font(.title3)
                                 .foregroundStyle(palette.accent)
-                                .frame(width: 40, height: 40)
+                                .frame(width: iconTile, height: iconTile)
                                 .background(palette.surfaceElevated, in: RoundedRectangle(cornerRadius: Radius.sm, style: .continuous))
                                 .padding(Spacing.sm)
                                 .accessibilityHidden(true)

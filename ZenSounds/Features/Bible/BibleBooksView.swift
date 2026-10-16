@@ -9,6 +9,9 @@ struct BibleBooksView: View {
 
     @State private var testament: BibleTestament = .old
     @State private var heroVerse: Verse?
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    /// Icon tile of list rows; grows with Dynamic Type (separators start after it).
+    @ScaledMetric(relativeTo: .title3) private var iconTile: CGFloat = 40
 
     private var language: BibleLanguage { languageStore.selection.bibleLanguage }
 
@@ -50,37 +53,39 @@ struct BibleBooksView: View {
     // MARK: Hero
 
     private var hero: some View {
-        ZStack(alignment: .trailing) {
+        // The verse sets the height (it grows with Dynamic Type); the artwork fills behind it.
+        VStack(alignment: .trailing, spacing: Spacing.xs) {
+            if let heroVerse {
+                Text(Self.heroText(heroVerse.text))
+                    .font(.scriptureCaption)
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.trailing)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(reference(for: heroVerse))
+                    .font(.essenceLabelMedium)
+                    .foregroundStyle(.white.opacity(0.85))
+            }
+        }
+        .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : 210, alignment: .trailing)
+        .padding(Spacing.md)
+        .frame(maxWidth: .infinity, minHeight: 176, alignment: .trailing)
+        .accessibilityElement(children: .combine)
+        .background {
             Image("BibleHero")
                 .resizable()
                 .scaledToFill()
-                .frame(height: 176)
-                .frame(maxWidth: .infinity)
-                .clipped()
                 .accessibilityHidden(true)
-            // Keeps the verse legible over the artwork.
-            LinearGradient(
-                colors: [.clear, .black.opacity(0.25), .black.opacity(0.6)],
-                startPoint: .leading,
-                endPoint: .trailing
-            )
-            if let heroVerse {
-                VStack(alignment: .trailing, spacing: Spacing.xs) {
-                    Text(Self.heroText(heroVerse.text))
-                        .font(.scriptureCaption)
-                        .foregroundStyle(.white)
-                        .multilineTextAlignment(.trailing)
-                        .minimumScaleFactor(0.75)
-                    Text(reference(for: heroVerse))
-                        .font(.essenceLabelMedium)
-                        .foregroundStyle(.white.opacity(0.85))
-                }
-                .frame(maxWidth: 210, alignment: .trailing)
-                .padding(Spacing.md)
-                .accessibilityElement(children: .combine)
+            // Keeps the verse legible over the artwork (uniform when the text spans the card).
+            if dynamicTypeSize.isAccessibilitySize {
+                Color.black.opacity(0.5)
+            } else {
+                LinearGradient(
+                    colors: [.clear, .black.opacity(0.25), .black.opacity(0.6)],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
             }
         }
-        .frame(minHeight: 176)
         .clipShape(RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
     }
 
@@ -110,7 +115,7 @@ struct BibleBooksView: View {
                 }
                 .buttonStyle(.plain)
                 if book.id != books.last?.id {
-                    Divider().padding(.leading, 64)
+                    Divider().padding(.leading, iconTile + 24)
                 }
             }
         }
@@ -133,13 +138,15 @@ private struct BookRow: View {
     let name: String
     let chapters: Int
     @Environment(\.essencePalette) private var palette
+    /// Icon tile of list rows; grows with Dynamic Type (separators start after it).
+    @ScaledMetric(relativeTo: .title3) private var iconTile: CGFloat = 40
 
     var body: some View {
         HStack(spacing: Spacing.sm) {
             Image(systemName: "book.closed")
                 .font(.body)
                 .foregroundStyle(palette.accent)
-                .frame(width: 40, height: 40)
+                .frame(width: iconTile, height: iconTile)
                 .background(palette.surfaceElevated, in: RoundedRectangle(cornerRadius: Radius.sm, style: .continuous))
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {

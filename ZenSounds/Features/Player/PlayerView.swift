@@ -9,6 +9,7 @@ struct PlayerView: View {
     @ObservedObject private var prefs = UserPreferencesStore.shared
     @ObservedObject private var playerPresentation = PlayerPresentation.shared
     @Environment(\.essencePalette) private var palette
+    @ScaledMetric(relativeTo: .largeTitle) private var playButtonSize: CGFloat = 72
 
     @State private var isTimerSheetPresented = false
     @State private var isAddSoundSheetPresented = false
@@ -183,7 +184,7 @@ struct PlayerView: View {
                     audio.togglePlayPause()
                 } label: {
                     Image(systemName: audio.isPlaying ? "pause.circle.fill" : "play.circle.fill")
-                        .font(.system(size: 72))
+                        .font(.system(size: playButtonSize))
                         .foregroundStyle(palette.accent)
                 }
                 .accessibilityLabel(audio.isPlaying ? "Pause" : "Play")

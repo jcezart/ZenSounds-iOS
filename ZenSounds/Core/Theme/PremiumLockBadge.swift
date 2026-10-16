@@ -16,13 +16,14 @@ struct PremiumLockBadge: View {
 
     @ObservedObject private var superwall = SuperwallService.shared
     @Environment(\.essencePalette) private var palette
+    @ScaledMetric(relativeTo: .caption2) private var badgeSize: CGFloat = 22
 
     var body: some View {
         if superwall.premiumGate.shouldShowBadge(for: feature) {
             Image(systemName: "lock.fill")
-                .font(.system(size: 10, weight: .bold))
+                .font(.caption2.weight(.bold))
                 .foregroundStyle(style == .overlay ? Color.white : palette.accent)
-                .frame(width: 22, height: 22)
+                .frame(width: badgeSize, height: badgeSize)
                 .background(
                     style == .overlay ? Color.black.opacity(0.45) : palette.accent.opacity(0.12),
                     in: Circle()

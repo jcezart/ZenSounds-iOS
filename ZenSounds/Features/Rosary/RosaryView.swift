@@ -12,6 +12,8 @@ struct RosaryView: View {
     @State private var isSettingsPresented = false
     @ScaledMetric(relativeTo: .subheadline) private var numberSize: CGFloat = 26
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .largeTitle) private var guidedPlaySize: CGFloat = 58
+    @ScaledMetric(relativeTo: .title) private var guidedStopSize: CGFloat = 34
 
     var body: some View {
         ScrollView {
@@ -254,16 +256,16 @@ struct RosaryView: View {
 
             Button(action: guidedPrimaryAction) {
                 Image(systemName: guidedIcon)
-                    .font(.system(size: 58))
+                    .font(.system(size: guidedPlaySize))
                     .foregroundStyle(palette.accent)
-                    .frame(width: 68, height: 68)
+                    .frame(minWidth: guidedPlaySize + 10, minHeight: guidedPlaySize + 10)
             }
             .disabled(model.isCompleted)
             .accessibilityLabel(guidedTitle)
 
             Button(action: model.stopGuided) {
                 Image(systemName: "stop.circle.fill")
-                    .font(.system(size: 34))
+                    .font(.system(size: guidedStopSize))
                     .foregroundStyle(palette.text)
                     .frame(width: 44, height: 44)
             }

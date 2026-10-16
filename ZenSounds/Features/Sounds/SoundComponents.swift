@@ -107,7 +107,7 @@ struct SoundRow: View {
                 prefs.toggleFavoriteSound(sound.id)
             } label: {
                 Image(systemName: isFavorite ? "heart.fill" : "heart")
-                    .font(.system(size: 20, weight: .medium))
+                    .font(.title3.weight(.medium))
                     .foregroundStyle(palette.accent)
                     .symbolEffect(.bounce, value: isFavorite)
                     .frame(width: 40, height: 44)
@@ -121,7 +121,7 @@ struct SoundRow: View {
             )
 
             Image(systemName: "chevron.right")
-                .font(.system(size: 14, weight: .semibold))
+                .font(.footnote.weight(.semibold))
                 .foregroundStyle(palette.secondaryText.opacity(0.72))
                 .accessibilityHidden(true)
         }
@@ -170,7 +170,7 @@ struct MixRow: View {
 
             Button(role: .destructive, action: onDelete) {
                 Image(systemName: "trash")
-                    .font(.system(size: 19, weight: .medium))
+                    .font(.title3.weight(.medium))
                     .foregroundStyle(palette.accent)
                     .frame(width: 40, height: 44)
                     .contentShape(Rectangle())
@@ -179,7 +179,7 @@ struct MixRow: View {
             .accessibilityLabel("Delete mix \(mix.name)")
 
             Image(systemName: "chevron.right")
-                .font(.system(size: 14, weight: .semibold))
+                .font(.footnote.weight(.semibold))
                 .foregroundStyle(palette.secondaryText.opacity(0.72))
                 .accessibilityHidden(true)
         }

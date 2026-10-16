@@ -95,7 +95,7 @@ struct DailyWordCard: View {
                     .accessibilityLabel("Open chapter")
                     .layoutPriority(1)
                 }
-                .font(.system(size: 18, weight: .medium))
+                .font(.body.weight(.medium))
                 .foregroundStyle(palette.onVerse)
                 .buttonStyle(.plain)
             }
@@ -107,8 +107,8 @@ struct DailyWordCard: View {
 
     private var openChapterArrow: some View {
         Image(systemName: "arrow.right")
-            .font(.system(size: 14, weight: .semibold))
-            .frame(width: 34, height: 34)
+            .font(.footnote.weight(.semibold))
+            .frame(minWidth: 34, minHeight: 34)
             .background(palette.onVerse, in: Circle())
             .foregroundStyle(palette.verseBackground)
     }

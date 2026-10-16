@@ -168,7 +168,7 @@ private struct FavoriteVerseRow: View {
             HStack {
                 ShareLink(item: "\(verse.text) — \(reference) · Orante") {
                     Image(systemName: "square.and.arrow.up")
-                        .frame(width: 40, height: 40)
+                        .frame(minWidth: 44, minHeight: 44)
                 }
                 .accessibilityLabel("Share verse")
 
@@ -200,7 +200,8 @@ private struct FavoritesEmptyState: View {
     var body: some View {
         VStack(spacing: 12) {
             Image(systemName: "heart")
-                .font(.system(size: 48))
+                .font(.largeTitle)
+                .imageScale(.large)
                 .foregroundStyle(palette.secondaryText)
                 .accessibilityHidden(true)
             Text("No favorites yet")

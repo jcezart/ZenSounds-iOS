@@ -13,6 +13,8 @@ struct HomeView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var isSettingsPresented = false
+    /// Icon tile of list rows; grows with Dynamic Type (separators start after it).
+    @ScaledMetric(relativeTo: .title3) private var iconTile: CGFloat = 40
 
     /// Explore keeps the previous behavior (the Word of the Day's book), with Psalms before it loads.
     private var exploreBookCode: String { viewModel.state.reading?.book ?? "PSA" }
@@ -91,7 +93,7 @@ struct HomeView: View {
                     subtitle: readingSubtitle,
                     action: openReadingPosition
                 )
-                Divider().padding(.leading, 64)
+                Divider().padding(.leading, iconTile + 24)
                 ShortcutRow(
                     systemImage: AppTab.rosary.systemImage,
                     title: Text("Pray the Rosary"),
@@ -122,43 +124,41 @@ struct HomeView: View {
         return VStack(alignment: .leading, spacing: Spacing.xs) {
             SectionTitle("Explore")
             Button(action: openExploreBook) {
-                ZStack(alignment: .leading) {
+                HStack(alignment: .bottom) {
+                    VStack(alignment: .leading, spacing: Spacing.xxs) {
+                        Text(bookName)
+                            .font(.scriptureTitle)
+                            .foregroundStyle(.white)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                        Text("Find comfort in every word.")
+                            .font(.essenceBodyMedium)
+                            .foregroundStyle(.white.opacity(0.92))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    Spacer(minLength: Spacing.sm)
+                    Image(systemName: "arrow.right")
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(.white)
+                        .frame(width: 40, height: 40)
+                        .overlay(Circle().stroke(.white.opacity(0.7), lineWidth: 1.5))
+                        .accessibilityHidden(true)
+                }
+                .padding(Spacing.md)
+                .frame(maxWidth: .infinity, minHeight: 140, alignment: .bottomLeading)
+                // The text sets the height (Dynamic Type); the artwork fills behind it.
+                .background {
                     Image("ExplorePsalms")
                         .resizable()
                         .scaledToFill()
-                        .frame(height: 140)
-                        .frame(maxWidth: .infinity)
-                        .clipped()
                         .accessibilityHidden(true)
                     // Keeps the title legible over the artwork in light and dark mode.
                     LinearGradient(
-                        colors: [.black.opacity(0.55), .black.opacity(0.1), .clear],
+                        colors: [.black.opacity(0.55), .black.opacity(0.25), .black.opacity(0.05)],
                         startPoint: .leading,
                         endPoint: .trailing
                     )
-                    HStack(alignment: .bottom) {
-                        VStack(alignment: .leading, spacing: Spacing.xxs) {
-                            Text(bookName)
-                                .font(.scriptureTitle)
-                                .foregroundStyle(.white)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.7)
-                            Text("Find comfort in every word.")
-                                .font(.essenceBodyMedium)
-                                .foregroundStyle(.white.opacity(0.92))
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
-                        Spacer(minLength: Spacing.sm)
-                        Image(systemName: "arrow.right")
-                            .font(.body.weight(.semibold))
-                            .foregroundStyle(.white)
-                            .frame(width: 40, height: 40)
-                            .overlay(Circle().stroke(.white.opacity(0.7), lineWidth: 1.5))
-                            .accessibilityHidden(true)
-                    }
-                    .padding(Spacing.md)
                 }
-                .frame(minHeight: 140)
                 .clipShape(RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
             }
             .buttonStyle(.plain)
@@ -241,6 +241,8 @@ struct ShortcutRow: View {
     let action: () -> Void
 
     @Environment(\.essencePalette) private var palette
+    /// Icon tile of list rows; grows with Dynamic Type (separators start after it).
+    @ScaledMetric(relativeTo: .title3) private var iconTile: CGFloat = 40
 
     var body: some View {
         Button(action: action) {
@@ -248,7 +250,7 @@ struct ShortcutRow: View {
                 Image(systemName: systemImage)
                     .font(.title3)
                     .foregroundStyle(palette.accent)
-                    .frame(width: 40, height: 40)
+                    .frame(width: iconTile, height: iconTile)
                     .background(palette.surfaceElevated, in: RoundedRectangle(cornerRadius: Radius.sm, style: .continuous))
                     .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 2) {
